@@ -823,7 +823,7 @@ function renderBud(F){
   const vu=v=>{const t=fmtVND(v); const m=t.match(/^(.*) (tr|tỷ)$/); return m?[m[1],m[2]==='tr'?'triệu đ':'tỷ đ']:[t,'đ'];};
   // ---- thẻ ngân sách tổng: kế hoạch / đã dùng / còn lại + thanh tiến độ
   {const h=$('#bHero'); h.replaceChildren();
-   const hd=el('div',{class:'bh-hd'}); const ic=el('span',{class:'ico'}); ic.append(icon('coin')); const tt=el('div'); tt.append(el('h3',{text:`Ngân sách đào tạo năm ${F.Y}`}),el('div',{class:'bh-src',text:B.hasP?'Ngân sách: sheet Kế hoạch đào tạo · Thực tế: Chi phí thực tế ở sheet Lớp học':'Ngân sách: tổng Chi phí kế hoạch các lớp (file chưa có sheet Kế hoạch đào tạo)'})); hd.append(ic,tt); h.append(hd);
+   const hd=el('div',{class:'bh-hd'}); const ic=el('span',{class:'ico'}); ic.append(icon('coin')); const tt=el('div'); tt.append(el('h3',{text:`Ngân sách đào tạo năm ${F.Y}`}),el('div',{class:'bh-src',text:B.hasP?'Ngân sách: sheet Kế hoạch đào tạo · Thực tế: Chi phí thực tế ở sheet Lớp học':'Ngân sách: tổng Chi phí kế hoạch các lớp (năm này chưa có trong sheet Kế hoạch đào tạo)'})); hd.append(ic,tt); h.append(hd);
    const u=B.plan?B.act/B.plan:null; const over=B.act>B.plan&&B.plan>0;
    const nums=el('div',{class:'bh-nums'});
    const nb=(lab,v,dot,pc)=>{const d=el('div'); const l=el('span',{class:'lb'}); if(dot){const i=el('i'); i.style.background=dot; l.append(i);} l.append(document.createTextNode(lab)); const [a,b]=vu(v); const x=el('div',{class:'vv'}); x.append(el('b',{text:a}),el('small',{text:b})); if(pc!=null) x.append(el('em',{text:fmtP(pc)})); d.append(l,x); return d;};
@@ -898,7 +898,7 @@ function renderSch(F){
     ]);
     renderGantt(F,Sm);
     // theo tháng (tháng của Kết thúc dự kiến)
-    const D=MONTHS.map((_,m)=>due.filter(x=>x.p.s.getMonth()===m).length), H=MONTHS.map((_,m)=>dueDone.filter(x=>x.p.s.getMonth()===m).length+new Set(Sm.adhoc.filter(c=>c.d0.getMonth()===m).map(c=>c.kh)).size);
+    const D=MONTHS.map((_,m)=>due.filter(x=>(x.p.s||x.p.dn).getMonth()===m).length), H=MONTHS.map((_,m)=>dueDone.filter(x=>(x.p.s||x.p.dn).getMonth()===m).length+new Set(Sm.adhoc.filter(c=>c.d0.getMonth()===m).map(c=>c.kh)).size);
     $('#sTitle').textContent='Khóa học theo tháng: kế hoạch và đã diễn ra';
     legend($('#lgSch'),[['Khóa kế hoạch (theo tháng bắt đầu dự kiến)','var(--navy)'],['Đã diễn ra (gồm ad-hoc)','var(--good)']]);
     vbars($('#cSch'),MONTHS,[{name:'Khóa kế hoạch',color:'var(--navy)',values:D},{name:'Đã diễn ra',color:'var(--good)',values:H}],fmtN,{intTicks:true,label:fmtN});
@@ -910,11 +910,11 @@ function renderSch(F){
     const over=due.filter(c=>!['Hoàn thành','Hủy'].includes(c.st));
     kpis($('#kSch'),[
       {i:'cal',l:'Tỷ lệ hoàn thành kế hoạch',v:fmtN(dueDone.length),of:fmtN(due.length),u:'lớp',p:Sm.rate,n:`${fmtP(Sm.rate)} lớp trong KH đã đến hạn · HR Action Plan 3.3`,d:Dl('rate','pp',1)},
-      {i:'book',u:'đợt',l:'Số lớp theo kế hoạch',v:fmtN(Sm.nPlan),n:'cột Kế hoạch = Trong kế hoạch',d:Qf?dlt(Sm.nPlan,Qf.nPlan,'cả năm '+Yc,'pct',0):null},
-      {i:'check',u:'đợt',l:'Số lớp đã tổ chức',v:fmtN(Sm.nDone),n:`gồm ${fmtN(Sm.nOut)} lớp ngoài kế hoạch`,d:Dl('nDone','pct',1)},
-      {i:'x',u:'đợt',l:'Số lớp hủy / dời lịch',v:fmtN(Sm.nCx),n:'ghi lý do ở cột Ghi chú',d:Dl('nCx','pct',-1)},
-      {i:'warn',u:'đợt',l:'Đến hạn chưa cập nhật',v:fmtN(over.length),st:over.length?['warn','Cần cập nhật trạng thái']:['good','Đã cập nhật đủ'],n:'ngày bắt đầu đã qua, chưa Hoàn thành/Hủy'},
-      {i:'cal',u:'đợt',l:'Số lớp sắp tới',v:fmtN(upS.length),n:'từ ngày tính'},
+      {i:'book',u:'lớp',l:'Số lớp theo kế hoạch',v:fmtN(Sm.nPlan),n:'cột Kế hoạch = Trong kế hoạch',d:Qf?dlt(Sm.nPlan,Qf.nPlan,'cả năm '+Yc,'pct',0):null},
+      {i:'check',u:'lớp',l:'Số lớp đã tổ chức',v:fmtN(Sm.nDone),n:`gồm ${fmtN(Sm.nOut)} lớp ngoài kế hoạch`,d:Dl('nDone','pct',1)},
+      {i:'x',u:'lớp',l:'Số lớp hủy / dời lịch',v:fmtN(Sm.nCx),n:'ghi lý do ở cột Ghi chú',d:Dl('nCx','pct',-1)},
+      {i:'warn',u:'lớp',l:'Đến hạn chưa cập nhật',v:fmtN(over.length),st:over.length?['warn','Cần cập nhật trạng thái']:['good','Đã cập nhật đủ'],n:'ngày bắt đầu đã qua, chưa Hoàn thành/Hủy'},
+      {i:'cal',u:'lớp',l:'Số lớp sắp tới',v:fmtN(upS.length),n:'từ ngày tính'},
     ]);
     $('#calLg').innerHTML='<span><i class="mk done"></i>Đã tổ chức</span><span><i class="mk up"></i>Dự kiến (chưa đến hạn)</span><span><i class="mk late"></i>Quá hạn, chưa cập nhật</span><span><i class="mk dl"></i>Dời lịch</span><span><i class="mk cx"></i>Hủy</span>';
     $('#calSch').classList.remove('gantt'); renderCal(F);
@@ -942,7 +942,7 @@ function renderGantt(F,Sm){
   const tb=el('tbody');
   const tl=(s,e,k,extra)=>{const d=el('div',{class:'gtl'});
     if(showNow){const n=el('i',{class:'gnow'}); n.style.left=nowP+'%'; d.append(n);}
-    if(!s){d.append(el('span',{class:'gna',text:'Khi có phát sinh'})); return d;}
+    if(!s){if(extra&&extra.length) extra.forEach(x=>{const m=el('i',{class:x.cls}); m.style.left=pos(x.d)+'%'; m.title=x.t; d.append(m);}); else d.append(el('span',{class:'gna',text:'Khi có phát sinh'})); return d;}
     const b=el('div',{class:'gbar '+k}); const l=pos(s), r=pos(new Date(+e+DAY)); b.style.left=l+'%'; b.style.width=Math.max(.9,r-l)+'%'; b.style.background=PST[k][1]; d.append(b);
     (extra||[]).forEach(x=>{const m=el('i',{class:x.cls}); m.style.left=pos(x.d)+'%'; m.title=x.t; d.append(m);}); return d;};
   const row=(cells,tlNode,title)=>{const tr=el('tr'); cells.forEach(([v,c])=>{const td=el('td',{class:c}); if(v instanceof Node) td.append(v); else if(c==='c-dv'||c==='c-nt'){const x=el('div',{class:'clamp',text:v}); td.title=v; td.append(x);} else td.textContent=v; tr.append(td);}); const td=el('td',{class:'c-tl'}); td.append(tlNode); if(title) td.title=title; tr.append(td); tb.append(tr);};
