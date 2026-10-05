@@ -269,9 +269,9 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .pdfx .tbl table{font-size:11.5px}.pdfx .tbl td{white-space:normal}.pdfx .tbl th,.pdfx .tbl td{padding:6px 7px}
 .pdfx .gantt td .clamp{-webkit-line-clamp:unset;display:block}
 
-.yc.yprog{grid-column:1/-1}
-.ypg{display:flex;flex-direction:column;gap:12px;margin:14px 0 8px}
-.ypr{display:grid;grid-template-columns:64px 1fr 190px;gap:14px;align-items:center}
+.ypg{display:flex;flex-direction:column;gap:14px;margin:18px 0 8px}
+.ypr{display:grid;grid-template-columns:52px 1fr;grid-template-rows:auto auto;column-gap:12px;row-gap:3px;align-items:center}
+.ypr .yv{grid-column:2;text-align:left!important;font-size:12.5px!important}
 .ypr .yl{font-weight:700;color:var(--ink-2);font-size:14px}.ypr.cur .yl{color:var(--accent-2)}
 .ypr .yt{position:relative;height:26px;border-radius:8px;background:#e9edf4}
 .ypr .yt i{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--navy)}.ypr.cur .yt i{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
@@ -292,6 +292,7 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .yc .hd .ico{width:44px;height:44px;border-radius:12px}
 .yc h3{font-size:14px}
 .bh-hd .ico{width:56px;height:56px;border-radius:15px}.bh-hd .ico svg{width:30px;height:30px}
+.ypr .yp{color:#fff;text-shadow:0 0 3px rgba(0,0,0,.35)}.ypr .yp.out{color:var(--ink);text-shadow:0 0 3px #fff}
 </style>
 <header class="top" id="topbar" hidden>
  <div class="bar"><div class="barin">
@@ -603,7 +604,9 @@ const ICO={
  cal:'<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/>',
  book:'<path d="M5 5.5A2.5 2.5 0 017.5 3H19v15H7.5A2.5 2.5 0 005 20.5z"/><path d="M5 20.5V5.5"/>',
  warn:'<path d="M12 4l9 15H3z"/><path d="M12 10v4M12 16.8v.2"/>',
- x:'<circle cx="12" cy="12" r="8"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/>'};
+ x:'<circle cx="12" cy="12" r="8"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/>',
+ home:'<path d="M4 10.5L12 4l8 6.5V19a1 1 0 01-1 1h-4.5v-5.5h-5V20H5a1 1 0 01-1-1z"/>',
+ ext:'<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.2 2.3 3.3 5 3.3 8s-1.1 5.7-3.3 8c-2.2-2.3-3.3-5-3.3-8s1.1-5.7 3.3-8z"/>'};
 function icon(n){const s=document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('width','17'); s.setAttribute('height','17'); s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('fill','none'); s.setAttribute('stroke','currentColor'); s.setAttribute('stroke-width','1.9'); s.setAttribute('stroke-linecap','round'); s.setAttribute('stroke-linejoin','round'); s.innerHTML=ICO[n]||ICO.spark; return s;}
 // ---------- render helpers
 const el=(tag,attrs={},...kids)=>{const n=document.createElement(tag); for(const[k,v] of Object.entries(attrs)){ if(k==='class') n.className=v; else if(k==='text') n.textContent=v; else n.setAttribute(k,v);} for(const k of kids) if(k!=null) n.append(k); return n;};
@@ -706,13 +709,13 @@ function renderPerf(F){
   const done=P.done;
   kpis($('#kPerf'),[
     {i:'users',l:'Số NV được đào tạo',v:fmtN(P.uniq),of:fmtN(P.hc),p:P.cov,n:`độ phủ ${fmtP(P.cov)} NV đang làm`+(P.learners>P.uniq?` · thêm ${fmtN(P.learners-P.uniq)} người đã nghỉ`:''),d:D('cov','pp',1)},
-    {i:'clock',u:P.hasH?'giờ':'',l:'Tổng số giờ đào tạo',v:P.hasH?fmtN(P.hrs):'–',n:P.hasH?`${fmtN(P.attN)} lượt hoàn thành`:`${fmtN(P.attN)} lượt hoàn thành · chưa có số giờ (điền Thời lượng chuẩn ở DM Khoa hoc)`,d:D('hrs','pct',1)},
+    {i:'star',u:P.satN?'/ 5':'',l:'Mức độ hài lòng',v:P.satN?fmt1(P.sat):'–',n:`${fmtN(P.satN)} lượt đánh giá`,d:D('sat','abs',1)},
+    {i:'clock',u:P.hasH?'giờ':'',l:'Tổng số giờ đào tạo',v:P.hasH?fmtN(P.hrs):'–',n:P.hasH?`${fmtN(P.attN)} lượt tham dự`:`${fmtN(P.attN)} lượt tham dự · chưa có số giờ (điền Thời lượng chuẩn ở DM Khoa hoc)`,d:D('hrs','pct',1)},
     {i:'gauge',u:P.hasH?`giờ / ${fmtN(P.hc)} NV`:`/ ${fmtN(P.hc)} NV`,l:'Số giờ đào tạo / NV',v:fmt1(P.hpn),n:P.hasH?`${fmtN(P.hrs)} giờ ÷ ${fmtN(P.hc)} NV đang làm`:'chưa có số giờ',d:D('hpn','pct',1)},
     {i:'cal',l:'Tỷ lệ tham dự',v:fmtN(P.attN),of:fmtN(P.attD),u:'lượt',p:P.att,n:`tỷ lệ ${fmtP(P.att)}`,d:D('att','pp',1)},
     {i:'check',l:'Tỷ lệ đạt',v:fmtN(P.pass),of:fmtN(P.tested),u:'lượt',p:P.pr,n:`tỷ lệ đạt ${fmtP(P.pr)}`,d:D('pr','pp',1)},
-    {i:'star',u:P.satN?'/ 5':'',l:'Mức độ hài lòng',v:P.satN?fmt1(P.sat):'–',n:`${fmtN(P.satN)} lượt đánh giá`,d:D('sat','abs',1)},
-    (()=>{const B=budM(F), Bq=C?budM(C):null; return {i:'coin',vnd:1,l:'Tổng chi phí đào tạo',v:fmtVND(B.act),p:B.plan?B.act/B.plan:null,n:B.plan?`${fmtP(B.act/B.plan)} ngân sách ${fmtVND(B.plan)}`:'chưa có ngân sách kế hoạch',d:Bq?dlt(B.act,Bq.act,(C.cut?'cùng kỳ ':'')+Yc,'pct',0):null};})(),
-    (()=>{const B=budM(F), Bq=C?budM(C):null; return {i:'clock',vnd:1,l:'Chi phí / giờ đào tạo',v:fmtVND(B.perH),n:P.hasH?`${vt(B.act)} ÷ ${fmtN(P.hrs)} giờ`:'chưa có số giờ',d:Bq?dlt(B.perH,Bq.perH,(C.cut?'cùng kỳ ':'')+Yc,'pct',-1):null};})(),
+    (()=>{const t=P.hrs||0, f=(m)=>{const h=P.done.filter(r=>norm(r.cl.nb)===m).reduce((a,r)=>a+r.hrs,0); const k=new Set(P.done.filter(r=>norm(r.cl.nb)===m).map(r=>r.cl.kh)).size; return {h,k};}; const a=f('noi bo'); return {i:'home',u:P.hasH?'giờ':'',l:'Số giờ đào tạo nội bộ',v:P.hasH?fmtN(a.h):'–',p:t?a.h/t:null,n:`${fmtP(t?a.h/t:null)} tổng giờ · ${fmtN(a.k)} khóa do SCC tự đào tạo`,d:Q?dlt(a.h,(()=>{const x=Q.done.filter(r=>norm(r.cl.nb)==='noi bo').reduce((s,r)=>s+r.hrs,0); return x;})(),(C.cut?'cùng kỳ ':'')+Yc,'pct',1):null};})(),
+    (()=>{const t=P.hrs||0; const dn=P.done.filter(r=>norm(r.cl.nb)==='ben ngoai'); const h=dn.reduce((a,r)=>a+r.hrs,0); const k=new Set(dn.map(r=>r.cl.kh)).size; return {i:'ext',u:P.hasH?'giờ':'',l:'Số giờ đào tạo bên ngoài',v:P.hasH?fmtN(h):'–',p:t?h/t:null,n:`${fmtP(t?h/t:null)} tổng giờ · ${fmtN(k)} khóa thuê / cử đi học bên ngoài`,d:Q?dlt(h,Q.done.filter(r=>norm(r.cl.nb)==='ben ngoai').reduce((s,r)=>s+r.hrs,0),(C.cut?'cùng kỳ ':'')+Yc,'pct',0):null};})(),
   ]);
   // month
   const mm=(S.month==='hours'&&!P.hasH)?'lượt':S.month; const mv=(F2,dn)=>MONTHS.map((_,m)=>{const d=dn.filter(r=>r.month===m); return mm==='hours'?d.reduce((a,r)=>a+r.hrs,0):mm==='nv'?new Set(d.filter(r=>r.e&&r.e.join&&r.e.join.getFullYear()===F2.Y).map(r=>r.eid)).size:d.length;});
@@ -759,7 +762,7 @@ function renderInsights(F,P,C,Q){
     let t=`**${fmtN(P.attN)} lượt học** hoàn thành (${fmtN(P.learners)} người). Nhóm **${top[0]}** chiếm nhiều nhất: ${fmtP(top[1]/P.attN)} số lượt. Chưa có số giờ học – điền Thời lượng chuẩn ở DM Khoa hoc để tính giờ.`;
     if(Q&&Q.attN){const d=(P.attN-Q.attN)/Q.attN; t+=` So với ${C.cut?'cùng kỳ ':''}${C.Y}: **${d>=0?'+':''}${Math.round(d*100)}%** lượt học.`;} add('trend','',t);}
   else if(P.hrs){const g=new Map(); done.forEach(r=>g.set(r.cl.nhom,(g.get(r.cl.nhom)||0)+r.hrs)); const top=[...g.entries()].sort((a,b)=>b[1]-a[1])[0];
-    let t=`Tổng **${fmtN(P.hrs)} giờ** đào tạo (${fmtN(P.attN)} lượt hoàn thành), bình quân **${fmt1(P.hpn)} giờ/NV**. Nhóm **${top[0]}** chiếm nhiều nhất: ${fmtP(top[1]/P.hrs)} tổng giờ.`;
+    let t=`Tổng **${fmtN(P.hrs)} giờ** đào tạo (${fmtN(P.attN)} lượt tham dự), bình quân **${fmt1(P.hpn)} giờ/NV**. Nhóm **${top[0]}** chiếm nhiều nhất: ${fmtP(top[1]/P.hrs)} tổng giờ.`;
     if(Q&&Q.hrs){const d=(P.hrs-Q.hrs)/Q.hrs; t+=` So với ${C.cut?'cùng kỳ ':''}${C.Y}: **${d>=0?'+':''}${Math.round(d*100)}%** giờ.`;}
     add('trend','',t);}
   else if(!done.length) add('warn','warn',`Chưa có lượt học hoàn thành nào trong năm ${F.Y} theo bộ lọc đang chọn.`);
@@ -832,11 +835,11 @@ function renderBud(F){
    const bar=el('div',{class:'bh-bar'}); const fill=el('i'); fill.style.width=Math.min(100,(u||0)*100)+'%'; if(over) fill.style.background='var(--crit)'; bar.append(fill);
    const lab=el('span',{class:'bh-pc',text:u==null?'–':fmtP(u)+' đã dùng'}); bar.append(lab);
    const y0=new Date(F.Y,0,1), y1=new Date(F.Y+1,0,1); const tp=F.T<y0?0:F.T>=y1?1:(F.T-y0)/(y1-y0);
-   if(tp>0&&tp<1){const nw=el('span',{class:'bh-now'}); nw.style.left=(tp*100)+'%'; nw.append(el('span',{text:`${dmy(F.T).slice(0,5)} · đã qua ${fmtP(tp)} năm`})); bar.append(nw);}
+   if(tp>0&&tp<1){const nw=el('span',{class:'bh-now'}); nw.style.left=(tp*100)+'%'; nw.append(el('span',{text:`${dmy(F.T).slice(0,5)} · Tiến độ năm ${fmtP(tp)}`})); bar.append(nw);}
    h.append(bar);
    const sc=el('div',{class:'bh-scale'}); ['0%','25%','50%','75%','100%'].forEach(t=>sc.append(el('span',{text:t}))); h.append(sc);
    const note=el('div',{class:'bh-note'});
-   note.textContent=B.plan?`Đã dùng ${fmtP(u)} ngân sách (${vt(B.act)} / ${vt(B.plan)})`+(tp>0&&tp<1?` trong khi đã qua ${fmtP(tp)} thời gian của năm.`:'.')+(B.nDone?` ${fmtN(B.nDone)} lớp đã tổ chức trong năm.`:''):'Chưa có ngân sách kế hoạch cho năm này.';
+   note.textContent=B.plan?`Đã dùng ${fmtP(u)} ngân sách (${vt(B.act)} / ${vt(B.plan)})`+(tp>0&&tp<1?`, trong khi tiến độ thời gian năm ${F.Y} là ${fmtP(tp)} (tính đến ${dmy(F.T).slice(0,5)}).`:'.')+(B.nDone?` ${fmtN(B.nDone)} lớp đã tổ chức trong năm.`:''):'Chưa có ngân sách kế hoạch cho năm này.';
    if(Q){const d=D('act','pct',0); const w=el('span',{class:'dl '+(d.c||''),text:d.t}); note.append(document.createTextNode(' Chi phí thực tế '),w,document.createTextNode(' '+d.e.trim()+'.'));}
    h.append(note);
    // phân bổ theo nhóm kế hoạch
@@ -852,9 +855,8 @@ function renderBud(F){
      const hh=el('div',{class:'bs bs-h'}); hh.append(el('div',{text:'Theo nhóm kế hoạch'}),el('div'),el('div',{text:'Thực tế / Kế hoạch'})); box.prepend(hh); h.append(box);}
   }
   kpis($('#kBud'),[
-    {i:'user',vnd:1,l:'Chi phí / lượt học',v:fmtVND(B.perRec),n:`thực tế / ${fmtN(B.nRec)} lượt hoàn thành`,d:D('perRec','pct',-1)},
+    {i:'user',vnd:1,l:'Chi phí / lượt học',v:fmtVND(B.perRec),n:`thực tế / ${fmtN(B.nRec)} lượt tham dự`,d:D('perRec','pct',-1)},
     {i:'clock',vnd:1,l:'Chi phí / giờ đào tạo',v:fmtVND(B.perH),n:'thực tế / giờ đào tạo',d:D('perH','pct',-1)},
-    {i:'pie',p:B.intS,l:'Tỷ trọng chi phí nội bộ',v:fmtP(B.intS),n:'chi phí lớp Nội bộ / tổng thực tế',d:D('intS','pp',0)},
   ]);
   const mon=(F2,f)=>MONTHS.map((_,m)=>F2.cls.filter(c=>c.d0.getMonth()===m).reduce((a,c)=>a+f(c),0));
   const monP=F2=>F2.plan.length?MONTHS.map((_,m)=>F2.plan.filter(p=>p.s&&p.s.getMonth()===m).reduce((a,p)=>a+p.bud,0)):mon(F2,c=>c.cp);
@@ -972,11 +974,11 @@ function yProg(rows,sel,T){const box=el('div',{class:'ypg'});
   rows.slice().sort((a,b)=>b.y-a.y).forEach(r=>{const B=r.b; const u=B.plan?B.act/B.plan:null; const over=B.plan&&B.act>B.plan;
     const row=el('div',{class:'ypr'+(r.y===sel.y?' cur':'')}); row.append(el('div',{class:'yl',text:String(r.y)+(r.y===T.getFullYear()?'*':'')}));
     const tr=el('div',{class:'yt'}); const f=el('i'); f.style.width=(u==null?0:Math.min(100,u*100))+'%'; if(over) f.style.background='var(--crit)'; tr.append(f);
-    tr.append(el('span',{class:'yp',text:u==null?(B.act?'chưa có ngân sách KH':'chưa có số liệu'):fmtP(u)}));
-    const y0=new Date(r.y,0,1),y1=new Date(r.y+1,0,1); if(T>y0&&T<y1){const n=el('b',{class:'ynow'}); n.style.left=((T-y0)/(y1-y0)*100)+'%'; n.title='Ngày tính '+dmy(T)+' · đã qua '+fmtP((T-y0)/(y1-y0))+' năm'; tr.append(n);}
+    tr.append(el('span',{class:'yp'+((u||0)<0.12?' out':''),text:u==null?(B.act?'chưa có ngân sách KH':'chưa có số liệu'):fmtP(u)}));
+    const y0=new Date(r.y,0,1),y1=new Date(r.y+1,0,1); if(T>y0&&T<y1){const n=el('b',{class:'ynow'}); n.style.left=((T-y0)/(y1-y0)*100)+'%'; n.title='Ngày tính '+dmy(T)+' · tiến độ năm '+fmtP((T-y0)/(y1-y0)); tr.append(n);}
     const v=el('div',{class:'yv'}); v.append(el('b',{text:fmtVND(B.act)}),document.createTextNode(B.plan?' / '+fmtVND(B.plan):''));
     row.append(tr,v); row.title=`${r.y}: chi phí ${fmtN(B.act)} đ`+(B.plan?` / ngân sách ${fmtN(B.plan)} đ (${fmtP(u)})`:' · chưa có ngân sách kế hoạch'); box.append(row);});
-  const lg=el('div',{class:'ylg',text:'Thực tế / Ngân sách kế hoạch · vạch đứt = ngày tính (đã qua bao nhiêu % năm)'}); box.append(lg); return box;}
+  const lg=el('div',{class:'ylg',text:'Thực tế / Ngân sách kế hoạch · vạch đứt = tiến độ thời gian của năm tính đến ngày tính'}); box.append(lg); return box;}
 function renderYears(F){
   const ys=YEARS.slice().sort((a,b)=>a-b); const T=F.T; const curY=T.getFullYear();
   const rows=ys.map(y=>{const Fy=filt(y); const p=perfM(Fy), b=budM(Fy), sc=schM(Fy); return {y,p,b,sc,n:sc.nDone,Fy};});
@@ -1016,16 +1018,16 @@ function renderData(){
   if(M.badRec.length){host.append(el('h3',{text:`Sheet Training Record: ${M.badRec.length} dòng lỗi`})); const d=el('div',{class:'tbl'}); tbl(d,[{h:'Dòng dữ liệu thứ',num:1,v:r=>r.row},{h:'Mã lớp',v:r=>r.cid},{h:'Ngày học',v:r=>r.d||''},{h:'Mã NV',v:r=>r.eid},{h:'Lỗi',v:r=>r.msg}],M.badRec.slice(0,500)); host.append(d);}
   const fx=t=>el('span',{class:'fx',text:t});
   tbl($('#tDef'),[{h:'Chỉ số',v:r=>r[0]},{h:'Công thức',v:r=>fx(r[1])},{h:'Ý nghĩa',v:r=>r[2]}],[
-    ['Độ phủ đào tạo','NV đang làm có ≥ 1 lượt hoàn thành ÷ Tổng NV đang làm × 100%','Bao nhiêu phần trăm nhân sự hiện có đã được đào tạo ít nhất 1 lần trong năm. NV đang làm = đã vào làm và chưa nghỉ tại ngày tính (năm cũ: 31/12).'],
+    ['Độ phủ đào tạo','NV đang làm có ≥ 1 lượt tham dự ÷ Tổng NV đang làm × 100%','Bao nhiêu phần trăm nhân sự hiện có đã được đào tạo ít nhất 1 lần trong năm. NV đang làm = đã vào làm và chưa nghỉ tại ngày tính (năm cũ: 31/12).'],
     ['Số lượt học hoàn thành','Σ dòng Training Record có Trạng thái tham dự = Hoàn thành','Quy mô hoạt động đào tạo; 1 người học 3 lớp = 3 lượt.'],
-    ['Tổng số giờ đào tạo','Σ Giờ học của các lượt hoàn thành (Giờ học thực tế → nếu trống: Số giờ lớp → nếu trống: Thời lượng chuẩn)','Tổng thời gian công ty đầu tư cho đào tạo.'],
+    ['Tổng số giờ đào tạo','Σ Giờ học của các lượt tham dự (Giờ học thực tế → nếu trống: Số giờ lớp → nếu trống: Thời lượng chuẩn)','Tổng thời gian công ty đầu tư cho đào tạo.'],
     ['Số giờ đào tạo / NV','Tổng giờ đào tạo ÷ Tổng NV đang làm','Bình quân mỗi nhân viên được đào tạo bao nhiêu giờ; so được giữa các năm, Khối, Phòng ban dù quy mô khác nhau.'],
     ['Tỷ lệ tham dự','Hoàn thành ÷ (Hoàn thành + Vắng + Không hoàn thành) × 100%','Người được mời có thực sự đi học và học hết lớp không.'],
     ['Tỷ lệ đạt','Lượt Đạt ÷ (Lượt Đạt + Lượt Không đạt) × 100%  (Đạt = cột Kết quả là Đạt, hoặc Điểm sau ≥ Điểm đạt của khóa)','Chất lượng tiếp thu sau đào tạo; chỉ tính lượt có kết quả đánh giá.'],
     ['Mức độ hài lòng','Σ Điểm hài lòng ÷ Số lượt đánh giá  (thang 1–5)','Học viên đánh giá lớp học tốt đến mức nào.'],
     ['Tỷ lệ hoàn thành kế hoạch','(Khóa trong kế hoạch đã diễn ra + Khóa ad-hoc / ngoài kế hoạch đã diễn ra) ÷ Tổng số khóa theo kế hoạch cả năm × 100%. Khóa KH: mỗi dòng có lịch ở sheet Ke hoach dao tao (Trạng thái = Hoàn thành là đã diễn ra); khóa ad-hoc: lớp Ngoài kế hoạch, Hoàn thành ở sheet Lop hoc. Chương trình phát sinh chưa có lịch không tính vào mẫu số','Phòng có triển khai đúng kế hoạch đào tạo đã duyệt không; mục tiêu 100% (HR Action Plan 3.3).'],
     ['Trạng thái kế hoạch (Gantt)','Cột Trạng thái nhập tay (Hoàn thành / Đang thực hiện / Hủy) → nếu trống: Kết thúc dự kiến < ngày tính = Trễ hạn · Bắt đầu ≤ ngày tính ≤ Kết thúc = Đang thực hiện · chưa tới Bắt đầu = Kế hoạch','Xanh lá = đã hoàn thành · Vàng = đang thực hiện · Xám = kế hoạch · Đỏ = trễ hạn.'],
-    ['Sử dụng ngân sách','Σ Chi phí thực tế (sheet Lop hoc) ÷ Σ Ngân sách dự kiến (sheet Ke hoach dao tao) × 100%','Đã tiêu bao nhiêu so với ngân sách đào tạo được duyệt; vạch "Hôm nay" cho biết đã qua bao nhiêu % thời gian của năm để so sánh.'],
+    ['Sử dụng ngân sách','Σ Chi phí thực tế (sheet Lop hoc) ÷ Σ Ngân sách dự kiến (sheet Ke hoach dao tao) × 100%','Đã tiêu bao nhiêu so với ngân sách đào tạo được duyệt; vạch đứt cho biết tiến độ thời gian của năm (tính đến ngày tính) để so sánh.'],
     ['Chi phí / lượt học','Chi phí thực tế ÷ Lượt học hoàn thành','Bình quân 1 lượt học tốn bao nhiêu tiền.'],
     ['Tỷ trọng chi phí nội bộ','Chi phí lớp Nội bộ ÷ Tổng chi phí thực tế × 100%','Mức tự chủ đào tạo bằng nguồn lực nội bộ so với thuê ngoài.'],
     ['Tăng / giảm so với năm khác','Chỉ số tỷ lệ: A − B (điểm %) · Chỉ số số lượng: (A − B) ÷ B × 100%','A = năm đang xem, B = năm so sánh. Năm đang xem chưa hết năm thì B lấy cùng kỳ (cùng khoảng 01/01 → ngày tính).'],
@@ -1065,6 +1067,12 @@ async function rasterize(node,width,breaksOut){
   await new Promise((ok,bad)=>{img.onload=ok; img.onerror=()=>bad(new Error('render')); setTimeout(()=>bad(new Error('timeout')),30000); img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);});
   const sc=2, cv=document.createElement('canvas'); cv.width=width*sc; cv.height=H*sc; const g=cv.getContext('2d'); g.fillStyle='#eef1f6'; g.fillRect(0,0,cv.width,cv.height); g.scale(sc,sc); g.drawImage(img,0,0);
   cv.toDataURL('image/jpeg',0.5); // ném lỗi ngay nếu trình duyệt chặn (canvas bị "tainted")
+  // cắt phần nền trống thừa ở cuối (font trong ảnh có thể khác font trên trang → nội dung ngắn hơn)
+  const W=cv.width; let last=cv.height-1; const step=32*sc;
+  outer: for(let y=cv.height;y>0;y-=step){const y0=Math.max(0,y-step), d=g.getImageData(0,y0,W,y-y0).data;
+    for(let i=d.length-4;i>=0;i-=4){if(Math.abs(d[i]-238)>6||Math.abs(d[i+1]-241)>6||Math.abs(d[i+2]-246)>6){last=y0+Math.floor(i/4/W); break outer;}}}
+  const Ht=Math.min(cv.height,last+1+16*sc);
+  if(Ht<cv.height-4){const c2=document.createElement('canvas'); c2.width=W; c2.height=Ht; c2.getContext('2d').drawImage(cv,0,0); return {cv:c2,H:Ht/sc,sc};}
   return {cv,H,sc};
 }
 function filterSummary(F){const sel=id=>{const e=$(id); return e.options[e.selectedIndex]?e.options[e.selectedIndex].text:'';};
