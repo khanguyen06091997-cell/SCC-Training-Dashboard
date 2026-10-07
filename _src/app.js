@@ -233,19 +233,21 @@ const NS='http://www.w3.org/2000/svg';
 const sv=(tag,a={})=>{const n=document.createElementNS(NS,tag); for(const[k,v] of Object.entries(a)) n.setAttribute(k,v); return n;};
 function niceMax(v){if(v<=0) return 1; const p=Math.pow(10,Math.floor(Math.log10(v))); const f=v/p; const st=[1,1.2,1.6,2,2.4,3,4,5,6,8,10]; return st.find(x=>f<=x+1e-9)*p;}
 // vertical bars; series: [{name,color,values}] grouped
-function vbars(host,cats,series,fmt,{h=240,tickFmt=fmt,highlight=-1,intTicks=false,label=fmt,max:fixMax=null,ticks=4,small=false}={}){
-  host.replaceChildren(); const W=Math.max(320,host.clientWidth||600); const pad={l:48,r:8,t:22,b:26};
+const VBREG=new Map(); let VBN=0;
+function vbars(host,cats,series,fmt,{h=240,tickFmt=fmt,highlight=-1,intTicks=false,label=fmt,max:fixMax=null,ticks=4,small=false,w=null,fs=1}={}){
+  host.replaceChildren(); const W=w||Math.max(320,host.clientWidth||600);
   let max=niceMax(Math.max(0,...series.flatMap(s=>s.values))); if(intTicks) max=Math.max(ticks,Math.ceil(Math.max(0,...series.flatMap(s=>s.values))/ticks)*ticks); if(fixMax) max=fixMax;
-  const svg=sv('svg',{viewBox:`0 0 ${W} ${h}`,width:'100%',height:h,role:'img'});
+  const svg=sv('svg',{viewBox:`0 0 ${W} ${h}`,width:'100%',height:h,role:'img'}); {const id=String(++VBN); svg.setAttribute('data-vbid',id); VBREG.set(id,[cats,series,fmt,{h,tickFmt,highlight,intTicks,label,max:fixMax,ticks,small}]); if(VBREG.size>600){let k=0; for(const key of VBREG.keys()){VBREG.delete(key); if(++k>300) break;}}}
+  const pad={l:48*fs,r:8,t:22*fs,b:26*fs};
   const iw=W-pad.l-pad.r, ih=h-pad.t-pad.b; const y=v=>pad.t+ih-(v/max)*ih;
   for(let i=0;i<=ticks;i++){const v=max*i/ticks; svg.append(sv('line',{x1:pad.l,x2:W-pad.r,y1:y(v),y2:y(v),stroke:'var(--grid)','stroke-width':1}));
-    const t=sv('text',{x:pad.l-6,y:y(v)+4,'text-anchor':'end','font-size':11,fill:'var(--muted)'}); t.textContent=tickFmt(v); svg.append(t);}
-  const bw=iw/cats.length; const n=series.length; const gap=4; const barW=Math.min(30,(bw*(n>1?0.84:0.7)-(n-1)*gap)/n);
+    const t=sv('text',{x:pad.l-6,y:y(v)+4*fs,'text-anchor':'end','font-size':11*fs,fill:'var(--muted)'}); t.textContent=tickFmt(v); svg.append(t);}
+  const bw=iw/cats.length; const n=series.length; const gap=4; const barW=Math.min(30*fs*fs,(bw*(n>1?0.84:0.7)-(n-1)*gap)/n);
   cats.forEach((c,i)=>{const cx=pad.l+bw*i+bw/2; const gx=cx-(n*barW+(n-1)*gap)/2;
-    const t=sv('text',{x:cx,y:h-8,'text-anchor':'middle','font-size':small?10:11,fill:'var(--muted)'}); t.textContent=c; svg.append(t);
+    const t=sv('text',{x:cx,y:h-8*fs,'text-anchor':'middle','font-size':(small?10:11)*fs,fill:'var(--muted)'}); t.textContent=c; svg.append(t);
     series.forEach((s,j)=>{const v=s.values[i]||0; const x=gx+j*(barW+gap); const yy=y(v); const hh=Math.max(0,pad.t+ih-yy);
       if(hh>0){const r=Math.min(4,barW/2,hh); svg.append(sv('path',{d:`M${x},${pad.t+ih}V${yy+r}a${r},${r} 0 0 1 ${r},${-r}H${x+barW-r}a${r},${r} 0 0 1 ${r},${r}V${pad.t+ih}Z`,fill:s.colors?s.colors[i]:s.color}));
-        if(label){const lt=sv('text',{x:x+barW/2,y:yy-5,'text-anchor':'middle','font-size':small?8.5:n>1?9.5:11,'font-weight':600,fill:'var(--ink-2)'}); lt.textContent=label(v); svg.append(lt);}}});
+        if(label){const lt=sv('text',{x:x+barW/2,y:yy-5*fs,'text-anchor':'middle','font-size':(small?8.5:n>1?9.5:11)*fs,'font-weight':600,fill:'var(--ink-2)'}); lt.textContent=label(v); svg.append(lt);}}});
     const hit=sv('rect',{x:pad.l+bw*i,y:pad.t,width:bw,height:ih,fill:'transparent',tabindex:0});
     const lines=[[c]].concat(series.map(s=>[s.name,(s.tips?s.tips[i]:fmt(s.values[i]||0)),s.colors?s.colors[i]:s.color]));
     hit.addEventListener('pointermove',e=>showTip(e,lines)); hit.addEventListener('pointerleave',hideTip);
@@ -934,7 +936,20 @@ async function buildPages(lbl){
     // trong lúc xếp: cho phép thu nhỏ cả trang tới MINZ để gộp thêm khung
     const fits=()=>fitsZ(MINZ);
     const bestZ=()=>{if(!fitsZ(MINZ)) return MINZ; let lo=MINZ,hi=MAXZ; if(fitsZ(hi)) return hi; for(let k=0;k<8;k++){const m=(lo+hi)/2; if(fitsZ(m)) lo=m; else hi=m;} return lo;};
-    const flush=()=>{if(cur&&cur.body.children.length){const z=bestZ(); setZ(z); cur.inner.classList.add('fill'); cur.inner.style.minHeight=(cur.body.clientHeight/z)+'px'; host.replaceChildren(); out.push(cur);} cur=null;};
+    const fitsNow=()=>cur.body.scrollHeight<=cur.body.clientHeight+1;
+    // kéo đầy từng khung: vẽ lại biểu đồ cột cao hơn (cột + chữ to hơn), phóng chữ bảng/danh sách cho vừa chỗ trống
+    const grow=()=>{const blocks=[...cur.inner.querySelectorAll('.card,.yc')].filter(c=>!c.parentElement.closest('.card,.yc'));
+      for(const c of blocks){
+        for(const s0 of [...c.querySelectorAll('svg[data-vbid]')]){const reg=VBREG.get(s0.getAttribute('data-vbid')); if(!reg) continue;
+          const h0=+s0.getAttribute('height')||240; const W=Math.max(320,Math.round(s0.parentElement.clientWidth||600)); let s=s0;
+          const put=H=>{const fs=Math.min(1.8,Math.max(1.3,Math.sqrt(H/260))); const tmp=document.createElement('div'); vbars(tmp,reg[0],reg[1],reg[2],{...reg[3],h:Math.round(H),w:W,fs}); const n=tmp.firstChild; s.replaceWith(n); s=n;};
+          let lo=h0, hi=h0*3.2; put(lo); if(!fitsNow()){put(h0); if(!fitsNow()){s.replaceWith(s0); continue;} }
+          for(let k=0;k<7;k++){const m=(lo+hi)/2; put(m); if(fitsNow()) lo=m; else hi=m;} put(lo);}
+        for(const t of [...c.querySelectorAll('.ins,.tbl,.pbt')]){if(t.parentElement.closest('.ins,.tbl,.pbt')) continue;
+          const pw=t.parentElement.clientWidth; const zt=v=>{t.style.zoom=String(v); t.style.width=(pw/v)+'px';}; const okW=()=>![t,...t.querySelectorAll('*')].some(e=>e.scrollWidth>e.clientWidth+2&&getComputedStyle(e).overflowX!=='visible'||e.scrollWidth>e.clientWidth+40&&e===t);
+          let lo=1, hi=1.6; zt(1); if(!fitsNow()){t.style.zoom=''; t.style.width=''; continue;}
+          for(let k=0;k<7;k++){const m=(lo+hi)/2; zt(m); if(fitsNow()&&okW()) lo=m; else hi=m;} zt(lo); if(lo<1.02){t.style.zoom=''; t.style.width='';}}}};
+    const flush=()=>{if(cur&&cur.body.children.length){const z=bestZ(); setZ(z); cur.inner.classList.add('fill'); cur.inner.style.minHeight=(cur.body.clientHeight/z)+'px'; grow(); host.replaceChildren(); out.push(cur);} cur=null;};
     // tách 1 khung có bảng/danh sách: lấy phần vừa với chỗ trống còn lại, phần còn lại thành khung "(tiếp)"
     const splitCard=(b,minRows)=>{const U0=pgUnits(b); if(!U0) return null;
       const c=b.cloneNode(true); const U=pgUnits(c); const all=pgItems(U); [...U.box.children].forEach(x=>x.remove()); cur.body.append(c);

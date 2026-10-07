@@ -199,6 +199,7 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .pdfx.pg .pgbody>*{flex:none;margin:0}
 .pdfx.pg .pgz{display:flex;flex-direction:column;gap:10px}
 .pdfx.pg .pgz>*{flex:none;margin:0}
+.pdfx.pg .pgz.fill svg[data-vbid]{max-height:none!important}
 .pdfx.pg .pgz.fill>:last-child{flex:1 1 auto}
 .pdfx.pg .pgz.fill .grid2{align-items:stretch}
 .pdfx.pg .pgz.fill>.grid2:last-child{grid-template-rows:minmax(0,1fr)}
@@ -208,7 +209,7 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .pdfx.pg .pgz.fill>:last-child .tbl>table,.pdfx.pg .pgz.fill>.grid2:last-child .tbl>table{height:100%}
 .pdfx.pg .pgz.fill>.card:last-child .pbt,.pdfx.pg .pgz.fill>.card:last-child .ins{flex:1 1 auto}
 .pdfx.pg .kpis:not(.kcol):not(.k4){grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
-.pdfx.pg .pgz>.card svg{max-height:400px}
+
 .pdfx.pg .pgz>.card .ins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;align-items:start}
 .pdfx.pg .pdffoot{flex:none;margin-top:4px;padding-top:0;border-top:0;font-size:12px;font-weight:700;color:#8a93a8;text-align:right}
 .pdfx.pg .pgbody{gap:10px}
@@ -221,7 +222,7 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .pdfx.pg .kpi{padding:10px 14px;gap:3px;border-radius:12px}
 .pdfx.pg .kpi .hd{min-height:0}
 .pdfx.pg .kpi .v{margin-top:2px}
-.pdfx.pg .pgz>.card svg{max-height:330px}
+
 .pdffoot{margin-top:18px;padding-top:10px;border-top:1px solid #d5dae5;font-size:11px;color:#8a93a8;text-align:right}
 #calSch{max-height:none;overflow-y:visible}
 #fPb{max-width:170px}
