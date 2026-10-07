@@ -293,6 +293,138 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .yc h3{font-size:14px}
 .bh-hd .ico{width:56px;height:56px;border-radius:15px}.bh-hd .ico svg{width:30px;height:30px}
 .ypr .yp{color:#fff;text-shadow:0 0 3px rgba(0,0,0,.35)}.ypr .yp.out{color:var(--ink);text-shadow:0 0 3px #fff}
+
+/* v16: thẻ gộp Tham dự + Đạt */
+.kpi.kw{grid-column:span 2}
+.kpi .kmw{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:2px}
+.kpi .km{display:flex;flex-direction:column;gap:6px;min-width:0}
+.kpi .km+.km{border-left:1px solid var(--grid);padding-left:22px}
+.kpi .km-l{font-size:12px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+.kpi .km .v{margin-top:0}
+.kpi .km-bar{height:10px;border-radius:6px;background:var(--grid);overflow:hidden}
+.kpi .km-bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+@media (max-width:560px){.kpi .kmw{gap:12px}.kpi .km+.km{padding-left:12px}}
+/* v16: nút lọc cột */
+th .fbtn{all:unset;cursor:pointer;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:5px;margin-left:5px;vertical-align:-4px;color:var(--muted);opacity:.75}
+th .fbtn:hover{background:var(--grid);opacity:1}
+th .fbtn.on{background:var(--accent);color:#fff;opacity:1}
+th .fbtn:focus-visible{outline:2px solid var(--accent)}
+.fpop{position:fixed;z-index:60;width:260px;max-width:calc(100vw - 24px);background:var(--surface);border-radius:12px;box-shadow:0 12px 32px rgba(20,33,61,.22);border:1px solid var(--ring);padding:10px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--ink)}
+.fpop .fh{font-weight:700;font-size:12.5px;color:var(--ink-2)}
+.fpop input[type=search]{font:inherit;padding:7px 9px;border:1px solid var(--ring);border-radius:8px;width:100%;box-sizing:border-box;background:var(--surface);color:var(--ink)}
+.fpop .fl{max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:1px}
+.fpop label{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;cursor:pointer;line-height:1.3}
+.fpop label:hover{background:var(--surface-2)}
+.fpop label .fc{margin-left:auto;color:var(--muted);font-size:11.5px}
+.fpop label.all{border-bottom:1px solid var(--grid);border-radius:0;font-weight:600}
+.fpop .ff{display:flex;justify-content:space-between;gap:8px}
+.fpop .ff .btn{padding:6px 12px;font-size:12.5px}
+.fnote{font-size:12px;color:var(--accent-2);font-weight:600;margin:6px 2px 0}
+.ins.yq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+.ins.yq .it:nth-child(2){border-top:0;padding-top:4px}
+@media (max-width:760px){.ins.yq{grid-template-columns:1fr}.ins.yq .it:nth-child(2){border-top:1px solid var(--grid);padding-top:11px}}
+#refreshBtn.spin svg{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.fpop input[type=checkbox]{accent-color:var(--accent)}
+.fnote a{color:var(--accent-2)}
+/* v17: sắp xếp + dòng tổng + 2 thanh tỷ lệ */
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:var(--ink)}
+th.sortable::after{content:'↕';margin-left:5px;opacity:.35;font-size:11px}
+th.sortable[data-sort=asc]::after{content:'▲';opacity:1;color:var(--accent-2)}
+th.sortable[data-sort=desc]::after{content:'▼';opacity:1;color:var(--accent-2)}
+th.sortable[data-sort=asc],th.sortable[data-sort=desc]{color:var(--ink)}
+tr.subtot td{position:sticky;background:#fff4e8;font-weight:700;color:var(--ink);border-bottom:2px solid var(--accent-line);z-index:1}
+.pdfx tr.subtot td{position:static!important}
+.rbx{display:flex;flex-direction:column;gap:4px;min-width:200px}
+.rbr{display:grid;grid-template-columns:52px 1fr 40px;align-items:center;gap:8px;font-size:11.5px;color:var(--ink-2)}
+.rbr .t{height:8px;border-radius:5px;background:var(--grid);overflow:hidden}
+.rbr .t i{display:block;height:100%;border-radius:5px;background:var(--accent)}
+.rbr .t i.ok{background:var(--good)}
+.rbr b{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+#tCourse td:nth-child(2),#tBud td:nth-child(2){white-space:normal;min-width:220px}
+#tCourse th{white-space:normal}
+/* v18: thanh chồng đạt / tham dự */
+.sbar{position:relative;height:6px;border-radius:4px;background:var(--grid);overflow:hidden}
+.sbar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.sbar .sa{background:#f9c48e}
+.sbar .sp{background:var(--accent-2)}
+.sbar.kbar{height:4px;margin-top:10px}
+.slg{display:flex;gap:14px;font-size:11.5px;color:var(--ink-2);margin-top:2px}
+.slg span::before,.rtx .k1::before,.rtx .k2::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:0}
+.slg .k1::before,.rtx .k1::before{background:var(--accent-2)}
+.slg .k2::before,.rtx .k2::before{background:#f9c48e}
+.rcell{display:flex;flex-direction:column;gap:5px;min-width:170px}
+.rtx{font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.rtx b{color:var(--ink);font-variant-numeric:tabular-nums}
+td.stt,th.stt{width:36px;color:var(--muted)}
+.sub2{display:block;font-size:10.5px;font-weight:500;color:var(--muted)}
+/* v19: bảng phòng ban gọn */
+.pbt{display:flex;flex-direction:column;font-size:12.5px;font-variant-numeric:tabular-nums}
+.pbr{display:grid;grid-template-columns:34px 92px minmax(140px,1.1fr) minmax(200px,2fr) 84px 120px;gap:12px;align-items:center;padding:5px 0;border-bottom:1px solid var(--grid)}
+.pbr:last-child{border-bottom:0}
+.pbr .r{text-align:right}
+.pbr .mu{color:var(--muted)}
+.pbr .nm{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pbh{font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--muted);text-transform:uppercase;line-height:1.3;align-items:end;padding-bottom:7px}
+.pbbar{position:relative;height:18px;border-radius:5px;background:var(--surface-2)}
+.pbbar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--accent)}
+.pbbar span{position:absolute;left:8px;top:0;bottom:0;display:flex;align-items:center;gap:3px;color:#fff;font-size:11.5px;white-space:nowrap}
+.pbbar span.out{color:var(--ink-2)}
+.pbbar span b{font-weight:700}
+@media (max-width:760px){.pbr{grid-template-columns:24px 0 minmax(90px,1fr) minmax(120px,1.4fr) 44px 64px;gap:8px}.pbr>div:nth-child(2){display:none}}
+/* v20 */
+.pbh .srt{cursor:pointer;user-select:none}
+.pbh .srt:hover{color:var(--ink)}
+.pbh .srt::after{content:'↕';margin-left:4px;opacity:.4;font-size:10.5px}
+.pbh .srt[data-sort=asc]::after{content:'▲';opacity:1;color:var(--accent-2)}
+.pbh .srt[data-sort=desc]::after{content:'▼';opacity:1;color:var(--accent-2)}
+.pbh .srt[data-sort=asc],.pbh .srt[data-sort=desc]{color:var(--ink)}
+.gantt thead th{background:var(--navy);color:#fff;border-bottom:0}
+.gantt thead th:first-child{border-top-left-radius:10px}.gantt thead th:last-child{border-top-right-radius:10px}
+.gantt thead .gmh span{color:#c9d3e6}.gantt thead .gmh span.now{color:var(--accent);font-weight:800}
+.gantt thead th .fbtn{color:rgba(255,255,255,.75)}.gantt thead th .fbtn:hover{background:rgba(255,255,255,.15)}
+.gantt tr.sec td{background:var(--accent-soft);border-left:4px solid var(--accent);color:var(--ink-2);padding:8px 10px}
+.gantt tr.sec b{color:var(--accent-2);font-size:12.5px}
+.gsh{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.gsh>b{min-width:150px}
+.gsb{display:inline-flex;align-items:center;gap:8px;font-size:11.5px}
+.gsb small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+.gsbt{display:inline-block;width:120px;height:6px;border-radius:4px;background:#fff;overflow:hidden;box-shadow:inset 0 0 0 1px var(--accent-line)}
+.gsbt i{display:block;height:100%;background:var(--good);border-radius:4px}
+.gsb.m .gsbt i{background:var(--accent)}
+.gsb em{font-style:normal;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.gsx{font-size:11.5px;color:var(--ink-2)}
+.pdfx .gantt thead th{position:static}
+.gantt thead th,.gantt thead th.c-dv,.gantt thead th.c-nt{color:#fff}
+/* v21 */
+.tbadge{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:rgba(26,166,115,.12);color:var(--good-ink);font-size:12px;font-weight:600;vertical-align:2px}
+.tbadge b{font-weight:800}
+#tUp{overflow-x:hidden}#tUp td{white-space:normal}#tUp td:first-child{white-space:nowrap}
+.gantt thead th.sortable::after{color:rgba(255,255,255,.55)}
+.gantt thead th.sortable[data-sort=asc]::after,.gantt thead th.sortable[data-sort=desc]::after{color:var(--accent)}
+.gantt thead th.sortable,.gantt thead th.sortable:hover,.gantt thead th.sortable[data-sort=asc],.gantt thead th.sortable[data-sort=desc]{color:#fff}
+.kpi .kbl{list-style:none;margin:6px 0 0;padding:8px 0 0;border-top:1px solid var(--grid);display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--ink-2)}
+.kpi .kbl li{display:flex;justify-content:space-between;gap:8px}
+.kpi .kbl li::before{content:'+';color:var(--accent);font-weight:700;margin-right:-2px}
+.kpi .kbl li span{flex:1}.kpi .kbl li b{color:var(--ink);font-variant-numeric:tabular-nums}
+#kSch{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:1000px){#kSch{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#kSch{grid-template-columns:repeat(6,minmax(0,1fr))}
+.kpi .kbn{font-size:11px;color:var(--muted);margin-top:4px}
+/* v22: cột chi phí Gantt */
+.gantt table{min-width:1330px}
+.gantt .c-cp{width:96px}
+.gcp{display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gcp b{color:var(--ink);font-weight:700}
+.gcpb{display:block;height:5px;border-radius:3px;background:var(--grid);overflow:hidden}
+.gcpb i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.gcpb i.over{background:var(--crit)}
+.gantt th.c-cp .thu{display:block;font-size:10px;font-weight:600;text-transform:none;letter-spacing:0;opacity:.8;margin-top:1px}
+.gantt table{min-width:1180px}
+.ins .ih{font-weight:700;color:var(--ink);font-size:13.5px;line-height:1.35}
+.ins .ib{margin-top:3px;font-size:13px;color:var(--ink-2);line-height:1.5}
+.ins .ia{margin-top:5px;font-size:12.5px;color:var(--accent-2);line-height:1.45}
+.ins .ia b{color:var(--accent-2)}
 </style>
 <header class="top" id="topbar" hidden>
  <div class="bar"><div class="barin">
@@ -310,17 +442,17 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
    <span id="rowsChip" class="chip"></span>
    <button class="btn" id="sampleBtn" type="button">Về trang tải file</button>
    <button class="btn" id="pdfBtn" type="button" title="Tải toàn bộ dashboard đang xem thành file PDF"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M4 17v1.5A1.5 1.5 0 005.5 20h13a1.5 1.5 0 001.5-1.5V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="pdfLbl">Tải PDF</span></button>
-   <button class="btn" id="refreshBtn" type="button" title="Đọc lại file Excel sau khi bạn cập nhật"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Làm mới</button>
-   <button class="btn primary" id="pickBtn" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5M4 15.5V18a2 2 0 002 2h12a2 2 0 002-2v-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Đổi file</button>
+   <button class="btn primary" id="refreshBtn" type="button" title="Cập nhật lại dữ liệu từ file Excel đang mở (sau khi bạn sửa và lưu file)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Làm mới</button>
   </div>
  </div></div>
  <div class="fbar"><div class="filters">
    <div class="f" id="ffYear"><label for="fYear">Năm</label><select id="fYear"></select></div>
-   <div class="f" id="ffCmp"><label for="fCmp">So sánh với</label><select id="fCmp"></select></div>
+   <div class="f" id="ffFrom"><label for="fFrom">Từ ngày</label><input type="date" id="fFrom" title="Để trống = từ đầu năm"></div>
+   <div class="f" id="ffDate"><label for="fDate">Đến ngày</label><input type="date" id="fDate" title="Ngày chốt số liệu – khóa quá ngày này mà chưa hoàn thành là trễ hạn"></div>
+   <div class="f" id="ffCmp" hidden style="display:none"><label for="fCmp">So sánh với</label><select id="fCmp"></select></div>
    <div class="f" id="ffKhoi"><label for="fKhoi">Khối</label><select id="fKhoi"></select></div>
    <div class="f" id="ffPb"><label for="fPb">Phòng ban</label><select id="fPb"></select></div>
    <div class="f" id="ffNhom"><label for="fNhom">Nhóm khóa học</label><select id="fNhom"></select></div>
-   <div class="f" id="ffDate"><label for="fDate">Ngày tính đến hạn</label><input type="date" id="fDate"></div>
  </div></div>
 </header>
 <input type="file" id="fileIn" accept=".xlsx,.xlsm" multiple hidden>
@@ -329,8 +461,9 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
  <div class="land-card" id="landDrop" tabindex="0" role="button" aria-label="Chọn file Excel dữ liệu đào tạo">
   <svg width="54" height="54" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0l-4.5-4.5M12 14l4.5-4.5M4 15.5v2.5a2 2 0 002 2h12a2 2 0 002-2v-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <h2>Kéo thả file dữ liệu đào tạo vào đây</h2>
-  <p>Thả file <b>SCC_Training_Data.xlsx</b> vào bất kỳ đâu trên trang, hoặc bấm để chọn file. Có thể chọn nhiều file cùng lúc (ví dụ mỗi năm 1 file).</p>
+  <p>Thả file <b>SCC Training Record.xlsx</b> vào bất kỳ đâu trên trang, hoặc bấm để chọn file. Có thể chọn nhiều file cùng lúc (ví dụ mỗi năm 1 file).</p>
   <button class="btn cta" id="pickBtn3" type="button">Chọn file…</button>
+  <button class="btn" id="reopenBtn" type="button" hidden style="margin-top:10px"></button>
   <p class="small">File chỉ được đọc trên máy bạn, không tải lên máy chủ nào.</p>
  </div>
  <div id="alertsLand"></div>
@@ -348,10 +481,10 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
      <div class="legend" id="lgMonth"></div><div class="chart" id="cMonth"></div></div>
    <div class="card"><div class="ch"><div><h3>Tỷ lệ NV được đào tạo &amp; giờ đào tạo theo Khối</h3></div></div><div class="chart" id="cKhoi"></div></div>
    <div class="card"><div class="ch"><div><h3 id="nTitle">Giờ đào tạo theo nhóm khóa học</h3></div></div><div class="chart" id="cNhom"></div></div>
-   <div class="card"><div class="ch"><div><h3>Tóm tắt nhanh</h3></div></div><div class="ins" id="insights"></div></div>
+   <div class="card"><div class="ch"><div><h3>Phân tích nhanh</h3></div></div><div class="ins" id="insights"></div></div>
   </div>
-  <div class="card"><div class="ch"><div><h3>Tỷ lệ NV được đào tạo &amp; giờ đào tạo theo Phòng ban</h3></div></div><div class="chart" id="cPb"></div></div>
-  <div class="card"><div class="ch"><div><h3>Theo khóa học</h3></div></div><div class="tbl" id="tCourse"></div></div>
+  <div class="card"><div class="ch"><div><h3>Tỷ lệ &amp; Số giờ nhân viên được đào tạo theo Phòng ban</h3></div></div><div class="chart" id="cPb"></div></div>
+  <div class="card"><div class="ch"><div><h3 id="cTitle">Theo khóa học</h3></div></div><div class="tbl" id="tCourse"></div></div>
   <div class="card nopdf"><div class="ch"><div><h3>Tra cứu quá trình đào tạo của nhân viên</h3></div>
     <div class="f qf"><label for="qNV">Tìm</label><input id="qNV" type="search" placeholder="VD: NV00106 hoặc Bùi Văn" autocomplete="off"></div></div><div id="nvRes"><p class="hint">Nhập ít nhất 2 ký tự để tìm.</p></div></div>
  </section>
@@ -362,7 +495,6 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
    <div class="card"><div class="ch"><div><h3 id="bTitle">Chi phí kế hoạch và thực tế theo tháng</h3></div></div><div class="legend" id="lgBud"></div><div class="chart" id="cBud"></div></div>
    <div class="card"><div class="ch"><div><h3>Chi phí thực tế theo nhóm khóa học</h3></div></div><div class="chart" id="cBudNhom"></div></div>
   </div>
-  <div class="card"><div class="ch"><div><h3>Chi phí theo lớp</h3></div></div><div class="tbl" id="tBud"></div></div>
  </section>
 
  <section class="panel" id="p-sched" role="tabpanel" aria-labelledby="t-sched" hidden>
@@ -372,26 +504,25 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
    <div class="tbl" id="calSch"></div></div>
   <div class="grid2">
    <div class="card"><div class="ch"><div><h3 id="sTitle">Lớp trong kế hoạch: đến hạn và hoàn thành</h3></div></div><div class="legend" id="lgSch"></div><div class="chart" id="cSch"></div></div>
-   <div class="card"><div class="ch"><div><h3 id="uTitle">Lớp sắp tới</h3></div></div><div class="tbl" id="tUp"></div></div>
+   <div class="card"><div class="ch"><div><h3 id="uTitle">Lịch Đào Tạo</h3></div></div><div class="tbl" id="tUp"></div></div>
   </div>
   <div class="card"><div class="ch"><div><h3>Toàn bộ lớp trong năm</h3></div>
     <div class="f"><label for="fStatus">Trạng thái</label><select id="fStatus"></select></div></div><div class="tbl" id="tCls"></div></div>
  </section>
 
  <section class="panel" id="p-years" role="tabpanel" aria-labelledby="t-years" hidden>
-  <p class="hint ynote" id="yNote"></p>
   <div class="ygrid" id="yCharts"></div>
-  <div class="card"><div class="ch"><div><h3>Bảng số liệu so sánh các năm</h3></div></div><div class="tbl" id="tYears"></div></div>
+  <div class="card"><div class="ch"><div><h3>Phân tích nhanh</h3><p class="hint" id="yqSub" style="margin:2px 0 0"></p></div></div><div class="ins yq" id="yQuick"></div></div>
  </section>
 
  <section class="panel" id="p-data" role="tabpanel" aria-labelledby="t-data" hidden>
   <div class="card"><h3>Kiểm tra dữ liệu của file đang mở</h3><div id="dq"></div></div>
   <div class="card"><h3>Cách dùng</h3>
    <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;max-width:85ch">
-    <li>Nhập dữ liệu mọi năm vào cùng file <i>SCC_Training_Data.xlsx</i>: gõ thêm dòng ngay dưới bảng ở sheet Lop hoc và Training Record. Năm được lấy từ cột Ngày bắt đầu / Ngày học.</li>
+    <li>Nhập dữ liệu mọi năm vào cùng file <i>SCC Training Record.xlsx</i>: gõ thêm dòng ngay dưới bảng ở sheet Lop hoc và Training Record. Năm được lấy từ cột Ngày bắt đầu / Ngày học.</li>
     <li>DS Nhan vien giữ cả người đã nghỉ (ghi Ngày nghỉ việc, không xóa dòng) để headcount các năm cũ tính đúng.</li>
     <li>Mở link, bấm <b>Chọn file…</b> hoặc kéo thả file. Nếu dữ liệu tách nhiều file (mỗi năm 1 file), chọn tất cả cùng lúc – trang tự gộp.</li>
-    <li>Sửa Excel xong, lưu file rồi bấm <b>Làm mới</b>. Trình duyệt cho phép thì trang đọc lại ngay; nếu không, hộp chọn file mở ra – chọn lại file là xong.</li>
+    <li>Sửa Excel xong, lưu file (Ctrl+S) rồi bấm nút cam <b>Làm mới</b>: trang tự đọc lại chính file đang mở, không cần chọn lại. Lần đầu trình duyệt có thể hỏi quyền xem file – chọn <i>Cho phép</i> (nên chọn "cho phép mỗi lần truy cập" để lần sau mở link là tự tải). Dùng Chrome hoặc Edge.</li>
     <li>Bấm <b>Tải PDF</b> để lưu toàn bộ dashboard (4 tab, theo bộ lọc đang chọn) thành 1 file PDF gửi báo cáo.</li>
     <li>Chọn Năm và <b>So sánh với</b> một năm khác: thẻ chỉ số hiện mức tăng/giảm, biểu đồ theo tháng hiện 2 năm cạnh nhau.</li>
    </ol>
@@ -546,23 +677,24 @@ function fillPb(){const K=$('#fKhoi').value, fp=$('#fPb'), v=fp.value;
   fp.replaceChildren(new Option('Tất cả','*'),...pbs.map(p=>new Option(p,p))); fp.value=pbs.includes(v)?v:'*';}
 function fillCmp(){const Y=+$('#fYear').value; const fc=$('#fCmp'); const v=fc.value;
   fc.replaceChildren(new Option('Không so sánh',''),...YEARS.filter(y=>y!==Y).sort((a,b)=>b-a).map(y=>new Option(y,y)));
-  if([...fc.options].some(o=>o.value===v)) fc.value=v; else fc.value='';}
+  fc.value='';}
 // headcount reference date for a year: the as-of date when it is in that year, else 31/12
 const refDate=(Y,T)=>T.getFullYear()===Y?T:new Date(Y,11,31);
 // NV 'Đã nghỉ' chưa có Ngày nghỉ việc: không biết nghỉ lúc nào -> không tính vào headcount
 const activeAt=(e,d)=>(!e.join||e.join<=d)&&(e.leave?e.leave>d:!e.quit);
 function filt(Yo,cut){
   const Y=Yo??+$('#fYear').value, K=$('#fKhoi').value, PB=$('#fPb').value||'*', N=$('#fNhom').value; const T=toDate($('#fDate').value)||new Date();
-  const inCut=d=>!cut||d<=cut;
+  const F0=Yo==null?toDate($('#fFrom').value):null; const D0=F0&&F0.getFullYear()===Y?F0:null; const D1=D0?(T.getFullYear()===Y?T:new Date(Y,11,31)):null;
+  const inCut=d=>(!cut||d<=cut)&&(!D0||(d>=D0&&d<=D1));
   const recs=M.recs.filter(r=>r.year===Y&&inCut(r.cl.d0)&&(K==='*'||r.khoi===K)&&(PB==='*'||(r.e&&r.e.pb===PB))&&(N==='*'||r.cl.nhom===N));
   const clsAll=[...M.cls.values()];
   const cls=clsAll.filter(c=>c.d0&&c.d0.getFullYear()===Y&&inCut(c.d0)&&(K==='*'||c.khoi===K)&&(N==='*'||c.nhom===N));
   const R=cut||refDate(Y,T); const emps=[...M.emp.values()].filter(e=>activeAt(e,R)&&(K==='*'||e.khoi===K)&&(PB==='*'||e.pb===PB));
-  const plan=(M.plan||[]).filter(p=>p.y===Y&&(N==='*'||p.nhom===N));
-  return {Y,K,PB,N,T,R,recs,cls,clsAll,emps,plan,cut};
+  const plan=(M.plan||[]).filter(p=>p.y===Y&&(N==='*'||p.nhom===N)&&(!D0||(p.s&&p.e&&p.s<=D1&&p.e>=D0)||(p.dn&&p.dn>=D0&&p.dn<=D1)));
+  return {Y,K,PB,N,T,R,recs,cls,clsAll,emps,plan,cut,D0,D1};
 }
 // compare year: same period (cùng kỳ) when the viewed year is still running, else full year
-function cmpF(){const v=$('#fCmp').value; if(!v) return null; const Y=+$('#fYear').value, Yc=+v; const T=toDate($('#fDate').value)||new Date();
+function cmpF(){return null; const v=$('#fCmp').value; if(!v) return null; const Y=+$('#fYear').value, Yc=+v; const T=toDate($('#fDate').value)||new Date();
   const cut=T.getFullYear()===Y?new Date(Yc,T.getMonth(),Math.min(T.getDate(),new Date(Yc,T.getMonth()+1,0).getDate())):null;
   const F=filt(Yc,cut); F.full=filt(Yc); F.cut=cut; return F;}
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
@@ -610,11 +742,20 @@ const ICO={
 function icon(n){const s=document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('width','17'); s.setAttribute('height','17'); s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('fill','none'); s.setAttribute('stroke','currentColor'); s.setAttribute('stroke-width','1.9'); s.setAttribute('stroke-linecap','round'); s.setAttribute('stroke-linejoin','round'); s.innerHTML=ICO[n]||ICO.spark; return s;}
 // ---------- render helpers
 const el=(tag,attrs={},...kids)=>{const n=document.createElement(tag); for(const[k,v] of Object.entries(attrs)){ if(k==='class') n.className=v; else if(k==='text') n.textContent=v; else n.setAttribute(k,v);} for(const k of kids) if(k!=null) n.append(k); return n;};
-function kpis(host,items){host.replaceChildren(...items.map(it=>{const k=el('div',{class:'kpi'});
+function kpis(host,items){host.replaceChildren(...items.map(it=>{const k=el('div',{class:'kpi'+(it.wide?' kw':'')});
   const hd=el('div',{class:'hd'}); const ic=el('span',{class:'ico'}); ic.append(icon(it.i)); hd.append(ic,el('div',{class:'l',text:it.l})); k.append(hd);
+  if(it.multi){const w=el('div',{class:'kmw'}); it.multi.forEach(x=>{const r=el('div',{class:'km'}); r.append(el('div',{class:'km-l',text:x.l}));
+      const v=el('div',{class:'v'}); v.append(document.createTextNode(x.p==null||isNaN(x.p)?'–':fmtP(x.p))); r.append(v);
+      if(!it.dual){const bar=el('div',{class:'km-bar'}); const f=el('i'); f.style.width=(x.p==null||isNaN(x.p)?0:Math.max(0,Math.min(100,x.p*100)))+'%'; bar.append(f); r.append(bar);}
+      r.append(el('div',{class:'n',text:x.n}));
+      if(x.d){const dw=el('div',{class:'dlw'}); dw.append(el('span',{class:'dl '+(x.d.c||''),text:x.d.t})); if(x.d.e) dw.append(el('span',{class:'dle',text:x.d.e.trim()})); r.append(dw);}
+      w.append(r);}); k.append(w);
+    if(it.dual){k.append(stackBar(it.dual.att,it.dual.pr,'kbar')); const lg=el('div',{class:'slg'}); lg.append(el('span',{class:'k1',text:'Đạt'}),el('span',{class:'k2',text:'Tham dự'})); k.append(lg);}
+    return k;}
   const v=el('div',{class:'v'}); const m=String(it.v).match(/^(.*?)(\s*\/\s*5|\s+(tr|tỷ|giờ))?$/); v.append(document.createTextNode(m?m[1]:it.v)); if(it.of!=null) v.append(el('span',{class:'of',text:'/'+it.of})); const U={tr:'triệu đ','tỷ':'tỷ đ','giờ':'giờ'}; const u=it.u||(m&&m[3]?U[m[3]]:(it.vnd&&it.v!=='–'?'đ':null)); if(u) v.append(el('small',{text:u})); k.append(v);
   if(it.st){const s=el('span',{class:'st'}); const d=el('span',{class:'dot'}); d.style.background=`var(--${it.st[0]})`; s.append(d,document.createTextNode(it.st[1])); k.append(s);}
-  if(it.n) k.append(el('div',{class:'n',text:it.n}));
+  if(it.n&&!it.bl) k.append(el('div',{class:'n',text:it.n}));
+  if(it.bl){const u=el('ul',{class:'kbl'}); it.bl.forEach(([a,v])=>{const li=el('li'); li.append(el('span',{text:a}),el('b',{text:v})); u.append(li);}); k.append(u); if(it.n) k.append(el('div',{class:'n kbn',text:it.n}));}
   if(it.d){const w=el('div',{class:'dlw'}); w.append(el('span',{class:'dl '+(it.d.c||''),text:it.d.t})); if(it.d.e) w.append(el('span',{class:'dle',text:it.d.e.trim()})); k.append(w);}
   if(it.p!=null&&!isNaN(it.p)){const mt=el('div',{class:'meter'}); const b=el('i'); b.style.width=Math.max(0,Math.min(100,it.p*100))+'%'; mt.append(b); k.append(mt);}
   return k;}));}
@@ -670,12 +811,113 @@ function hbars(host,items,fmt,{max=null,color='var(--s1)',heads=null}={}){
     box.append(row);});
   host.append(box);
 }
+// bảng phòng ban gọn: STT · Khối · Phòng ban · thanh (đã học/tổng · %) · Số khóa · Giờ học
+const PBS={i:1,d:1};
+function pbTable(host,items,hasH){host.replaceChildren(); if(!items.length){host.append(el('div',{class:'empty',text:'Chưa có dữ liệu'})); return;}
+  const t=el('div',{class:'pbt'}); const hd=el('div',{class:'pbr pbh'}); const body=el('div');
+  const K=[null,it=>String(it.khoi||''),it=>it.label,it=>it.value,it=>it.nk,it=>hasH?it.hh:it.n];
+  const heads=['STT','Khối','Phòng ban','NV đang làm đã học / tổng · tỷ lệ','Số khóa học',hasH?'Giờ học (gồm NV đã nghỉ)':'Lượt học (gồm NV đã nghỉ)'];
+  const hcs=heads.map((x,i)=>{const c=el('div',{class:(i===0||i>=4?'r':'')+(i?' srt':''),text:x}); if(i){c.tabIndex=0; c.title='Bấm để sắp xếp'; const go=()=>{if(PBS.i===i) PBS.d=-PBS.d; else {PBS.i=i; PBS.d=i>=3?-1:1;} draw();}; c.addEventListener('click',go); c.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); go();}});} hd.append(c); return c;});
+  const cmp=(x,y)=>typeof x==='number'?x-y:String(x).localeCompare(String(y),'vi',{numeric:true});
+  function draw(){hcs.forEach((c,i)=>c.dataset.sort=i&&i===PBS.i?(PBS.d>0?'asc':'desc'):'');
+    const arr=items.slice().sort((a,b2)=>cmp(K[PBS.i](a),K[PBS.i](b2))*PBS.d||(PBS.i===1?(b2.value-a.value||b2.hh-a.hh):0)||a.label.localeCompare(b2.label,'vi'));
+    body.replaceChildren(...arr.map((it,i)=>{const r=el('div',{class:'pbr'});
+      r.append(el('div',{class:'r mu',text:String(i+1)}),el('div',{class:'mu',text:String(it.khoi||'').replace(/^Khối\s+/,'')}));
+      const nm=el('div',{class:'nm',text:it.label}); nm.title=it.label; r.append(nm);
+      const tr=el('div',{class:'pbbar'}); const f=el('i'); f.style.width=Math.max(0,Math.min(100,it.value*100))+'%'; tr.append(f);
+      const lb=el('span',{class:it.value<0.35?'out':''}); lb.append(el('b',{text:fmtP(it.value)}),document.createTextNode(` · ${fmtN(it.u)}/${fmtN(it.h)} NV`)); tr.append(lb); r.append(tr);
+      r.append(el('div',{class:'r',text:fmtN(it.nk)}),el('div',{class:'r',text:hasH?fmtN(it.hh)+' giờ':fmtN(it.n)+' lượt'}));
+      r.title=it.sub||''; return r;}));}
+  t.append(hd,body); host.append(t); draw();}
 function legend(host,items){host.replaceChildren(...items.map(([n,c])=>{const s=el('span'); const w=el('span',{class:'sw'}); w.style.background=c; s.append(w,document.createTextNode(n)); return s;}));}
-function tbl(host,cols,rows,empty='Chưa có dữ liệu'){
-  host.replaceChildren(); if(!rows.length){host.append(el('div',{class:'empty',text:empty}));return;}
+const SST=new Map();
+function tbl(host,cols,rows,empty='Chưa có dữ liệu',opt={}){
+  host.replaceChildren(); if(host.nextElementSibling&&host.nextElementSibling.classList.contains('fnote')) host.nextElementSibling.remove(); if(!rows.length){host.append(el('div',{class:'empty',text:empty}));return;}
   const t=el('table'),th=el('thead'),tr=el('tr'); cols.forEach(c=>tr.append(el('th',{class:c.num?'num':'',text:c.h}))); th.append(tr); t.append(th);
-  const tb=el('tbody'); rows.forEach(r=>{const x=el('tr'); cols.forEach(c=>{const v=c.v(r); const td=el('td',{class:c.num?'num':''}); if(v instanceof Node) td.append(v); else td.textContent=v; x.append(td);}); tb.append(x);}); t.append(tb); host.append(t);
+  const tb=el('tbody'); rows.forEach(r=>{const x=el('tr'); x._r=r; cols.forEach(c=>{const v=c.v(r); const td=el('td',{class:c.num?'num':''}); if(v instanceof Node) td.append(v); else td.textContent=v; if(c.fv) td.dataset.fv=c.fv(r); x.append(td);}); tb.append(x);}); t.append(tb); host.append(t);
+  const key=host.id||host.closest('[id]')?.id||'t';
+  let renum=()=>{};
+  if(opt.stt){const h0=el('th',{class:'num stt',text:'STT'}); tr.prepend(h0); [...tb.rows].forEach(x=>x.prepend(el('td',{class:'num stt'})));
+    renum=()=>{let n=0; [...tb.rows].forEach(x=>{if(!x.hidden) x.cells[0].textContent=++n;});}; cols=[{h:'STT',nosort:1,num:1,v:()=>''},...cols];}
+  if(!opt.sort){if(rows.length>1) addFilters(t,key); return;}
+  // dòng tổng (subtotal) ngay dưới tiêu đề – tính theo các dòng đang hiển thị
+  let upd=()=>{};
+  if(opt.total){const st=el('tr',{class:'subtot'}); const tds=cols.map(c=>{const d=el('td',{class:c.num?'num':''}); st.append(d); return d;}); th.append(st);
+    upd=()=>{renum(); const vis=[...tb.rows].filter(x=>!x.hidden).map(x=>x._r); cols.forEach((c,i)=>{const v=c.tot?c.tot(vis):''; tds[i].replaceChildren(); if(v instanceof Node) tds[i].append(v); else tds[i].textContent=v;});};
+    requestAnimationFrame(()=>{const hh=tr.offsetHeight; tds.forEach(d=>d.style.top=hh+'px');});}
+  // sắp xếp: bấm tiêu đề cột (bấm lần nữa để đảo chiều)
+  const ss=SST.get(key)||{i:-1,d:1}; SST.set(key,ss); const ths=[...tr.cells];
+  const kf=c=>c.sv||(r=>{const v=c.v(r); return v instanceof Node?v.textContent:v;});
+  const cmp=(x,y)=>{const nx=x==null||x==='–'||x==='', ny=y==null||y==='–'||y==='';
+    if(nx||ny) return nx&&ny?0:nx?1:-1; if(typeof x==='number'&&typeof y==='number') return x-y; if(x instanceof Date&&y instanceof Date) return x-y; return String(x).localeCompare(String(y),'vi',{numeric:true});};
+  const doSort=()=>{ths.forEach((h2,i)=>h2.dataset.sort=i===ss.i?(ss.d>0?'asc':'desc'):''); if(ss.i<0||!cols[ss.i]) return; const k=kf(cols[ss.i]);
+    [...tb.rows].map(x=>({x,v:k(x._r)})).sort((a,b)=>{const nb=(a.v==null||a.v==='–'||a.v==='')-(b.v==null||b.v==='–'||b.v===''); return nb||cmp(a.v,b.v)*ss.d;}).forEach(o=>tb.append(o.x)); renum();};
+  ths.forEach((h2,i)=>{const c=cols[i]; if(c.filter||c.nosort) return; h2.classList.add('sortable'); h2.tabIndex=0; h2.title='Bấm để sắp xếp';
+    const go=()=>{if(ss.i===i) ss.d=-ss.d; else {ss.i=i; ss.d=c.num||c.desc?-1:1;} doSort();};
+    h2.addEventListener('click',e=>{if(e.target.closest('.fbtn')) return; go();}); h2.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault(); go();}});});
+  doSort();
+  const fcols=cols.map((c,i)=>c.filter?i:-1).filter(i=>i>=0);
+  const upd2=()=>{renum(); upd();};
+  if(fcols.length&&rows.length>1) addFilters(t,key,cols.map((c,i)=>i).filter(i=>!fcols.includes(i)),upd2); else upd2();
 }
+// ---- lọc theo cột (kiểu AutoFilter Excel): nút phễu ở tiêu đề, trạng thái giữ qua các lần vẽ lại
+const FST=new Map(); let FPOP=null;
+const FUN='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/></svg>';
+const cv=td=>((td&&td.dataset.fv!=null?td.dataset.fv:td?td.textContent:'')||'').replace(/\s+/g,' ').trim()||'(Trống)';
+function closeFilter(){if(FPOP){FPOP.remove(); FPOP=null;}}
+document.addEventListener('pointerdown',e=>{if(FPOP&&!FPOP.contains(e.target)&&!e.target.closest('.fbtn')) closeFilter();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeFilter();});
+addEventListener('scroll',e=>{if(FPOP&&!FPOP.contains(e.target)&&Date.now()-FPOP._t>400) closeFilter();},true);
+function addFilters(t,key,skip=[],after=null){
+  if(!t||!t.tHead||!t.tBodies[0]) return; const st=FST.get(key)||new Map(); FST.set(key,st);
+  const ths=[...t.tHead.rows[0].cells]; const body=[...t.tBodies[0].rows]; const data=body.filter(r=>!r.classList.contains('sec'));
+  const pass=(tr,ex)=>{for(const [i,set] of st){if(i!==ex&&!set.has(cv(tr.cells[i]))) return false;} return true;};
+  const host=t.closest('.tbl')||t.parentNode;
+  const apply=()=>{let n=0; data.forEach(tr=>{const ok=pass(tr,-1); tr.hidden=!ok; if(ok) n++;});
+    let sec=null,any=false; const fin=()=>{if(sec) sec.hidden=!any;}; body.forEach(tr=>{if(tr.classList.contains('sec')){fin(); sec=tr; any=false;} else if(!tr.hidden) any=true;}); fin();
+    ths.forEach((th,i)=>{const b=th.querySelector('.fbtn'); if(b) b.classList.toggle('on',st.has(i));});
+    let nt=host.nextElementSibling&&host.nextElementSibling.classList.contains('fnote')?host.nextElementSibling:null;
+    if(st.size){if(!nt){nt=el('div',{class:'fnote nopdf'}); host.after(nt);} nt.replaceChildren(document.createTextNode(`Đang lọc: hiển thị ${fmtN(n)} / ${fmtN(data.length)} dòng · `)); const a=el('a',{href:'#',text:'Bỏ tất cả bộ lọc'}); a.addEventListener('click',e=>{e.preventDefault(); st.clear(); apply();}); nt.append(a);}
+    else if(nt) nt.remove(); if(after) after();};
+  ths.forEach((th,i)=>{if(skip.includes(i)) return; th.querySelector('.fbtn')?.remove();
+    const b=el('button',{class:'fbtn nopdf',type:'button',title:'Lọc cột này','aria-label':'Lọc cột '+th.textContent}); b.innerHTML=FUN;
+    b.addEventListener('click',e=>{e.stopPropagation(); if(FPOP&&FPOP._b===b){closeFilter(); return;} openFilter(b,th.textContent,i);}); th.append(b);});
+  function openFilter(b,title,i){closeFilter();
+    const cnt=new Map(); data.filter(tr=>pass(tr,i)).forEach(tr=>{const v=cv(tr.cells[i]); cnt.set(v,(cnt.get(v)||0)+1);});
+    (st.get(i)||new Set()).forEach(v=>{if(!cnt.has(v)) cnt.set(v,0);});
+    const vals=[...cnt.keys()].sort((a,b)=>a.localeCompare(b,'vi',{numeric:true}));
+    const cur=st.get(i); const sel=new Set(cur?[...cur]:vals);
+    const p=el('div',{class:'fpop',role:'dialog','aria-label':'Lọc '+title}); p._b=b; p._t=Date.now();
+    p.append(el('div',{class:'fh',text:'Lọc: '+title}));
+    const q=el('input',{type:'search',placeholder:'Tìm giá trị…'}); p.append(q);
+    const list=el('div',{class:'fl'}); p.append(list);
+    const commit=()=>{if(sel.size===vals.length&&vals.every(v=>sel.has(v))) st.delete(i); else st.set(i,new Set(sel)); apply();};
+    const allL=el('label',{class:'all'}); const allC=el('input',{type:'checkbox'}); allL.append(allC,document.createTextNode('(Chọn tất cả)'));
+    const boxes=[];
+    const syncAll=()=>{const vis=boxes.filter(x=>!x.l.hidden); allC.checked=vis.every(x=>x.c.checked); allC.indeterminate=!allC.checked&&vis.some(x=>x.c.checked);};
+    vals.forEach(v=>{const l=el('label'); const c=el('input',{type:'checkbox'}); c.checked=sel.has(v); l.append(c,el('span',{text:v}),el('span',{class:'fc',text:fmtN(cnt.get(v))}));
+      c.addEventListener('change',()=>{c.checked?sel.add(v):sel.delete(v); syncAll(); commit();}); boxes.push({v,l,c}); list.append(l);});
+    allC.addEventListener('change',()=>{boxes.filter(x=>!x.l.hidden).forEach(x=>{x.c.checked=allC.checked; allC.checked?sel.add(x.v):sel.delete(x.v);}); syncAll(); commit();});
+    list.prepend(allL); syncAll();
+    q.addEventListener('input',()=>{const k=norm(q.value); boxes.forEach(x=>x.l.hidden=!!k&&!norm(x.v).includes(k)); syncAll();});
+    const ff=el('div',{class:'ff'}); const clr=el('button',{class:'btn',type:'button',text:'Xóa lọc cột'}); const ok=el('button',{class:'btn primary',type:'button',text:'Xong'});
+    clr.addEventListener('click',()=>{st.delete(i); apply(); closeFilter();}); ok.addEventListener('click',closeFilter); ff.append(clr,ok); p.append(ff);
+    document.body.append(p); FPOP=p; const r=b.getBoundingClientRect(); const w=p.offsetWidth, hh=p.offsetHeight;
+    p.style.left=Math.max(12,Math.min(innerWidth-w-12,r.left-10))+'px'; p.style.top=(r.bottom+6+hh>innerHeight-8?Math.max(8,r.top-hh-6):r.bottom+6)+'px'; q.focus({preventScroll:true});}
+  // bỏ giá trị lọc không còn trong dữ liệu mới
+  for(const [i,set] of [...st]){if(i>=ths.length) st.delete(i);}
+  apply();
+}
+// 2 thanh tiến độ trong 1 ô: tỷ lệ tham dự + tỷ lệ đạt
+function stackBar(att,pr,cls){const t=el('div',{class:'sbar '+(cls||'')}); const a=el('i',{class:'sa'}); const p=el('i',{class:'sp'});
+  a.style.width=(att==null?0:Math.min(100,att*100))+'%'; p.style.width=(att==null||pr==null?0:Math.min(100,att*pr*100))+'%'; t.append(a,p); return t;}
+function rateCell(done,reg,pass,tested){const att=reg?done/reg:null, pr=tested?pass/tested:null; const w=el('div',{class:'rcell'});
+  const tx=el('div',{class:'rtx'}); tx.append(el('span',{class:'k1',text:'Đạt '}),el('b',{text:pr==null?'–':fmtP(pr)}),document.createTextNode(' / '),el('span',{class:'k2',text:'Tham dự '}),el('b',{text:att==null?'–':fmtP(att)}));
+  w.append(tx,stackBar(att,pr)); w.title=`Tỷ lệ đạt ${pr==null?'–':fmtP(pr)} (${fmtN(pass)}/${fmtN(tested)} lượt có kết quả) · Tỷ lệ tham dự ${att==null?'–':fmtP(att)} (${fmtN(done)}/${fmtN(reg)} lượt)`; return w;}
+function rateBars(done,reg,pass,tested){const w=el('div',{class:'rbx'});
+  [['Tham dự',reg?done/reg:null,`${fmtN(done)}/${fmtN(reg)} lượt tham dự`],['Đạt',tested?pass/tested:null,tested?`${fmtN(pass)}/${fmtN(tested)} lượt đạt`:'chưa có kết quả đánh giá']].forEach(([l,p,t])=>{
+    const r=el('div',{class:'rbr'}); r.title=t; r.append(el('span',{class:'l',text:l})); const tr=el('span',{class:'t'}); const i=el('i'); i.style.width=(p==null?0:Math.min(100,p*100))+'%'; if(l==='Đạt') i.classList.add('ok'); tr.append(i); r.append(tr,el('b',{text:p==null?'–':fmtP(p)})); w.append(r);});
+  return w;}
 function ratioBar(done,reg,mx){const w=el('div',{class:'rb'}); const t=el('div',{class:'tr'}); t.style.width=Math.max(4,reg/mx*100)+'%'; const i=el('i'); i.style.width=(reg?done/reg*100:0)+'%'; t.append(i);
   const tw=el('div',{class:'rbw'}); tw.append(t); const tx=el('span',{class:'tx'}); tx.append(el('b',{text:fmtN(done)}),document.createTextNode('/'+fmtN(reg))); w.append(tw,tx);
   w.title=`${fmtN(done)} hoàn thành / ${fmtN(reg)} đăng ký`+(reg?` (${fmtP(done/reg)})`:''); return w;}
@@ -693,7 +935,7 @@ function render(){
   if(!M) return; ['perf','budget','sched','years','data'].forEach(p=>$('#p-'+p).hidden=p!==S.tab); const F=filt();
   $('#srcChip').textContent=source.sample?'Dữ liệu mẫu':source.name; $('#srcChip').className='chip '+(source.sample?'sample':'ok');
   $('#rowsChip').textContent=`${fmtN(M.emp.size)} NV · ${fmtN(M.cls.size)} lớp · ${fmtN(M.recs.length)} lượt ghi nhận`;
-  $('#ffKhoi').classList.toggle('on',F.K!=='*'); $('#ffPb').classList.toggle('on',F.PB!=='*'); $('#ffNhom').classList.toggle('on',F.N!=='*'); $('#ffYear').classList.add('on'); $('#ffCmp').classList.toggle('on',!!$('#fCmp').value);
+  $('#ffKhoi').classList.toggle('on',F.K!=='*'); $('#ffFrom').classList.toggle('on',!!F.D0); $('#ffPb').classList.toggle('on',F.PB!=='*'); $('#ffNhom').classList.toggle('on',F.N!=='*'); $('#ffYear').classList.add('on'); $('#ffCmp').classList.toggle('on',!!$('#fCmp').value);
   {const C=cmpF(), n=$('#cmpNote'); n.hidden=!C||S.tab==='years'||S.tab==='data'; if(C) n.textContent=C.cut?`Đang so sánh cùng kỳ: 01/01–${dmy(F.T).slice(0,5)} năm ${F.Y} với cùng giai đoạn năm ${C.Y}. Biểu đồ theo tháng hiện đủ 12 tháng của năm ${C.Y} để tham khảo.`:`Đang so sánh cả năm ${F.Y} với cả năm ${C.Y}.`;}
   renderAlerts(); renderPerf(F); renderBud(F); renderSch(F); renderYears(F); renderData();
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',String(t.dataset.p===S.tab)));
@@ -708,12 +950,13 @@ function renderPerf(F){
   const P=perfM(F); const C=cmpF(); const Q=C?perfM(C):null; const Yc=C&&C.Y; const D=(k,kind,g)=>Q?dlt(P[k],Q[k],(C.cut?'cùng kỳ ':'')+Yc,kind,g):null;
   const done=P.done;
   kpis($('#kPerf'),[
-    {i:'users',l:'Số NV được đào tạo',v:fmtN(P.uniq),of:fmtN(P.hc),p:P.cov,n:`độ phủ ${fmtP(P.cov)} NV đang làm`+(P.learners>P.uniq?` · thêm ${fmtN(P.learners-P.uniq)} người đã nghỉ`:''),d:D('cov','pp',1)},
+    {i:'users',l:'Số NV được đào tạo',v:fmtN(P.uniq),of:fmtN(P.hc),p:P.cov,n:`độ phủ ${fmtP(P.cov)} NV đang làm`+(P.learners>P.uniq?` · ${fmtN(P.learners-P.uniq)} người đã nghỉ`:''),d:D('cov','pp',1)},
     {i:'star',u:P.satN?'/ 5':'',l:'Mức độ hài lòng',v:P.satN?fmt1(P.sat):'–',n:`${fmtN(P.satN)} lượt đánh giá`,d:D('sat','abs',1)},
     {i:'clock',u:P.hasH?'giờ':'',l:'Tổng số giờ đào tạo',v:P.hasH?fmtN(P.hrs):'–',n:P.hasH?`${fmtN(P.attN)} lượt tham dự`:`${fmtN(P.attN)} lượt tham dự · chưa có số giờ (điền Thời lượng chuẩn ở DM Khoa hoc)`,d:D('hrs','pct',1)},
     {i:'gauge',u:P.hasH?`giờ / ${fmtN(P.hc)} NV`:`/ ${fmtN(P.hc)} NV`,l:'Số giờ đào tạo / NV',v:fmt1(P.hpn),n:P.hasH?`${fmtN(P.hrs)} giờ ÷ ${fmtN(P.hc)} NV đang làm`:'chưa có số giờ',d:D('hpn','pct',1)},
-    {i:'cal',l:'Tỷ lệ tham dự',v:fmtN(P.attN),of:fmtN(P.attD),u:'lượt',p:P.att,n:`tỷ lệ ${fmtP(P.att)}`,d:D('att','pp',1)},
-    {i:'check',l:'Tỷ lệ đạt',v:fmtN(P.pass),of:fmtN(P.tested),u:'lượt',p:P.pr,n:`tỷ lệ đạt ${fmtP(P.pr)}`,d:D('pr','pp',1)},
+    {i:'check',l:'Tỷ lệ đạt / Tỷ lệ tham dự',wide:1,dual:{att:P.att,pr:P.pr},multi:[
+      {l:'Tỷ lệ đạt',p:P.pr,n:`${fmtN(P.pass)} / ${fmtN(P.tested)} lượt có kết quả đánh giá đạt`,d:D('pr','pp',1)},
+      {l:'Tỷ lệ tham dự',p:P.att,n:`${fmtN(P.attN)} / ${fmtN(P.attD)} lượt được mời đã tham dự`,d:D('att','pp',1)}]},
     (()=>{const t=P.hrs||0, f=(m)=>{const h=P.done.filter(r=>norm(r.cl.nb)===m).reduce((a,r)=>a+r.hrs,0); const k=new Set(P.done.filter(r=>norm(r.cl.nb)===m).map(r=>r.cl.kh)).size; return {h,k};}; const a=f('noi bo'); return {i:'home',u:P.hasH?'giờ':'',l:'Số giờ đào tạo nội bộ',v:P.hasH?fmtN(a.h):'–',p:t?a.h/t:null,n:`${fmtP(t?a.h/t:null)} tổng giờ · ${fmtN(a.k)} khóa do SCC tự đào tạo`,d:Q?dlt(a.h,(()=>{const x=Q.done.filter(r=>norm(r.cl.nb)==='noi bo').reduce((s,r)=>s+r.hrs,0); return x;})(),(C.cut?'cùng kỳ ':'')+Yc,'pct',1):null};})(),
     (()=>{const t=P.hrs||0; const dn=P.done.filter(r=>norm(r.cl.nb)==='ben ngoai'); const h=dn.reduce((a,r)=>a+r.hrs,0); const k=new Set(dn.map(r=>r.cl.kh)).size; return {i:'ext',u:P.hasH?'giờ':'',l:'Số giờ đào tạo bên ngoài',v:P.hasH?fmtN(h):'–',p:t?h/t:null,n:`${fmtP(t?h/t:null)} tổng giờ · ${fmtN(k)} khóa thuê / cử đi học bên ngoài`,d:Q?dlt(h,Q.done.filter(r=>norm(r.cl.nb)==='ben ngoai').reduce((s,r)=>s+r.hrs,0),(C.cut?'cùng kỳ ':'')+Yc,'pct',0):null};})(),
   ]);
@@ -733,8 +976,9 @@ function renderPerf(F){
   // phòng ban (theo bộ lọc Khối, không lọc Phòng ban)
   {const ap=allActive.filter(e=>e.pb&&(F.K==='*'||e.khoi===F.K)); const pbs=[...new Set(ap.map(e=>e.pb))];
    const items=pbs.map(p=>{const ak=new Set(ap.filter(e=>e.pb===p).map(e=>e.id)); const h=ak.size; const dk=yrDone.filter(r=>r.e&&r.e.pb===p); const u=new Set(dk.filter(r=>ak.has(r.eid)).map(r=>r.eid)).size; const hh=dk.reduce((a,r)=>a+r.hrs,0);
-     return {label:p,value:h?u/h:0,hh,n:dk.length,cnt:`${fmtN(u)} / ${fmtN(h)}`,txt:kHasH?`${fmtN(hh)} giờ`:`${fmtN(dk.length)} lượt`,sub:`${fmtN(u)}/${fmtN(h)} NV đang làm đã học · ${kHasH?fmtN(hh)+' giờ':fmtN(dk.length)+' lượt học'}`};}).sort((a,b)=>b.value-a.value||b.n-a.n);
-   hbars($('#cPb'),items,fmtP,{max:1,heads:['Phòng ban','','NV đang làm đã học / tổng','Tỷ lệ',kHasH?'Giờ học (gồm NV đã nghỉ)':'Lượt học (gồm NV đã nghỉ)']});
+     const kc=new Map(); ap.filter(e=>e.pb===p).forEach(e=>kc.set(e.khoi,(kc.get(e.khoi)||0)+1)); const khoi=[...kc.entries()].sort((x,y)=>y[1]-x[1])[0][0];
+     return {label:p,khoi,u,h,nk:new Set(dk.map(r=>r.cl.kh)).size,value:h?u/h:0,hh,n:dk.length,cnt:`${fmtN(u)} / ${fmtN(h)}`,txt:kHasH?`${fmtN(hh)} giờ`:`${fmtN(dk.length)} lượt`,sub:`${fmtN(u)}/${fmtN(h)} NV đang làm đã học · ${kHasH?fmtN(hh)+' giờ':fmtN(dk.length)+' lượt học'}`};}).sort((a,b)=>b.value-a.value||b.n-a.n);
+   pbTable($('#cPb'),items,kHasH);
    {const ph=$('#pbHint'); if(ph) ph.textContent=`% NV đang làm đã học ≥ 1 lớp · kèm ${kHasH?'tổng giờ':'số lượt học'} · xếp giảm dần · ${items.length} phòng ban${F.K==='*'?'':' thuộc '+F.K}`;}}
   // nhom
   const nh=[...new Set([...M.crs.values()].map(c=>c.nhom))];
@@ -742,9 +986,20 @@ function renderPerf(F){
   $('#nTitle').textContent=(byH?'Giờ đào tạo':'Lượt học hoàn thành')+' theo nhóm khóa học';
   const drawNhom=h=>vbars($('#cNhom'),nhv.map(x=>x.n),[{name:byH?'Giờ đào tạo':'Lượt học',color:'var(--accent)',values:nhv.map(x=>x.v)}],fmtN,{h,label:fmtN});
   // course table
-  const byC=new Map(); F.recs.forEach(r=>{const k=r.cl.kh; if(!byC.has(k)) byC.set(k,{name:r.cl.name,nhom:r.cl.nhom,cls:new Set(),reg:0,done:0,hrs:0,p:0,f:0,sat:[]}); const o=byC.get(k); o.cls.add(r.cl.key); o.reg++; if(r.done){o.done++; o.hrs+=r.hrs; if(r.res==='pass')o.p++; if(r.res==='fail')o.f++; if(r.sat>0)o.sat.push(r.sat);}});
-  const cr=[...byC.values()].sort((a,b)=>b.done-a.done||b.reg-a.reg); const mxReg=Math.max(1,...cr.map(r=>r.reg));
-  tbl($('#tCourse'),[{h:'Khóa học',v:r=>r.name},{h:'Nhóm',v:r=>r.nhom},{h:'Số lần tổ chức',num:1,v:r=>fmtN(r.cls.size)},{h:'Hoàn thành / Đăng ký',v:r=>ratioBar(r.done,r.reg,mxReg)},{h:'Giờ',num:1,v:r=>r.hrs?fmtN(r.hrs):'–'},{h:'Tỷ lệ đạt',num:1,v:r=>(r.p+r.f)?fmtP(r.p/(r.p+r.f)):'–'},{h:'Hài lòng',v:r=>stars(r.sat.length?avg(r.sat):null)}],cr);
+  const byC=new Map(); F.recs.forEach(r=>{const k=r.cl.kh; if(!byC.has(k)) byC.set(k,{name:r.cl.name,nhom:r.cl.nhom,nb:r.cl.nb,emp:new Set(),cls:new Set(),reg:0,done:0,hrs:0,p:0,f:0,sat:[]}); const o=byC.get(k); o.cls.add(r.cl.key); o.reg++; if(r.done){o.done++; o.emp.add(r.eid); o.hrs+=r.hrs; if(r.res==='pass')o.p++; if(r.res==='fail')o.f++; if(r.sat>0)o.sat.push(r.sat);}});
+  const nbo=x=>{const n=norm(x.nb); return n==='noi bo'?0:n==='ben ngoai'?2:1;}; const cr=[...byC.values()].sort((a,b)=>nbo(a)-nbo(b)||b.done-a.done||b.reg-a.reg); const mxReg=Math.max(1,...cr.map(r=>r.reg));
+  const SUM=(R,f)=>R.reduce((x,r)=>x+(f(r)||0),0);
+  $('#cTitle')&&($('#cTitle').textContent=`Theo khóa học – năm ${F.Y}`);
+  tbl($('#tCourse'),[
+    {h:'Khóa học',v:r=>r.name,sv:r=>r.name,tot:R=>`Tổng · ${fmtN(R.length)} khóa`},
+    {h:'Phân loại',v:r=>r.nb||'–',sv:r=>{const n=norm(r.nb); return n==='noi bo'?0:n==='ben ngoai'?1:2;}},
+    {h:'Nhóm',v:r=>r.nhom,sv:r=>r.nhom},
+    {h:'Số lần tổ chức',num:1,v:r=>fmtN(r.cls.size),sv:r=>r.cls.size,tot:R=>fmtN(SUM(R,r=>r.cls.size))},
+    {h:'Số NV học',num:1,v:r=>fmtN(r.emp.size),sv:r=>r.emp.size,tot:R=>{const u=new Set(R.flatMap(r=>[...r.emp])); const act=[...u].filter(id=>{const e=M.emp.get(id); return e&&activeAt(e,F.R);}).length; const d=el('span'); d.append(document.createTextNode(fmtN(u.size))); d.title=`${fmtN(act)} NV đang làm + ${fmtN(u.size-act)} NV đã nghỉ`; d.append(el('small',{class:'sub2',text:`${fmtN(act)} đang làm`})); return d;}},
+    {h:'Lượt tham dự',num:1,v:r=>fmtN(r.done),sv:r=>r.done,tot:R=>fmtN(SUM(R,r=>r.done))},
+    {h:'Giờ',num:1,v:r=>r.hrs?fmtN(r.hrs):'–',sv:r=>r.hrs||null,tot:R=>fmtN(SUM(R,r=>r.hrs))},
+    {h:'Tỷ lệ đạt / Tỷ lệ tham dự',v:r=>rateCell(r.done,r.reg,r.p,r.p+r.f),sv:r=>(r.p+r.f?r.p/(r.p+r.f):0)+(r.reg?r.done/r.reg:0)/1000,desc:1,tot:R=>rateCell(SUM(R,r=>r.done),SUM(R,r=>r.reg),SUM(R,r=>r.p),SUM(R,r=>r.p+r.f))},
+    {h:'Hài lòng',v:r=>stars(r.sat.length?avg(r.sat):null),sv:r=>r.sat.length?avg(r.sat):null,desc:1,tot:R=>{const a=R.flatMap(r=>r.sat); return stars(a.length?avg(a):null);}}],cr,'Chưa có dữ liệu',{sort:1,total:1,stt:1});
   renderInsights(F,P,C,Q);
   drawNhom(Math.max(300,Math.round($('#insights').offsetHeight)));  // cao bằng ô Tóm tắt nhanh bên cạnh
 }
@@ -752,44 +1007,53 @@ function renderPerf(F){
 // ---------- insights: short, factual sentences computed from the current filter (no invented targets)
 const vt=v=>fmtVND(v).replace(/ tr$/,' triệu đ').replace(/ tỷ$/,' tỷ đ').replace(/(\d)$/,'$1 đ');
 function rich(t){const f=document.createDocumentFragment(); t.split(/(\*\*[^*]+\*\*)/).forEach(p=>{if(!p) return; if(p.startsWith('**')) f.append(el('b',{text:p.slice(2,-2)})); else f.append(document.createTextNode(p));}); return f;}
+// Phân tích nhanh: mỗi điểm = nhận định + ý nghĩa + gợi ý hành động
+function insRender(host,out){host.replaceChildren(...out.map(o=>{const d=el('div',{class:'it'}); const ic=el('span',{class:'ic '+(o.kind||'')}); ic.append(icon(o.ic)); const p=el('div');
+  p.append(el('div',{class:'ih',text:o.title})); if(o.body){const x=el('div',{class:'ib'}); x.append(rich(o.body)); p.append(x);}  d.append(ic,p); return d;}));}
+const evalNote=()=>{const ys=YEARS.slice().sort(); const r=ys.length>1?`Giai đoạn ${ys[0]}–${ys[ys.length-1]}`:`Năm ${ys[0]}`; return `${r} chưa thực hiện đánh giá sau khóa học; nội dung này sẽ được bổ sung trong thời gian tới.`;};
 function renderInsights(F,P,C,Q){
-  const out=[]; const add=(ic,kind,t)=>out.push({ic,kind,t});
-  const kh=F.K==='*'?'toàn công ty':F.K; const done=P.done;
-  // 1 coverage
-  if(P.hc){const no=P.hc-P.uniq; add('users','info',`Độ phủ đào tạo năm ${F.Y} (${kh}): **${fmtP(P.cov)}** – ${fmtN(P.uniq)}/${fmtN(P.hc)} NV đang làm đã học ít nhất 1 lớp; **${fmtN(no)} NV** chưa có buổi học nào.`);}
-  // 2 hours + top group
-  if(done.length&&!P.hasH){const g=new Map(); done.forEach(r=>g.set(r.cl.nhom,(g.get(r.cl.nhom)||0)+1)); const top=[...g.entries()].sort((a,b)=>b[1]-a[1])[0];
-    let t=`**${fmtN(P.attN)} lượt học** hoàn thành (${fmtN(P.learners)} người). Nhóm **${top[0]}** chiếm nhiều nhất: ${fmtP(top[1]/P.attN)} số lượt. Chưa có số giờ học – điền Thời lượng chuẩn ở DM Khoa hoc để tính giờ.`;
-    if(Q&&Q.attN){const d=(P.attN-Q.attN)/Q.attN; t+=` So với ${C.cut?'cùng kỳ ':''}${C.Y}: **${d>=0?'+':''}${Math.round(d*100)}%** lượt học.`;} add('trend','',t);}
-  else if(P.hrs){const g=new Map(); done.forEach(r=>g.set(r.cl.nhom,(g.get(r.cl.nhom)||0)+r.hrs)); const top=[...g.entries()].sort((a,b)=>b[1]-a[1])[0];
-    let t=`Tổng **${fmtN(P.hrs)} giờ** đào tạo (${fmtN(P.attN)} lượt tham dự), bình quân **${fmt1(P.hpn)} giờ/NV**. Nhóm **${top[0]}** chiếm nhiều nhất: ${fmtP(top[1]/P.hrs)} tổng giờ.`;
-    if(Q&&Q.hrs){const d=(P.hrs-Q.hrs)/Q.hrs; t+=` So với ${C.cut?'cùng kỳ ':''}${C.Y}: **${d>=0?'+':''}${Math.round(d*100)}%** giờ.`;}
-    add('trend','',t);}
-  else if(!done.length) add('warn','warn',`Chưa có lượt học hoàn thành nào trong năm ${F.Y} theo bộ lọc đang chọn.`);
-  // 3 khối spread
-  if(F.K==='*'){const ae=[...M.emp.values()].filter(e=>e.khoi&&activeAt(e,F.R)); const ks=[...new Set(ae.map(e=>e.khoi))];
-    const yr=M.recs.filter(r=>r.year===F.Y&&r.done&&(F.N==='*'||r.cl.nhom===F.N));
-    const cv=ks.map(k=>{const h=ae.filter(e=>e.khoi===k).length; const u=new Set(yr.filter(r=>r.khoi===k).map(r=>r.eid)).size; return {k,h,u,c:h?u/h:0};}).sort((a,b)=>b.c-a.c||b.h-a.h);
-    if(cv.length>1){const hi=cv[0],lo=cv[cv.length-1]; add('gauge','',`**${hi.k}** có độ phủ cao nhất (**${fmtP(hi.c)}**, ${fmtN(hi.u)}/${fmtN(hi.h)} NV), **${lo.k}** thấp nhất (${fmtP(lo.c)}, ${fmtN(lo.u)}/${fmtN(lo.h)} NV).`);}}
-  // 4 plan completion (target 100% – HR Action Plan 3.3)
+  const out=[]; const add=(ic,kind,title,body)=>out.push({ic,kind,title,body});
+  const done=P.done; const actIds=new Set(F.emps.map(e=>e.id)); const host=$('#insights');
+  if(!done.length){add('cal','info','Chưa có dữ liệu trong kỳ','Chưa có lượt học hoàn thành nào theo bộ lọc đang chọn.'); insRender(host,out); return;}
+  // 1. độ phủ & chiều sâu
+  const pe=new Map(); done.forEach(r=>{if(!actIds.has(r.eid)) return; let o=pe.get(r.eid); if(!o){o={k:new Set()}; pe.set(r.eid,o);} o.k.add(r.cl.kh);});
+  const n1=[...pe.values()].filter(o=>o.k.size===1).length, n3=[...pe.values()].filter(o=>o.k.size>=3).length;
+  if(P.hc&&pe.size) add('users',P.cov>=0.9?'good':'info',`Độ phủ ${fmtP(P.cov)} – nền tảng tốt để đi sâu`,
+    `${fmtN(P.uniq)}/${fmtN(P.hc)} NV đang làm đã tham gia ít nhất 1 khóa, bình quân ${fmt1(P.hpn)} giờ/NV. ${fmtN(n1)} NV (${fmtP(n1/pe.size)}) học 1 khóa, ${fmtN(n3)} NV (${fmtP(n3/pe.size)}) học từ 3 khóa trở lên – độ phủ hiện đến nhiều từ các khóa bắt buộc và hội nhập, chiều sâu chuyên môn sẽ tăng dần khi các khóa theo nhu cầu được triển khai.`);
+  // 2. chương trình diện rộng
+  if(P.hrs){const ch=new Map(); done.forEach(r=>ch.set(r.cl.name,(ch.get(r.cl.name)||0)+r.hrs)); const cs=[...ch.entries()].sort((a,b)=>b[1]-a[1]);
+    if(cs.length>2){const t2=cs[0][1]+cs[1][1]; if(t2/P.hrs>=0.4) add('trend','info',`2 chương trình diện rộng đóng góp ${fmtP(t2/P.hrs)} số giờ`,
+      `**${cs[0][0]}** (${fmtN(cs[0][1])} giờ) và **${cs[1][0]}** (${fmtN(cs[1][1])} giờ) có số học viên lớn nên kéo tổng giờ lên đáng kể; ${fmtN(cs.length-2)} khóa còn lại quy mô nhỏ hơn, tập trung vào nhu cầu chuyên môn của từng phòng.`);}}
+  // 3. nội bộ
+  const B=budM(F);
+  if(P.hrs){const hI=done.filter(r=>norm(r.cl.nb)==='noi bo').reduce((a,r)=>a+r.hrs,0), hE=P.hrs-hI; const cI=F.cls.filter(c=>norm(c.nb)==='noi bo').reduce((a,c)=>a+(c.ca||0),0), cE=B.act-cI;
+    if(hI&&hE&&cE>0) add('home','good',`Đào tạo nội bộ đóng góp ${fmtP(hI/P.hrs)} số giờ`,
+      `Các khóa nội bộ gần như không phát sinh chi phí, trong khi giờ học bên ngoài bình quân ${vt(cE/hE)}/giờ – nguồn lực nội bộ đang được tận dụng hiệu quả.`);}
+  // 4. phòng ban
+  {const ap=F.emps.filter(e=>e.pb); const lset=new Set(done.map(r=>r.eid)); const m=new Map(); ap.forEach(e=>{const o=m.get(e.pb)||{h:0,u:0}; o.h++; if(lset.has(e.id)) o.u++; m.set(e.pb,o);});
+    const all=[...m.entries()].filter(([,o])=>o.h>=5); const low=all.filter(([,o])=>o.u/o.h<0.9).map(([k,o])=>({k,c:o.u/o.h,o})).sort((a,b)=>a.c-b.c);
+    if(low.length) add('gauge','info',`${all.length-low.length}/${all.length} phòng ban đạt độ phủ từ 90% trở lên`,`Các phòng còn lại: `+low.slice(0,4).map(x=>`**${x.k}** ${fmtP(x.c)} (${fmtN(x.o.u)}/${fmtN(x.o.h)})`).join(' · ')+'.');}
+  // 5. NV chưa tham gia
+  if(P.hc){const lset=new Set(done.map(r=>r.eid)); const no=F.emps.filter(e=>!lset.has(e.id));
+    if(no.length) add('user','info',`${fmtN(no.length)} NV chưa tham gia khóa nào`,(()=>{const g=new Map(); no.forEach(e=>{const k=e.pb||e.khoi||'Chưa rõ'; g.set(k,(g.get(k)||0)+1);}); const gs=[...g.entries()].sort((a,b)=>b[1]-a[1]);
+      const R=F.R||new Date(), nw=no.filter(e=>e.join&&(R-e.join)<=90*864e5).length;
+      let t=`Chiếm ${fmtP(no.length/P.hc)} NV đang làm, tập trung ở `+gs.slice(0,3).map(([k,v])=>`**${k}** (${fmtN(v)} NV)`).join(', ')+(gs.length>3?` và ${fmtN(gs.length-3)} phòng khác`:'')+'.';
+      if(nw) t+=` Trong đó ${fmtN(nw)} NV mới vào làm trong 3 tháng gần đây.`; return t;})());}
+  // 6. tiến độ kế hoạch
   const Sm=schM(F);
-  if(Sm.byPlan){const late=Sm.its.filter(x=>x.k==='late'); const nm=late.slice(0,3).map(x=>x.p.name.replace(/\s*\(đợt T\d+\)$/,'')).join('; ');
-    add('cal',late.length?'warn':'good',`Kế hoạch đào tạo ${F.Y}: đã diễn ra **${fmtN(Sm.num)}/${fmtN(Sm.due.length)}** khóa so với kế hoạch (**${fmtP(Sm.rate)}**, mục tiêu 100% – HR Action Plan 3.3), gồm ${fmtN(Sm.dueDone.length)} khóa trong kế hoạch và ${fmtN(Sm.nAd)} khóa ad-hoc`+(late.length?`; **${late.length} lớp trễ hạn**: ${nm}${late.length>3?'…':''}`:'')+(Sm.nRun?`; ${Sm.nRun} lớp đang thực hiện`:'')+(Sm.nUp?`; ${Sm.nUp} lớp chưa tới ngày`:'')+'.');}
-  const over=Sm.byPlan?0:Sm.due.filter(c=>!['Hoàn thành','Hủy'].includes(c.st)).length;
-  const upc=F.clsAll.filter(c=>c.d0&&c.d0>F.T&&c.d0.getFullYear()===F.Y&&['Kế hoạch','Đã xác nhận','Dời lịch'].includes(c.st)&&(F.K==='*'||c.khoi===F.K)&&(F.N==='*'||c.nhom===F.N)).length;
-  if(!Sm.byPlan&&Sm.due.length) add('cal',Sm.rate<1?'warn':'good',`Hoàn thành **${fmtN(Sm.dueDone.length)}/${fmtN(Sm.due.length)}** lớp trong kế hoạch đã đến hạn (**${fmtP(Sm.rate)}**, mục tiêu 100% – HR Action Plan 3.3)${over?`; **${over} lớp** đã qua ngày nhưng chưa cập nhật trạng thái`:''}. Còn **${fmtN(upc)} lớp** từ nay đến cuối năm.`);
-  // 5 budget
-  const B=budM(F); if(B.plan) add('coin','',`Chi phí thực tế **${vt(B.act)}**, bằng **${fmtP(B.u)}** ngân sách kế hoạch năm (${vt(B.plan)}); còn ${vt(B.rem)}. Chi phí bình quân **${vt(B.perRec)}/lượt** hoàn thành.`);
-  // 6 quality: pass rate + weakest course
-  if(P.tested){const byc=new Map(); done.filter(r=>r.res==='pass'||r.res==='fail').forEach(r=>{const o=byc.get(r.cl.name)||{p:0,n:0}; o.n++; if(r.res==='pass')o.p++; byc.set(r.cl.name,o);});
-    const w=[...byc.entries()].filter(([,o])=>o.n>=3).map(([k,o])=>({k,r:o.p/o.n,n:o.n})).sort((a,b)=>a.r-b.r)[0];
-    add('check','',`Tỷ lệ đạt bài kiểm tra **${fmtP(P.pr)}** (${fmtN(P.pass)}/${fmtN(P.tested)} lượt).`+(w&&byc.size>1&&w.r<P.pr?` Thấp nhất: **${w.k}** – ${fmtP(w.r)} (${fmtN(w.n)} lượt có điểm).`:''));}
-  // 7 satisfaction
-  if(P.satN){const byc=new Map(); done.filter(r=>r.sat>0).forEach(r=>{const a=byc.get(r.cl.name)||[]; a.push(r.sat); byc.set(r.cl.name,a);});
-    const ar=[...byc.entries()].filter(([,a])=>a.length>=3).map(([k,a])=>({k,v:avg(a)})).sort((a,b)=>b.v-a.v);
-    add('star','',`Hài lòng bình quân **${fmt1(P.sat)}/5** (${fmtN(P.satN)} lượt đánh giá).`+(ar.length>1?` Cao nhất **${ar[0].k}** (${fmt1(ar[0].v)}), thấp nhất **${ar[ar.length-1].k}** (${fmt1(ar[ar.length-1].v)}).`:''));}
-  const host=$('#insights'); host.replaceChildren(...out.map(o=>{const d=el('div',{class:'it'}); const ic=el('span',{class:'ic '+(o.kind||'')}); ic.append(icon(o.ic)); const p=el('div'); p.append(rich(o.t)); d.append(ic,p); return d;}));
-  {const ih=$('#insHint'); if(ih) ih.textContent=`Năm ${F.Y}${F.Y===F.T.getFullYear()?' (tính đến '+dmy(F.T)+')':''} · ${F.K==='*'?'Toàn công ty':F.K}${F.N==='*'?'':' · '+F.N}`;}
+  if(Sm.byPlan){const late=Sm.its.filter(x=>x.k==='late'); const lb=late.filter(x=>/bat buoc/.test(norm(x.p.sec)));
+    add('cal','info',`Đã triển khai ${fmtN(Sm.num)}/${fmtN(Sm.den)} khóa kế hoạch (${fmtP(Sm.rate)})`,
+      `${fmtN(Sm.nRun)} khóa đang thực hiện`+(late.length?`, ${fmtN(late.length)} khóa đang chờ xếp lịch`+(lb.length?` (gồm ${fmtN(lb.length)} khóa bắt buộc: ${lb.map(x=>x.p.name.replace(/\s*\(Đợt T\d+\)$/,'')).slice(0,3).join('; ')})`:''):'')+'.');
+  // 7. ngân sách
+    if(B.plan){const u=B.act/B.plan; const lateBud=late.reduce((a,x)=>a+(x.p.bud||0),0);
+      add('coin','info',`Đã sử dụng ${fmtP(u)} ngân sách`,lateBud?`Phần lớn ngân sách còn lại (${vt(lateBud)}) thuộc các khóa đang chờ xếp lịch; nếu triển khai đủ, chi phí cả năm khoảng ${vt(B.act+lateBud)} (${fmtP((B.act+lateBud)/B.plan)} ngân sách) – vẫn nằm trong ngân sách.`:`${vt(B.act)} / ${vt(B.plan)}.`);}}
+  // 8. người đã nghỉ
+  if(P.hrs){const lv=done.filter(r=>!actIds.has(r.eid)); const hL=lv.reduce((a,r)=>a+r.hrs,0); const nL=new Set(lv.map(r=>r.eid)).size;
+    if(nL) add('ext','info',`${fmtP(1-hL/P.hrs)} giờ đào tạo thuộc về NV đang làm`,`${fmtN(nL)} người đã học trong kỳ rồi nghỉ việc (${fmtN(hL)} giờ, ${fmtP(hL/P.hrs)} tổng giờ).`);}
+  // 9. đánh giá
+  if(!P.satN) add('star','info','Chưa có dữ liệu đánh giá sau khóa',evalNote());
+  else add('star',P.sat>=4?'good':'info',`Hài lòng bình quân ${fmt1(P.sat)}/5`,`${fmtN(P.satN)} lượt đánh giá.`);
+  insRender(host,out);
 }
 function renderNV(){
   const host=$('#nvRes'); if(!M) return; const q=norm($('#qNV').value);
@@ -821,12 +1085,17 @@ function renderCal(F){
     tr.append(el('td',{text:`${done}/${r.ss.length} lớp`+(late?` · ${late} quá hạn`:'')})); tb.append(tr);});
   t.append(tb); host.append(t);
 }
+// nhóm kế hoạch của 1 lớp: theo Mã lớp trong sheet Kế hoạch → nếu Ngoài kế hoạch = Phát sinh → còn lại theo nhóm khóa học
+const LO=s=>String(s||'').replace(/^[IVXLC]+\.\s*/,'').trim();
+function planRowOf(F,c){const rs=F.plan.filter(p=>p.code&&p.code===c.kh); if(!rs.length) return null; if(rs.length===1) return rs[0];
+  return rs.find(p=>p.dn&&+p.dn===+c.d0)||rs.find(p=>p.s&&c.d0>=p.s&&c.d0<=new Date(+p.e+864e5))||rs[0];}
+function typeFn(F){return c=>{if(!c.plan) return 'Phát sinh'; const p=planRowOf(F,c); return p?LO(p.sec):(c.nhom==='Bắt buộc'?'Bắt buộc':'Theo nhu cầu');};}
 function renderBud(F){
-  const B=budM(F); const C=cmpF(); const Q=C?budM(C):null; const Yc=C&&C.Y; const D=(k,kind,g)=>Q?dlt(B[k],Q[k],(C.cut?'cùng kỳ ':'')+Yc,kind,g):null;
+  const B=budM(F); const typeOf=typeFn(F); const C=cmpF(); const Q=C?budM(C):null; const Yc=C&&C.Y; const D=(k,kind,g)=>Q?dlt(B[k],Q[k],(C.cut?'cùng kỳ ':'')+Yc,kind,g):null;
   const vu=v=>{const t=fmtVND(v); const m=t.match(/^(.*) (tr|tỷ)$/); return m?[m[1],m[2]==='tr'?'triệu đ':'tỷ đ']:[t,'đ'];};
   // ---- thẻ ngân sách tổng: kế hoạch / đã dùng / còn lại + thanh tiến độ
   {const h=$('#bHero'); h.replaceChildren();
-   const hd=el('div',{class:'bh-hd'}); const ic=el('span',{class:'ico'}); ic.append(icon('coin')); const tt=el('div'); tt.append(el('h3',{text:`Ngân sách đào tạo năm ${F.Y}`}),el('div',{class:'bh-src',text:B.hasP?'Ngân sách: sheet Kế hoạch đào tạo · Thực tế: Chi phí thực tế ở sheet Lớp học':'Ngân sách: tổng Chi phí kế hoạch các lớp (năm này chưa có trong sheet Kế hoạch đào tạo)'})); hd.append(ic,tt); h.append(hd);
+   const hd=el('div',{class:'bh-hd'}); const ic=el('span',{class:'ico'}); ic.append(icon('coin')); const tt=el('div'); tt.append(el('h3',{text:`Ngân sách đào tạo năm ${F.Y}`})); hd.append(ic,tt); h.append(hd);
    const u=B.plan?B.act/B.plan:null; const over=B.act>B.plan&&B.plan>0;
    const nums=el('div',{class:'bh-nums'});
    const nb=(lab,v,dot,pc)=>{const d=el('div'); const l=el('span',{class:'lb'}); if(dot){const i=el('i'); i.style.background=dot; l.append(i);} l.append(document.createTextNode(lab)); const [a,b]=vu(v); const x=el('div',{class:'vv'}); x.append(el('b',{text:a}),el('small',{text:b})); if(pc!=null) x.append(el('em',{text:fmtP(pc)})); d.append(l,x); return d;};
@@ -839,17 +1108,17 @@ function renderBud(F){
    h.append(bar);
    const sc=el('div',{class:'bh-scale'}); ['0%','25%','50%','75%','100%'].forEach(t=>sc.append(el('span',{text:t}))); h.append(sc);
    const note=el('div',{class:'bh-note'});
-   note.textContent=B.plan?`Đã dùng ${fmtP(u)} ngân sách (${vt(B.act)} / ${vt(B.plan)})`+(tp>0&&tp<1?`, trong khi tiến độ thời gian năm ${F.Y} là ${fmtP(tp)} (tính đến ${dmy(F.T).slice(0,5)}).`:'.')+(B.nDone?` ${fmtN(B.nDone)} lớp đã tổ chức trong năm.`:''):'Chưa có ngân sách kế hoạch cho năm này.';
+   note.textContent=Q?'':B.plan?`Đã dùng ${fmtP(u)} ngân sách (${vt(B.act)} / ${vt(B.plan)})`+(tp>0&&tp<1?`, trong khi tiến độ thời gian năm ${F.Y} là ${fmtP(tp)} (tính đến ${dmy(F.T).slice(0,5)}).`:'.')+(B.nDone?` ${fmtN(B.nDone)} lớp đã tổ chức trong năm.`:''):'Chưa có ngân sách kế hoạch cho năm này.';
    if(Q){const d=D('act','pct',0); const w=el('span',{class:'dl '+(d.c||''),text:d.t}); note.append(document.createTextNode(' Chi phí thực tế '),w,document.createTextNode(' '+d.e.trim()+'.'));}
-   h.append(note);
+   if(Q) h.append(note);
    // phân bổ theo nhóm kế hoạch
    if(B.hasP){const secs=[...new Set(F.plan.map(p=>p.sec))].sort((a,b)=>a.localeCompare(b,'vi',{numeric:true})); const c2s=new Map(); F.plan.forEach(p=>{if(p.code&&!c2s.has(p.code)) c2s.set(p.code,p.sec);});
-     const ps=secs.find(x=>/phat sinh/.test(norm(x))); const secOf=c=>c2s.get(c.kh)||(!c.plan&&ps)||(c.plan?'Lớp trong KH chưa khớp mã':'Lớp ngoài kế hoạch');
+     const ps=secs.find(x=>/phat sinh/.test(norm(x))); const secOf=c=>{const t=typeOf(c); return secs.find(x=>LO(x)===t)||t;};
      const act=new Map(); F.cls.forEach(c=>{if(c.ca){const k=secOf(c); act.set(k,(act.get(k)||0)+c.ca);}});
      const all=[...secs,...[...act.keys()].filter(k=>!secs.includes(k))];
      const box=el('div',{class:'bh-secs'});
      all.forEach(k=>{const pl=F.plan.filter(p=>p.sec===k).reduce((a,p)=>a+p.bud,0), ac=act.get(k)||0; const r=el('div',{class:'bs'});
-       const n=el('div',{class:'bs-n'}); n.append(document.createTextNode(k)); if(k===ps) n.append(el('small',{text:' (gồm lớp ngoài kế hoạch)'}));
+       const n=el('div',{class:'bs-n'}); n.append(document.createTextNode(k==='Phát sinh'?'IV. Phát sinh':k)); if(k==='Phát sinh') n.append(el('small',{text:' (ngoài kế hoạch, chưa có ngân sách)'}));
        const tr=el('div',{class:'bs-t'}); const i=el('i'); i.style.width=(pl?Math.min(100,ac/pl*100):ac?100:0)+'%'; if(ac>pl) i.style.background='var(--crit)'; tr.append(i);
        const v=el('div',{class:'bs-v'}); v.append(el('b',{text:fmtVND(ac)}),document.createTextNode(' / '+fmtVND(pl))); r.append(n,tr,v); box.append(r);});
      const hh=el('div',{class:'bs bs-h'}); hh.append(el('div',{text:'Theo nhóm kế hoạch'}),el('div'),el('div',{text:'Thực tế / Kế hoạch'})); box.prepend(hh); h.append(box);}
@@ -862,19 +1131,30 @@ function renderBud(F){
   const monP=F2=>F2.plan.length?MONTHS.map((_,m)=>F2.plan.filter(p=>p.s&&p.s.getMonth()===m).reduce((a,p)=>a+p.bud,0)):mon(F2,c=>c.cp);
   const short=v=>v>=1e9?nf1.format(v/1e9)+' tỷ':v>=1e5?nf1.format(v/1e6):fmtN(v);
   const ser=Q?[{name:'Thực tế '+Yc,color:'var(--navy)',values:mon(C.full,c=>c.ca||0)},{name:'Thực tế '+F.Y,color:'var(--accent)',values:mon(F,c=>c.ca||0)}]
-             :[{name:B.hasP?'Kế hoạch (tháng bắt đầu dự kiến)':'Kế hoạch',color:'var(--navy)',values:monP(F)},{name:'Thực tế',color:'var(--accent)',values:mon(F,c=>c.ca||0)}];
+             :[{name:'Kế hoạch',color:'var(--navy)',values:monP(F)},{name:'Thực tế',color:'var(--accent)',values:mon(F,c=>c.ca||0)}];
   const naB=F.plan.filter(p=>!p.s).reduce((a,p)=>a+p.bud,0);
-  $('#bTitle').textContent=Q?`Chi phí thực tế theo tháng: ${F.Y} và ${Yc}`:'Chi phí kế hoạch và thực tế theo tháng';
-  legend($('#lgBud'),ser.map(s=>[s.name,s.color]).concat(!Q&&naB?[[`Phát sinh chưa có tháng: ${fmtVND(naB)}`,'transparent']]:[]));
+  $('#bTitle').textContent=Q?`Chi phí thực tế theo tháng: ${F.Y} và ${Yc}`:'Bảng theo dõi chi phí theo tháng';
+  legend($('#lgBud'),ser.map(s=>[s.name,s.color]));
   vbars($('#cBud'),MONTHS,ser,fmtVND,{label:short});
   const nh=[...new Set([...M.crs.values()].map(c=>c.nhom))];
   const plN=n=>B.hasP?F.plan.filter(p=>p.nhom===n).reduce((a,p)=>a+p.bud,0):F.cls.filter(c=>c.nhom===n).reduce((a,c)=>a+c.cp,0);
   hbars($('#cBudNhom'),nh.map(n=>({label:n,value:F.cls.filter(c=>c.nhom===n).reduce((a,c)=>a+(c.ca||0),0),sub:'Kế hoạch: '+fmtVND(plN(n))})).sort((a,b)=>b.value-a.value),fmtVND,{color:'var(--accent)'});
   // bảng: chương trình kế hoạch chưa hoàn thành + các lớp; Kế hoạch trước → Hoàn thành → Hủy; ngày mới → cũ
-  const rows=F.plan.map(p=>({p,k:pst(p,F.T)})).filter(x=>x.k!=='done').map(({p,k})=>({src:'Kế hoạch',id:p.code,name:p.name,d:p.s,dl:p.s?(dmy(p.s).slice(0,5)+' – '+dmy(p.e)):'Khi phát sinh',st:PST[k][0],nb:p.nb,cp:p.bud,ca:null,done:null,g:k==='cx'?2:0}))
-    .concat(F.cls.map(c=>({src:'Lớp',id:c.id,name:c.name,d:c.d0,dl:dmy(c.d0),st:c.st,nb:c.nb,cp:c.cp,ca:c.ca,done:c.done,g:c.st==='Hoàn thành'?1:c.st==='Hủy'?2:0})))
+  const rows=F.plan.map(p=>({p,k:pst(p,F.T)})).filter(x=>x.k!=='done').map(({p,k})=>({src:LO(p.sec),id:p.code,name:p.name,d:p.s,dl:p.s?(dmy(p.s).slice(0,5)+' – '+dmy(p.e)):'Khi phát sinh',st:PST[k][0],nb:p.nb,cp:p.bud,ca:null,done:null,g:k==='cx'?2:0}))
+    .concat(F.cls.map(c=>({src:typeOf(c),id:c.id,name:c.name,d:c.d0,dl:dmy(c.d0),st:c.st,nb:c.nb,cp:c.cp,ca:c.ca,done:c.done,g:c.st==='Hoàn thành'?1:c.st==='Hủy'?2:0})))
     .sort((a,b)=>a.g-b.g||((b.d?+b.d:-1)-(a.d?+a.d:-1)));
-  tbl($('#tBud'),[{h:'Mã lớp',v:r=>r.id||'–'},{h:'Khóa học / chương trình',v:r=>r.name},{h:'Loại',v:r=>r.src},{h:'Ngày',v:r=>r.dl},{h:'Trạng thái',v:r=>pill(r.st)},{h:'Nội bộ / ngoài',v:r=>r.nb},{h:'Kế hoạch',num:1,v:r=>r.cp?fmtN(r.cp):'–'},{h:'Thực tế',num:1,v:r=>r.ca==null?'–':fmtN(r.ca)},{h:'Chênh lệch',num:1,v:r=>r.ca==null?'–':fmtN(r.ca-r.cp)},{h:'Lượt HT',num:1,v:r=>r.done==null?'–':fmtN(r.done)},{h:'Chi phí / lượt',num:1,v:r=>r.ca&&r.done?fmtN(r.ca/r.done):'–'}],rows);
+  const SB=(R,f)=>R.reduce((x,r)=>x+(f(r)||0),0); const vn=v=>v==null?'–':fmtN(v);
+  if($('#tBud')) tbl($('#tBud'),[
+    {h:'Mã lớp',v:r=>r.id||'–',sv:r=>r.id||null,tot:R=>`Tổng · ${fmtN(R.length)} dòng`},
+    {h:'Khóa học / chương trình',v:r=>r.name,sv:r=>r.name},
+    {h:'Phân loại KH',v:r=>r.src,sv:r=>r.src},
+    {h:'Ngày',v:r=>r.dl,sv:r=>r.d||null,desc:1},
+    {h:'Trạng thái',v:r=>pill(r.st),sv:r=>r.st},
+    {h:'Nội bộ / ngoài',v:r=>r.nb,sv:r=>r.nb},
+    {h:'Kế hoạch',num:1,v:r=>r.cp?fmtN(r.cp):'–',sv:r=>r.cp||null,tot:R=>fmtN(SB(R,r=>r.cp))},
+    {h:'Thực tế',num:1,v:r=>vn(r.ca),sv:r=>r.ca,tot:R=>fmtN(SB(R,r=>r.ca))},
+    {h:'Chênh lệch',num:1,v:r=>r.ca==null?'–':fmtN(r.ca-r.cp),sv:r=>r.ca==null?null:r.ca-r.cp,tot:R=>fmtN(SB(R,r=>r.ca)-SB(R,r=>r.cp))},
+    {h:'Lượt HT',num:1,v:r=>vn(r.done),sv:r=>r.done,tot:R=>fmtN(SB(R,r=>r.done))}],rows,'Chưa có dữ liệu',{sort:1,total:1});
 }
 // trạng thái 1 dòng kế hoạch tại ngày T: cột Trạng thái nhập tay trước, để trống thì tự tính theo ngày
 const PST={done:['Hoàn thành','var(--good)'],run:['Đang thực hiện','var(--warn)'],plan:['Kế hoạch','#b8bfcc'],late:['Trễ hạn','var(--crit)'],cx:['Hủy','#6b7385'],na:['Khi phát sinh','#d5dae5']};
@@ -883,31 +1163,45 @@ function schM(F){const T=F.cut||F.T;
   if(F.plan.length){const its=F.plan.map(p=>({p,k:pst(p,T)})); const cnt=k=>its.filter(x=>x.k===k).length;
     const due=its.filter(x=>x.k!=='na'), dueDone=due.filter(x=>x.k==='done');  // lớp KH cả năm (có lịch) và lớp KH đã diễn ra
     const adhoc=F.cls.filter(c=>!c.plan&&c.st==='Hoàn thành'); const nAd=new Set(adhoc.map(c=>c.kh)).size; const num=dueDone.length+nAd;  // khóa ad-hoc (ngoài KH) đã diễn ra cũng tính vào tử số
-    return {byPlan:true,unit:'lớp',its,due,dueDone,adhoc,nAd,num,nPlan:its.filter(x=>x.k!=='na').length,nProg:new Set(F.plan.map(p=>p.stt||p.name)).size,rate:due.length?num/due.length:null,nRun:cnt('run'),nLate:cnt('late'),nUp:cnt('plan'),nNa:cnt('na'),nCx:cnt('cx'),nDone:F.cls.filter(c=>c.st==='Hoàn thành').length,nOut:F.cls.filter(c=>c.st==='Hoàn thành'&&!c.plan).length};}
+    // tử số = khóa trong KH đã hoàn thành + khóa Phát sinh (ngoài KH) đã diễn ra; mẫu số = mọi khóa trong sheet Kế hoạch
+    const typeOf=typeFn(F); const dn=F.cls.filter(c=>c.st==='Hoàn thành'&&c.d0<=T);
+    const ORD={'Bắt buộc':0,'Theo nhu cầu':1,'Dự phòng':2,'Phát sinh':3};
+    const grp=new Map(); [...new Set(F.plan.map(p=>LO(p.sec))),'Phát sinh'].sort((a,b)=>(ORD[a]??9)-(ORD[b]??9)).forEach(k=>grp.set(k,{plan:0,done:0,late:0,run:0,rem:0,cls:0}));
+    const G=k=>{if(!grp.has(k)) grp.set(k,{plan:0,done:0,late:0,run:0,rem:0,cls:0}); return grp.get(k);};
+    its.forEach(x=>{const g=G(LO(x.p.sec)); g.plan++; if(x.k==='done') g.done++; else g.rem++; if(x.k==='late') g.late++; if(x.k==='run') g.run++;});
+    const psC=new Set(dn.filter(c=>!c.plan).map(c=>c.kh)); G('Phát sinh').done=psC.size;
+    dn.forEach(c=>G(typeOf(c)).cls++);
+    const allNum=dueDone.length+psC.size, den=F.plan.length;
+    return {byPlan:true,unit:'lớp',its,due,dueDone,adhoc,nAd,num:allNum,den,grp,nPlan:its.filter(x=>x.k!=='na').length,nProg:new Set(F.plan.map(p=>p.stt||p.name)).size,rate:den?allNum/den:null,nRun:cnt('run'),nLate:cnt('late'),nUp:cnt('plan'),nNa:cnt('na'),nCx:cnt('cx'),nDone:F.cls.filter(c=>c.st==='Hoàn thành').length,nOut:F.cls.filter(c=>c.st==='Hoàn thành'&&!c.plan).length};}
   const planned=F.cls.filter(c=>c.plan); const due=planned.filter(c=>c.d0<=F.T); const dueDone=due.filter(c=>c.st==='Hoàn thành');
   return {unit:'lớp',planned,due,dueDone,nPlan:planned.length,rate:due.length?dueDone.length/due.length:null,nDone:F.cls.filter(c=>c.st==='Hoàn thành').length,nOut:F.cls.filter(c=>c.st==='Hoàn thành'&&!c.plan).length,nCx:F.cls.filter(c=>c.st==='Hủy'||c.st==='Dời lịch').length};}
 function renderSch(F){
   const Sm=schM(F); const {due,dueDone}=Sm; const C=cmpF(); const Q=C?schM(C):null; const Qf=C?schM(C.full):null; const Yc=C&&C.Y; const Dl=(k,kind,g)=>Q?dlt(Sm[k],Q[k],(C.cut?'cùng kỳ ':'')+Yc,kind,g):null;
   const upS=F.clsAll.filter(c=>c.d0&&c.d0>=F.T&&['Kế hoạch','Đã xác nhận','Dời lịch'].includes(c.st)&&(F.K==='*'||c.khoi===F.K)&&(F.N==='*'||c.nhom===F.N)).sort((a,b)=>a.d0-b.d0);
   if(Sm.byPlan){
+    const T0=F.T, inM=x=>x.p.s&&x.p.e&&x.p.s.getMonth()===T0.getMonth()&&x.p.e.getMonth()===T0.getMonth()&&x.p.s.getFullYear()===T0.getFullYear();
+    const runs=Sm.its.filter(x=>x.k==='run'), rM=runs.filter(inM).length;
+    const dn=F.cls.filter(c=>c.st==='Hoàn thành');
     kpis($('#kSch'),[
-      {i:'cal',l:'Tỷ lệ hoàn thành kế hoạch',v:fmtN(Sm.num),of:fmtN(due.length),u:'khóa',p:Sm.rate,n:`${fmtP(Sm.rate)} · ${fmtN(dueDone.length)} khóa trong KH + ${fmtN(Sm.nAd)} khóa ad-hoc đã diễn ra / ${fmtN(due.length)} khóa KH cả năm · mục tiêu 100%`,d:Dl('rate','pp',1)},
-      {i:'book',u:'khóa',l:'Số khóa theo kế hoạch',v:fmtN(Sm.nPlan),n:`thuộc ${fmtN(new Set(due.map(x=>x.p.stt||x.p.name)).size)} chương trình có lịch`+(Sm.nNa?` · ${fmtN(Sm.nNa)} chương trình phát sinh chưa có lịch, không tính`:''),d:Qf&&Qf.byPlan?dlt(Sm.nPlan,Qf.nPlan,'cả năm '+Yc,'pct',0):null},
-      {i:'clock',u:'khóa',l:'Số khóa đang thực hiện',v:fmtN(Sm.nRun),st:['warn','Đang trong thời gian dự kiến'],n:'Trạng thái = Đang thực hiện, hoặc hôm nay nằm trong khoảng ngày dự kiến'},
-      {i:'warn',u:'khóa',l:'Số khóa trễ hạn',v:fmtN(Sm.nLate),st:Sm.nLate?['crit','Quá Kết thúc dự kiến, chưa Hoàn thành']:['good','Không có khóa trễ hạn'],n:'cập nhật Trạng thái hoặc dời ngày dự kiến ở sheet Kế hoạch'},
-      {i:'cal',u:'khóa',l:'Số khóa chưa tới ngày',v:fmtN(Sm.nUp),st:['muted','Kế hoạch'],n:'Bắt đầu dự kiến sau ngày tính'},
-      {i:'check',u:'lớp',l:'Số lớp đã tổ chức',v:fmtN(Sm.nDone),n:`gồm ${fmtN(Sm.nOut)} lớp ngoài kế hoạch`,d:Dl('nDone','pct',1)},
+      {i:'cal',l:'Tỷ lệ hoàn thành kế hoạch',v:fmtN(Sm.num),of:fmtN(Sm.den),u:`khóa (${fmtP(Sm.rate)})`,p:Sm.rate,bl:[...Sm.grp].map(([k,g])=>[k,k==='Phát sinh'?`${fmtN(g.done)} khóa`:`${fmtN(g.done)}/${fmtN(g.plan)} khóa`])},
+      {i:'book',u:'khóa',l:'Số khóa theo kế hoạch',v:fmtN(Sm.den),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.plan)} khóa`])},
+      {i:'clock',u:'khóa',l:'Số khóa đang thực hiện',v:fmtN(Sm.nRun),bl:[[`Trong tháng ${T0.getMonth()+1}`,`${fmtN(rM)} khóa`],['Định kỳ cả năm',`${fmtN(runs.length-rM)} khóa`]],n:runs.length-rM?'Định kỳ: '+[...new Set(runs.filter(x=>!inM(x)).map(x=>x.p.name.replace(/\s*–\s*Khối.*$/,'').replace(/^Hướng Dẫn\s+/,'').replace(/\s+Cho\s+/,' ').replace(/Nhân Viên/g,'NV')))].join('; '):''},
+      {i:'warn',u:'khóa',l:'Số khóa trễ hạn',v:fmtN(Sm.nLate),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.late)} khóa`])},
+      {i:'cal',u:'khóa',l:'Số khóa còn lại theo kế hoạch',v:fmtN(Sm.den-Sm.dueDone.length),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.rem)} khóa`])},
+      {i:'check',u:'lớp',l:'Số lớp đã tổ chức',v:fmtN(Sm.nDone),bl:[...Sm.grp].map(([k,g])=>[k,`${fmtN(g.cls)} lớp`])},
     ]);
     renderGantt(F,Sm);
     // theo tháng (tháng của Kết thúc dự kiến)
     const D=MONTHS.map((_,m)=>due.filter(x=>(x.p.s||x.p.dn).getMonth()===m).length), H=MONTHS.map((_,m)=>dueDone.filter(x=>(x.p.s||x.p.dn).getMonth()===m).length+new Set(Sm.adhoc.filter(c=>c.d0.getMonth()===m).map(c=>c.kh)).size);
-    $('#sTitle').textContent='Khóa học theo tháng: kế hoạch và đã diễn ra';
-    legend($('#lgSch'),[['Khóa kế hoạch (theo tháng bắt đầu dự kiến)','var(--navy)'],['Đã diễn ra (gồm ad-hoc)','var(--good)']]);
-    vbars($('#cSch'),MONTHS,[{name:'Khóa kế hoạch',color:'var(--navy)',values:D},{name:'Đã diễn ra',color:'var(--good)',values:H}],fmtN,{intTicks:true,label:fmtN});
-    $('#uTitle').textContent='Đang thực hiện & sắp tới';
-    const up=Sm.its.filter(x=>x.k==='run'||x.k==='plan').map(x=>({d:x.p.s,t:dmy(x.p.s).slice(0,5)+' – '+dmy(x.p.e).slice(0,5),name:x.p.name,who:x.p.dv,st:PST[x.k][0]}))
-      .concat(upS.map(c=>({d:c.d0,t:dmy(c.d0),name:c.name+' (lớp)',who:c.gv,st:c.st}))).sort((a,b)=>a.d-b.d);
-    tbl($('#tUp'),[{h:'Thời gian',v:r=>r.t},{h:'Nội dung',v:r=>r.name},{h:'Đơn vị thực hiện',v:r=>r.who||'–'},{h:'Trạng thái',v:r=>pill(r.st)}],up.slice(0,15),'Không có lớp sắp tới');
+    {const t=$('#sTitle'); t.replaceChildren(document.createTextNode('Số Khóa Học Theo Tháng ')); const bd=el('span',{class:'tbadge'}); bd.append(el('b',{text:`${fmtN(Sm.num)}/${fmtN(Sm.den)}`}),document.createTextNode(` khóa đã diễn ra / kế hoạch · ${fmtP(Sm.rate)}`)); t.append(bd);}
+    legend($('#lgSch'),[['Khóa kế hoạch','var(--navy)'],['Đã diễn ra','var(--good)']]);
+    $('#uTitle').textContent='Lịch Đào Tạo';
+    const ord={'Trễ hạn':0,'Đang thực hiện':1,'Kế hoạch':2};
+    const up=Sm.its.filter(x=>x.k==='run'||x.k==='plan'||x.k==='late').map(x=>({d:x.p.s,t:dmy(x.p.s).slice(0,5)+' – '+dmy(x.p.e).slice(0,5),name:x.p.name,who:x.p.dv,st:PST[x.k][0]}))
+      .concat(upS.map(c=>({d:c.d0,t:dmy(c.d0),name:c.name+' (lớp)',who:c.gv,st:c.st}))).sort((a,b)=>(ord[a.st]??3)-(ord[b.st]??3)||a.d-b.d);
+    tbl($('#tUp'),[{h:'Thời gian',v:r=>r.t,sv:r=>r.d},{h:'Nội dung',v:r=>r.name,sv:r=>r.name},{h:'Đơn vị thực hiện',v:r=>r.who||'–',sv:r=>r.who||null},{h:'Trạng thái',v:r=>pill(r.st),sv:r=>ord[r.st]??3}],up.slice(0,20),'Không có lớp sắp tới',{sort:1});
+    const ch=$('#tUp').closest('.card').offsetHeight; const hh=ch?Math.max(240,ch-$('#lgSch').offsetHeight-$('#sTitle').closest('.ch').offsetHeight-60):240;
+    vbars($('#cSch'),MONTHS,[{name:'Khóa kế hoạch',color:'var(--navy)',values:D},{name:'Đã diễn ra',color:'var(--good)',values:H}],fmtN,{intTicks:true,label:fmtN,h:hh});
   } else {
     const over=due.filter(c=>!['Hoàn thành','Hủy'].includes(c.st));
     kpis($('#kSch'),[
@@ -925,48 +1219,71 @@ function renderSch(F){
     legend($('#lgSch'),[['Đến hạn','var(--navy)'],['Hoàn thành','var(--accent)']]);
     vbars($('#cSch'),MONTHS,[{name:'Đến hạn',color:'var(--navy)',values:D},{name:'Hoàn thành',color:'var(--accent)',values:H}],fmtN,{intTicks:true,label:fmtN});
     $('#uTitle').textContent='Lớp sắp tới';
-    tbl($('#tUp'),[{h:'Ngày',v:c=>dmy(c.d0)},{h:'Mã lớp',v:c=>c.id},{h:'Khóa học',v:c=>c.name},{h:'Khối',v:c=>c.khoi},{h:'Trạng thái',v:c=>pill(c.st)},{h:'Đăng ký',num:1,v:c=>fmtN(c.reg)}],upS.slice(0,15),'Không có lớp sắp tới');
+    tbl($('#tUp'),[{h:'Ngày',v:c=>dmy(c.d0)},{h:'Mã lớp',v:c=>c.id},{h:'Khóa học',v:c=>c.name},{h:'Khối',v:c=>c.khoi},{h:'Trạng thái',v:c=>pill(c.st)},{h:'Đăng ký',num:1,v:c=>fmtN(c.reg),sv:c=>c.reg}],upS.slice(0,15),'Không có lớp sắp tới',{sort:1});
   }
   const st=$('#fStatus').value||'Tất cả';
-  tbl($('#tCls'),[{h:'Ngày',v:c=>dmy(c.d0)},{h:'Mã lớp',v:c=>c.id},{h:'Khóa học',v:c=>c.name},{h:'Nhóm',v:c=>c.nhom},{h:'KH',v:c=>c.plan?'Trong':'Ngoài'},{h:'Khối',v:c=>c.khoi},{h:'Giảng viên',v:c=>c.gv},{h:'Trạng thái',v:c=>pill(c.st)},{h:'Đăng ký',num:1,v:c=>fmtN(c.reg)},{h:'Hoàn thành',num:1,v:c=>fmtN(c.done)},{h:'Ghi chú',v:c=>c.note}],
-    F.cls.filter(c=>st==='Tất cả'||c.st===st).sort((a,b)=>b.d0-a.d0));
+  tbl($('#tCls'),[{h:'Ngày',v:c=>dmy(c.d0),sv:c=>c.d0,desc:1},{h:'Mã lớp',v:c=>c.id},{h:'Khóa học',v:c=>c.name},{h:'Nhóm',v:c=>c.nhom},{h:'KH',v:c=>c.plan?'Trong':'Ngoài'},{h:'Khối',v:c=>c.khoi||null},{h:'Giảng viên',v:c=>c.gv||null},{h:'Trạng thái',v:c=>pill(c.st),sv:c=>c.st},{h:'Đăng ký',num:1,v:c=>fmtN(c.reg),sv:c=>c.reg},{h:'Hoàn thành',num:1,v:c=>fmtN(c.done),sv:c=>c.done},{h:'Ghi chú',v:c=>c.note||null}],
+    F.cls.filter(c=>st==='Tất cả'||c.st===st).sort((a,b)=>b.d0-a.d0),'Chưa có dữ liệu',{sort:1});
 }
+// sắp xếp Gantt: bấm tiêu đề cột, các dòng được xếp lại BÊN TRONG từng nhóm I–IV
+const GSS={i:-1,d:1};
+function ganttSort(t){const tb=t.tBodies[0]; const ths=[...t.tHead.rows[0].cells];
+  const val=(tr,i)=>{const td=tr.cells[i]; let x=(td.dataset.fv!=null?td.dataset.fv:td.textContent).trim(); if(!x||x==='–') return null;
+    if(i===0) return tr._g; if(i===3||i===4){const m=x.match(/^(\d{2})\/(\d{2})/); return m?+m[2]*100+ +m[1]:null;}
+    if(i===6) return td.dataset.sv===''||td.dataset.sv==null?null:+td.dataset.sv; if(i===5) return {'Trễ hạn':0,'Đang thực hiện':1,'Kế hoạch':2,'Hoàn thành':3,'Khi phát sinh':4,'Hủy':5}[x]??6; return x;};
+  const groups=[]; [...tb.rows].forEach(r=>{if(r.classList.contains('sec')) groups.push({h:r,rows:[]}); else if(groups.length) groups[groups.length-1].rows.push(r); else groups.push({h:null,rows:[r]});});
+  let gi=0; groups.forEach(g=>g.rows.forEach((r,j)=>{r._o=j; r._g=gi++;}));
+  const draw=()=>{ths.forEach((h2,i)=>h2.dataset.sort=i===GSS.i?(GSS.d>0?'asc':'desc'):'');
+    groups.forEach(g=>{const rs=g.rows.slice().sort((a,b)=>{if(GSS.i<0) return a._o-b._o; const x=val(a,GSS.i),y=val(b,GSS.i); if(x==null||y==null) return x==null&&y==null?a._o-b._o:x==null?1:-1;
+      return (typeof x==='number'?x-y:String(x).localeCompare(String(y),'vi',{numeric:true}))*GSS.d||a._o-b._o;}); let after=g.h; rs.forEach(r=>{if(after) after.after(r); else tb.prepend(r); after=r;});});
+    let n=0; [...tb.rows].forEach(r=>{if(!r.classList.contains('sec')) r.cells[0].textContent=++n;});};
+  ths.forEach((h2,i)=>{if(i>6) return; h2.classList.add('sortable'); h2.tabIndex=0; h2.title='Bấm để sắp xếp (trong từng nhóm)';
+    const go=()=>{if(GSS.i===i) GSS.d=-GSS.d; else {GSS.i=i; GSS.d=1;} draw();}; h2.addEventListener('click',go); h2.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault(); go();}});});
+  draw();}
 // ---------- Gantt: mỗi dòng kế hoạch = 1 thanh trên trục 12 tháng
 function renderGantt(F,Sm){
   const host=$('#calSch'); host.classList.remove('cal'); host.classList.add('gantt'); host.replaceChildren();
-  $('#calTitle').textContent=`Kế hoạch đào tạo năm ${F.Y}: tiến độ thực hiện`;
+  $('#calTitle').textContent=`Bảng theo dõi tiến độ Đào Tạo ${F.Y}`;
   $('#calLg').innerHTML=['done','run','plan','late'].map(k=>`<span><i class="gsw" style="background:${PST[k][1]}"></i>${PST[k][0]}</span>`).join('')+'<span><i class="gdm"></i>Ngày thực hiện (lớp đã tổ chức)</span><span><i class="gnw"></i>Ngày tính ('+dmy(F.T).slice(0,5)+')</span>';
   const y0=new Date(F.Y,0,1), y1=new Date(F.Y+1,0,1); const pos=d=>Math.max(0,Math.min(100,(d-y0)/(y1-y0)*100)); const DAY=864e5;
   const showNow=F.T>=y0&&F.T<y1, nowP=pos(F.T); const curM=showNow?F.T.getMonth():-1;
   const t=el('table'); const th=el('thead'), hr=el('tr');
-  [['STT','c-stt'],['Nội dung đào tạo','c-nm'],['Đơn vị thực hiện','c-dv'],['Bắt đầu','c-d'],['Kết thúc','c-d'],['Trạng thái','c-st'],['Ghi chú','c-nt']].forEach(([x,c])=>hr.append(el('th',{class:c,text:x})));
+  [['STT','c-stt'],['Nội dung đào tạo','c-nm'],['Đơn vị thực hiện','c-dv'],['Bắt đầu','c-d'],['Kết thúc','c-d'],['Trạng thái','c-st'],['Chi phí','c-cp']].forEach(([x,c])=>{const th=el('th',{class:c,text:x}); if(c==='c-cp') th.append(el('small',{class:'thu',text:'(Triệu Đ)'})); hr.append(th);});
   const tlh=el('th',{class:'c-tl'}); const mh=el('div',{class:'gmh'}); MONTHS.forEach((m,i)=>mh.append(el('span',{class:i===curM?'now':'',text:m}))); tlh.append(mh); hr.append(tlh); th.append(hr); t.append(th);
   const tb=el('tbody');
   const tl=(s,e,k,extra)=>{const d=el('div',{class:'gtl'});
     if(showNow){const n=el('i',{class:'gnow'}); n.style.left=nowP+'%'; d.append(n);}
     if(!s){if(extra&&extra.length) extra.forEach(x=>{const m=el('i',{class:x.cls}); m.style.left=pos(x.d)+'%'; m.title=x.t; d.append(m);}); else d.append(el('span',{class:'gna',text:'Khi có phát sinh'})); return d;}
-    const b=el('div',{class:'gbar '+k}); const l=pos(s), r=pos(new Date(+e+DAY)); b.style.left=l+'%'; b.style.width=Math.max(.9,r-l)+'%'; b.style.background=PST[k][1]; d.append(b);
+    const b=el('div',{class:'gbar '+k}); const l=pos(s), r=pos(new Date(+e+DAY)); b.style.left=l+'%'; b.style.width=Math.max(2,r-l)+'%'; b.style.background=PST[k][1]; d.append(b);
     (extra||[]).forEach(x=>{const m=el('i',{class:x.cls}); m.style.left=pos(x.d)+'%'; m.title=x.t; d.append(m);}); return d;};
-  const row=(cells,tlNode,title)=>{const tr=el('tr'); cells.forEach(([v,c])=>{const td=el('td',{class:c}); if(v instanceof Node) td.append(v); else if(c==='c-dv'||c==='c-nt'){const x=el('div',{class:'clamp',text:v}); td.title=v; td.append(x);} else td.textContent=v; tr.append(td);}); const td=el('td',{class:'c-tl'}); td.append(tlNode); if(title) td.title=title; tr.append(td); tb.append(tr);};
+  const tr1=v=>v==null?'–':nf1.format(v/1e6);
+  const cost=(act,bud)=>{const w=el('div',{class:'gcp'}); const t=el('div',{class:'gcpt'}); t.append(el('b',{text:act?tr1(act):'–'}),document.createTextNode(' / '+(bud?tr1(bud):'–'))); w.append(t);
+    if(bud||act){const k=el('span',{class:'gcpb'}); const f=el('i'); f.style.width=(bud?Math.min(100,(act||0)/bud*100):100)+'%'; if(!bud||(act||0)>bud) f.classList.add('over'); k.append(f); w.append(k);}
+    w.title=`Thực tế ${act?fmtN(act)+' đ':'–'} / ngân sách ${bud?fmtN(bud)+' đ':'–'}`; return w;};
+  const row=(cells,tlNode,title)=>{const tr=el('tr'); cells.forEach(([v,c,fv,sv])=>{const td=el('td',{class:c}); if(fv!=null) td.dataset.fv=fv; if(sv!==undefined) td.dataset.sv=sv==null?'':sv; if(v instanceof Node) td.append(v); else if(c==='c-dv'||c==='c-nt'){const x=el('div',{class:'clamp',text:v}); td.title=v; td.append(x);} else td.textContent=v; tr.append(td);}); const td=el('td',{class:'c-tl'}); td.append(tlNode); if(title) td.title=title; tr.append(td); tb.append(tr);};
   const secs=[...new Set(Sm.its.map(x=>x.p.sec))].sort((a,b)=>a.localeCompare(b,'vi',{numeric:true}));
-  const sk=x=>[parseFloat(x.p.stt)||1e9,x.p.s?+x.p.s:Infinity];
+  const sk=x=>[parseFloat(x.p.stt)||1e9,x.p.s?+x.p.s:Infinity]; const typeOfG=typeFn(F);
+  const secHead=(name,bars)=>{const w=el('div',{class:'gsh'}); w.append(el('b',{text:name}));
+    bars.filter(Boolean).forEach(([a,b2,txt,money])=>{const x=el('span',{class:'gsb'+(money?' m':'')}); x.append(el('small',{text:money?'Chi phí':'Tiến độ'})); const tk=el('span',{class:'gsbt'}); const f=el('i'); f.style.width=(b2?Math.min(100,a/b2*100):a?100:0)+'%'; if(money&&b2&&a>b2) f.style.background='var(--crit)'; tk.append(f); x.append(tk,el('em',{text:txt})); w.append(x);}); return w;};
   secs.forEach(sec=>{const its=Sm.its.filter(x=>x.p.sec===sec).sort((a,b)=>{const A=sk(a),B=sk(b); return A[0]-B[0]||A[1]-B[1];});
     const bud=its.reduce((a,x)=>a+x.p.bud,0); const done=its.filter(x=>x.k==='done').length;
-    const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=8; td.append(el('b',{text:sec}),document.createTextNode(` · ${its.length} khóa · ${done} đã diễn ra`+(bud?` · ngân sách ${vt(bud)}`:''))); tr.append(td); tb.append(tr);
+    const spent=F.cls.filter(c=>typeOfG(c)===LO(sec)).reduce((a,c)=>a+(c.ca||0),0);
+    const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=8; const hd=done; td.append(secHead(sec,[[hd,its.length,`${fmtN(hd)}/${fmtN(its.length)} khóa đã diễn ra`],bud||spent?[spent,bud,`${vt(spent)} / ${vt(bud)}`+'',1]:null])); tr.append(td); tb.append(tr);
     its.forEach(({p,k})=>{
-      const nm=el('div'); nm.append(el('span',{text:p.name})); if(p.code||p.dt) nm.append(el('small',{text:[p.code,p.dt].filter(Boolean).join(' · ')}));
+      const nm=el('div'); nm.append(el('span',{text:p.name})); 
       const ex=[]; if(p.dn) ex.push({d:p.dn,cls:'gdm',t:'Thực hiện '+dmy(p.dn)});
       if(p.code&&p.s) F.clsAll.filter(c=>c.kh===p.code&&c.st==='Hoàn thành'&&c.d0>=p.s&&c.d0<=p.e&&(!p.dn||+c.d0!==+p.dn)).forEach(c=>ex.push({d:c.d0,cls:'gdm',t:`Lớp ${c.id} ${dmy(c.d0)}${c.done?' · '+c.done+' học viên':''}`}));
-      row([[p.stt||'',''],[nm,'c-nm'],[p.dv||'–','c-dv'],[p.s?dmy(p.s).slice(0,5):'–','c-d'],[p.e?dmy(p.e).slice(0,5):'–','c-d'],[pill(PST[k][0]),'c-st'],[p.note||'','c-nt']],
-        tl(p.s,p.e,k,ex),`${p.name}\n${p.s?dmy(p.s)+' – '+dmy(p.e):'Khi có phát sinh'} · ${PST[k][0]}${p.dn?' · thực hiện '+dmy(p.dn):''}${p.bud?' · ngân sách '+fmtN(p.bud)+' đ':''}`);});
+      row([[p.stt||'',''],[nm,'c-nm',p.name],[p.dv||'–','c-dv'],[p.s?dmy(p.s).slice(0,5):'–','c-d'],[p.e?dmy(p.e).slice(0,5):'–','c-d'],[pill(PST[k][0]),'c-st'],(()=>{const a=F.clsAll.filter(c=>c.kh===p.code&&planRowOf(F,c)===p).reduce((x,c)=>x+(c.ca||0),0); return [cost(a,p.bud),'c-cp',null,a||null];})()],
+        tl(p.s||(k==='done'?p.dn:null),p.e||(k==='done'?p.dn:null),k,ex),`${p.name}\n${p.s?dmy(p.s)+' – '+dmy(p.e):'Khi có phát sinh'} · ${PST[k][0]}${p.dn?' · thực hiện '+dmy(p.dn):''}${p.bud?' · ngân sách '+fmtN(p.bud)+' đ':''}`);});
   });
   // lớp ngoài kế hoạch (phát sinh) đã/sắp tổ chức trong năm
   const out=F.cls.filter(c=>!c.plan).sort((a,b)=>a.d0-b.d0);
-  if(out.length){const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=8; td.append(el('b',{text:'Lớp ngoài kế hoạch'}),document.createTextNode(` · ${out.length} lớp (sheet Lớp học, cột Kế hoạch = Ngoài kế hoạch)`)); tr.append(td); tb.append(tr);
+  if(out.length){const oc=out.reduce((a,c)=>a+(c.ca||0),0), nk=new Set(out.map(c=>c.kh)).size, nd=new Set(out.filter(c=>c.st==='Hoàn thành').map(c=>c.kh)).size;
+    {const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=8; const sh=secHead('IV. Phát sinh (ngoài kế hoạch)',[[nd,nk,`${fmtN(nd)} khóa đã diễn ra`]]); sh.append(el('span',{class:'gsx',text:`Chi phí ${vt(oc)} (chưa có trong ngân sách kế hoạch)`})); td.append(sh); tr.append(td); tb.append(tr);}
     out.forEach(c=>{const k=c.st==='Hoàn thành'?'done':c.st==='Hủy'?'cx':c.d0<F.T?'late':'plan'; const e=c.d1&&c.d1>=c.d0?c.d1:c.d0;
-      const nm=el('div'); nm.append(el('span',{text:c.name})); nm.append(el('small',{text:c.id+(c.done?` · ${c.done} học viên`:'')}));
-      row([['–',''],[nm,'c-nm'],[c.gv||'–','c-dv'],[dmy(c.d0).slice(0,5),'c-d'],[dmy(e).slice(0,5),'c-d'],[pill(k==='late'?'Trễ hạn':c.st),'c-st'],[c.note||'','c-nt']],tl(c.d0,e,k),`${c.name} · ${dmy(c.d0)} · ${c.st}`);});}
-  t.append(tb); host.append(t);
+      const nm=el('div'); nm.append(el('span',{text:c.name})); 
+      row([['–',''],[nm,'c-nm',c.name],[c.gv||'–','c-dv'],[dmy(c.d0).slice(0,5),'c-d'],[dmy(e).slice(0,5),'c-d'],[pill(k==='late'?'Trễ hạn':c.st),'c-st'],[cost(c.ca,null),'c-cp',null,c.ca||null]],tl(c.d0,e,k),`${c.name} · ${dmy(c.d0)} · ${c.st}`);});}
+  t.append(tb); host.append(t); if(host.nextElementSibling&&host.nextElementSibling.classList.contains('fnote')) host.nextElementSibling.remove(); ganttSort(t);
 }
 
 // Chi phí đào tạo các năm: mỗi năm 1 thanh tiến độ thực tế / ngân sách kế hoạch
@@ -978,7 +1295,7 @@ function yProg(rows,sel,T){const box=el('div',{class:'ypg'});
     const y0=new Date(r.y,0,1),y1=new Date(r.y+1,0,1); if(T>y0&&T<y1){const n=el('b',{class:'ynow'}); n.style.left=((T-y0)/(y1-y0)*100)+'%'; n.title='Ngày tính '+dmy(T)+' · tiến độ năm '+fmtP((T-y0)/(y1-y0)); tr.append(n);}
     const v=el('div',{class:'yv'}); v.append(el('b',{text:fmtVND(B.act)}),document.createTextNode(B.plan?' / '+fmtVND(B.plan):''));
     row.append(tr,v); row.title=`${r.y}: chi phí ${fmtN(B.act)} đ`+(B.plan?` / ngân sách ${fmtN(B.plan)} đ (${fmtP(u)})`:' · chưa có ngân sách kế hoạch'); box.append(row);});
-  const lg=el('div',{class:'ylg',text:'Thực tế / Ngân sách kế hoạch · vạch đứt = tiến độ thời gian của năm tính đến ngày tính'}); box.append(lg); return box;}
+  return box;}
 function renderYears(F){
   const ys=YEARS.slice().sort((a,b)=>a-b); const T=F.T; const curY=T.getFullYear();
   const rows=ys.map(y=>{const Fy=filt(y); const p=perfM(Fy), b=budM(Fy), sc=schM(Fy); return {y,p,b,sc,n:sc.nDone,Fy};});
@@ -988,7 +1305,7 @@ function renderYears(F){
   if(prevY!=null){const cut=sel.y===curY?new Date(prevY,T.getMonth(),Math.min(T.getDate(),new Date(prevY,T.getMonth()+1,0).getDate())):null; const Fp=filt(prevY,cut); prev={p:perfM(Fp),b:budM(Fp),sc:schM(Fp)}; lab=(cut?'cùng kỳ ':'')+prevY;}
   const M_=[
     {i:'users',t:'Số NV được đào tạo',g:r=>r.p.cov,f:fmtP,big:r=>[fmtN(r.p.uniq),'/'+fmtN(r.p.hc)+' NV'],tip:r=>`${fmtP(r.p.cov)} · ${fmtN(r.p.uniq)}/${fmtN(r.p.hc)} NV`,d:['cov','pp',1,'p']},
-    {i:'check',t:'Số lượt học hoàn thành',g:r=>r.p.attN,f:fmtN,big:r=>[fmtN(r.p.attN),'lượt'],tip:r=>`${fmtN(r.p.attN)} lượt · ${fmtN(r.p.learners)} người`,d:['attN','pct',1,'p']},
+    {i:'check',t:'Số lượt tham dự',g:r=>r.p.attN,f:fmtN,big:r=>[fmtN(r.p.attN),'lượt'],tip:r=>`${fmtN(r.p.attN)} lượt · ${fmtN(r.p.learners)} người`,d:['attN','pct',1,'p']},
     {i:'clock',ok:r=>r.p.hasH,t:'Tổng số giờ đào tạo',g:r=>r.p.hrs,f:fmtN,big:r=>[fmtN(r.p.hrs),'giờ'],d:['hrs','pct',1,'p']},
     {i:'gauge',ok:r=>r.p.hasH,t:'Số giờ đào tạo / NV',g:r=>r.p.hpn,f:fmt1,big:r=>[fmt1(r.p.hpn),`giờ / ${fmtN(r.p.hc)} NV`],tip:r=>`${fmt1(r.p.hpn)} giờ/NV · ${fmtN(r.p.hrs)} giờ ÷ ${fmtN(r.p.hc)} NV`,d:['hpn','pct',1,'p']},
     {i:'check',t:'Số lớp đã tổ chức',g:r=>r.n,f:fmtN,big:r=>[fmtN(r.n),'lớp'],int:1,d:['nDone','pct',1,'sc']},
@@ -1006,9 +1323,23 @@ function renderYears(F){
     const vals=rows.map(r=>{const v=m.g(r); return v==null||isNaN(v)?0:v;});
     const many=rows.length>12; vbars(ch,rows.map(r=>(many?"'"+String(r.y).slice(2):String(r.y))+(r.y===curY?'*':'')),[{name:m.t,values:vals,colors:rows.map(r=>r.y===sel.y?'var(--accent)':'var(--navy)'),tips:rows.map(r=>m.tip?m.tip(r):m.f(m.g(r)))}],m.f,{h:190,label:v=>m.lf?m.lf(v):m.f(v),tickFmt:m.max5?fmtN:m.f===fmtVND?(v=>fmtN(v/1e6)):m.f,small:many,intTicks:!!m.int,max:m.max5?5:m.f===fmtP?1:null,ticks:m.max5?5:4});
   });
-  $('#yNote').textContent=(ys.includes(curY)?`* Năm ${curY} tính đến ${dmy(T)} (chưa đủ năm). `:'')+(prev?`Mức tăng/giảm so ${sel.y} với ${lab}. `:'')+'Cột cam = năm đang chọn ở bộ lọc Năm.'+(miss.length?` Chưa có dữ liệu (ẩn biểu đồ): ${miss.join(', ')}.`:'')+(rows.some(r=>r.p.learners>r.p.uniq)?' Độ phủ: chỉ tính NV có trong headcount năm đó (NV đã nghỉ chưa có Ngày nghỉ việc không được tính) – các năm cũ sẽ đúng hơn khi C&B bổ sung Ngày nghỉ việc.':'');
-  tbl($('#tYears'),[{h:'Năm',v:r=>String(r.y)},{h:'Lớp đã tổ chức',num:1,v:r=>fmtN(r.n)},{h:'NV được ĐT / đang làm',num:1,v:r=>fmtN(r.p.uniq)+' / '+fmtN(r.p.hc)},{h:'Tổng giờ',num:1,v:r=>r.p.hasH?fmtN(r.p.hrs):'–'},{h:'Giờ BQ / NV',num:1,v:r=>fmt1(r.p.hpn)},{h:'Hài lòng',v:r=>stars(r.p.satN?r.p.sat:null)},{h:'Chi phí đào tạo',num:1,v:r=>r.b.act?fmtVND(r.b.act):'–'},{h:'Ngân sách KH',num:1,v:r=>r.b.plan?fmtVND(r.b.plan):'–'}],rows.slice().reverse());
-  $('#tYears').querySelectorAll('tbody tr').forEach((tr,i)=>tr.classList.toggle('cur',rows.slice().reverse()[i].y===F.Y));
+  // Phân tích nhanh (so năm trước, cùng kỳ nếu năm chưa hết)
+  {const out=[]; const add=(ic,kind,title,body)=>out.push({ic,kind,title,body}); const s0=sel, P1=s0.p, B1=s0.b; const pv=prev; const L=lab;
+   const pc=(a,b)=>b?(a-b)/b:null; const sg=x=>x==null?'':(x>=0?'+':'−')+fmtP(Math.abs(x));
+   if(P1.hc) add('users',pv&&P1.cov>=pv.p.cov?'good':'info',`Độ phủ ${fmtP(P1.cov)}`+(pv?` (${P1.cov>=pv.p.cov?'+':'−'}${nf1.format(Math.abs(P1.cov-pv.p.cov)*100)} điểm % so với ${L})`:''),
+     `${fmtN(P1.uniq)}/${fmtN(P1.hc)} NV đang làm đã tham gia đào tạo`+(pv?`; ${L}: ${fmtP(pv.p.cov)}.`:'.'));
+   if(pv&&P1.hasH&&pv.p.hasH){const g=dn=>{const m=new Map(); dn.forEach(r=>m.set(r.cl.nhom,(m.get(r.cl.nhom)||0)+r.hrs)); return m;}; const a=g(P1.done), b0=g(pv.p.done);
+     const ks=[...new Set([...a.keys(),...b0.keys()])].map(k=>({k,d:(a.get(k)||0)-(b0.get(k)||0)})).sort((x,y)=>y.d-x.d); const dH=P1.hrs-pv.p.hrs;
+     add('clock',dH>=0?'good':'info',`Giờ học ${sg(pc(P1.hrs,pv.p.hrs))}, chủ yếu từ nhóm ${ks[0].k}`,
+       `${fmtN(P1.hrs)} giờ so với ${fmtN(pv.p.hrs)} giờ (${L}); nhóm **${ks[0].k}** tăng ${fmtN(ks[0].d)} giờ`+(dH>0?` (${fmtP(ks[0].d/dH)} mức tăng)`:'')+(ks[ks.length-1].d<0?`, nhóm ${ks[ks.length-1].k} thấp hơn ${fmtN(-ks[ks.length-1].d)} giờ.`:'.'));}
+   if(pv&&B1.act&&pv.b.act&&P1.hrs&&pv.p.hrs){const c1=B1.act/P1.hrs, c0=pv.b.act/pv.p.hrs;
+     add('coin',c1<=c0?'good':'info',`Chi phí / giờ học ${c1<=c0?'giảm':'tăng'} ${fmtP(Math.abs(pc(c1,c0)))}`,`${vt(c1)}/giờ so với ${vt(c0)}/giờ (${L}): tổng chi phí ${sg(pc(B1.act,pv.b.act))} trong khi giờ học ${sg(pc(P1.hrs,pv.p.hrs))}, nhờ tỷ trọng đào tạo nội bộ cao hơn.`);}
+   if(P1.hasH&&P1.hrs){const sh=p=>p.hrs?p.done.filter(r=>norm(r.cl.nb)==='noi bo').reduce((x,r)=>x+r.hrs,0)/p.hrs:null; const a=sh(P1), b0=pv&&pv.p.hasH?sh(pv.p):null;
+     add('home','info',`Nội bộ chiếm ${fmtP(a)} số giờ`+(b0!=null?` (${L}: ${fmtP(b0)})`:''),b0!=null?`Cơ cấu đào tạo ${a>b0?'nghiêng nhiều hơn về nội bộ':'nghiêng nhiều hơn về bên ngoài'} so với năm trước.`:'');}
+   if(P1.satN) add('star',pv&&pv.p.satN&&P1.sat>=pv.p.sat?'good':'info',`Hài lòng ${fmt1(P1.sat)}/5`,`${fmtN(P1.satN)} lượt đánh giá`+(pv&&pv.p.satN?`; ${L}: ${fmt1(pv.p.sat)}/5.`:'.'));
+   else add('star','info','Chưa có dữ liệu đánh giá sau khóa',evalNote());
+   insRender($('#yQuick'),out);
+   $('#yqSub').textContent=pv?`${sel.y} so với ${L}`:`Năm ${sel.y}`;}
 }
 function renderData(){
   const host=$('#dq'); host.replaceChildren();
@@ -1076,7 +1407,7 @@ async function rasterize(node,width,breaksOut){
   return {cv,H,sc};
 }
 function filterSummary(F){const sel=id=>{const e=$(id); return e.options[e.selectedIndex]?e.options[e.selectedIndex].text:'';};
-  return `Năm ${F.Y}${$('#fCmp').value?' · so với '+$('#fCmp').value:''} · Khối: ${sel('#fKhoi')} · Phòng ban: ${sel('#fPb')} · Nhóm: ${sel('#fNhom')} · Ngày tính: ${dmy(F.T)}`;}
+  return `Năm ${F.Y}${$('#fCmp').value?' · so với '+$('#fCmp').value:''} · Khối: ${sel('#fKhoi')} · Phòng ban: ${sel('#fPb')} · Nhóm: ${sel('#fNhom')} · ${F.D0?'Kỳ: '+dmy(F.D0)+' – '+dmy(F.D1):'Đến ngày: '+dmy(F.T)}`;}
 async function saveFile(blob,name){
   try{ if(window.claude&&typeof window.claude.use==='function'){ const d=await Promise.race([window.claude.use('downloads'),new Promise(r=>setTimeout(()=>r(null),4000))]);
       if(d){ try{await d.save({filename:name,data:blob}); return true;}catch(e){ if(e&&e.code==='declined') return false; if(e&&!['unavailable','not_granted','capability_disabled','capability_removed'].includes(e.code)) throw e; } } } }catch(e){}
@@ -1095,7 +1426,7 @@ async function exportPdf(){
       const tt=el('div'); tt.append(el('div',{class:'ph-t',text:'Training Dashboard'}),el('div',{class:'ph-s',text:'Phòng Nhân sự · L&OD · Saigon Cosmetics Corporation'})); L.append(tt);
       const Rr=el('div',{class:'ph-r'}); Rr.append(el('div',{class:'ph-tab',text:name}));
       const ch=el('div',{class:'ph-chips'}); const sel=id=>{const e=$(id); return e.options[e.selectedIndex]?e.options[e.selectedIndex].text:'';};
-      [['Năm',String(F0.Y)+($('#fCmp').value?' so với '+$('#fCmp').value:'')],['Khối',sel('#fKhoi')],['Phòng ban',sel('#fPb')],['Nhóm',sel('#fNhom')],['Ngày tính',dmy(F0.T)]].forEach(([k,v])=>{const c=el('span'); c.append(el('em',{text:k}),document.createTextNode(' '+v)); ch.append(c);});
+      [['Năm',String(F0.Y)+($('#fCmp').value?' so với '+$('#fCmp').value:'')],['Khối',sel('#fKhoi')],['Phòng ban',sel('#fPb')],['Nhóm',sel('#fNhom')],F0.D0?['Kỳ',dmy(F0.D0)+' – '+dmy(F0.D1)]:['Đến ngày',dmy(F0.T)]].forEach(([k,v])=>{const c=el('span'); c.append(el('em',{text:k}),document.createTextNode(' '+v)); ch.append(c);});
       Rr.append(ch); hd.append(L,Rr); node.append(hd);
       const ft=el('div',{class:'pdffoot',text:`SCC Training Dashboard · ${name} · Trang ${ti+1}/${TABS.length} · Xuất lúc ${new Date().toLocaleString('vi-VN')}`});
       const cn=$('#cmpNote'); if(!cn.hidden&&t!=='years'){const c=cn.cloneNode(true); c.className='cmpnote'; c.removeAttribute('id'); c.style.cssText='font-size:12.5px;color:var(--ink-2);margin:0 0 12px;padding:8px 12px;background:#fff4e8;border:1px solid #f6c38f;border-radius:10px'; node.append(c);}
@@ -1122,10 +1453,12 @@ document.querySelectorAll('#app .card').forEach(card=>{
 });
 // ---------- events
 ['#fPb','#fNhom','#fDate','#fStatus','#fCmp'].forEach(s=>$(s).addEventListener('change',render));
+$('#fFrom').addEventListener('change',()=>{const d=toDate($('#fFrom').value); if(d&&YEARS.includes(d.getFullYear())&&+$('#fYear').value!==d.getFullYear()){$('#fYear').value=d.getFullYear(); fillCmp();}
+  const t=toDate($('#fDate').value); if(d&&t&&t<d){const e=new Date(d.getFullYear(),d.getMonth()+1,0); $('#fDate').value=iso(e);} render();});
 $('#fKhoi').addEventListener('change',()=>{fillPb(); render();});
 $('#qNV').addEventListener('input',()=>renderNV());
 $('#pdfBtn').addEventListener('click',exportPdf);
-$('#fYear').addEventListener('change',()=>{fillCmp(); render();});
+$('#fYear').addEventListener('change',()=>{$('#fFrom').value=''; fillCmp(); render();});
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{S.tab=t.dataset.p; try{localStorage.setItem('scc-td-tab',S.tab)}catch(e){} render();}));
 $('#mSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; S.month=b.dataset.m; $('#mSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b))); render();});
 // merge several workbooks (e.g. one file per year): later files' columns are re-mapped onto the first file's headers by name
@@ -1144,29 +1477,45 @@ function mergeBooks(books){
   return out;
 }
 let handles=null, lastFiles=null;
+// lưu "tay cầm" file (File System Access) vào IndexedDB để Làm mới / mở lại trang đọc đúng file cũ
+const HDB={open(){return new Promise((res,rej)=>{try{const r=indexedDB.open('scc-training-dash',1); r.onupgradeneeded=()=>r.result.createObjectStore('h'); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);}catch(e){rej(e);}});},
+  async set(v){try{const db=await this.open(); db.transaction('h','readwrite').objectStore('h').put(v,'last');}catch(e){}},
+  async get(){try{const db=await this.open(); return await new Promise(r=>{const q=db.transaction('h').objectStore('h').get('last'); q.onsuccess=()=>r(q.result||null); q.onerror=()=>r(null);});}catch(e){return null;}}};
+function keepHandles(hs){handles=hs; HDB.set(hs); const rb=$('#reopenBtn'); if(rb) rb.hidden=true;}
+async function canRead(hs,ask){for(const h of hs){if(!h.queryPermission) continue; let p=await h.queryPermission({mode:'read'}); if(p!=='granted'&&ask) p=await h.requestPermission({mode:'read'}); if(p!=='granted') return false;} return true;}
+async function loadHandles(hs,refresh){handles=hs; return loadFiles(await Promise.all(hs.map(h=>h.getFile())),refresh);}
 const fi=$('#fileIn');
 async function pick(){
   // File System Access API keeps a handle so "Làm mới" can re-read without choosing again (Chrome/Edge, when allowed)
   if(window.showOpenFilePicker){
     try{const hs=await window.showOpenFilePicker({multiple:true,types:[{description:'Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx','.xlsm']}}]});
-      handles=hs; loadFiles(await Promise.all(hs.map(h=>h.getFile()))); return;}
+      keepHandles(hs); loadFiles(await Promise.all(hs.map(h=>h.getFile()))); return;}
     catch(e){if(e&&e.name==='AbortError') return;}
   }
   handles=null; fi.click();
 }
-['#pickBtn','#pickBtn3'].forEach(s=>$(s).addEventListener('click',pick)); $('#landDrop').addEventListener('click',e=>{if(!e.target.closest('button')) pick();}); $('#landDrop').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault(); pick();}});
+$('#pickBtn3').addEventListener('click',pick); $('#landDrop').addEventListener('click',e=>{if(!e.target.closest('button')) pick();}); $('#landDrop').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault(); pick();}});
 $('#refreshBtn').addEventListener('click',async()=>{
-  if(handles){try{loadFiles(await Promise.all(handles.map(h=>h.getFile())),true); return;}catch(e){handles=null;}}
-  if(source.sample){pick(); return;}
-  const host=$('#alerts'); host.replaceChildren(el('div',{class:'alert info',text:'Trình duyệt không cho trang tự đọc lại file trên máy. Hãy chọn lại file vừa lưu.'}));
-  fi.click();
+  const btn=$('#refreshBtn'); if(btn.classList.contains('spin')) return; btn.classList.add('spin');
+  try{let hs=handles; if(!hs&&!source.sample) hs=await HDB.get();
+    if(hs&&hs.length){try{if(await canRead(hs,true)){await loadHandles(hs,true); return;}}catch(e){}}
+    const host=$('#alerts'); host.replaceChildren(el('div',{class:'alert info',text:source.sample?'Chọn file SCC Training Record.xlsx để xem dữ liệu thật.':'Trình duyệt chưa cho phép tự đọc lại file. Hãy chọn file SCC Training Record.xlsx một lần – từ lần sau chỉ cần bấm Làm mới.'}));
+    await pick();}
+  finally{btn.classList.remove('spin');}
 });
+// mở lại file lần trước: tự tải nếu đã được cấp quyền, nếu chưa thì hiện nút trên trang đầu
+(async()=>{const hs=await HDB.get(); if(!hs||!hs.length) return;
+  try{if(await canRead(hs,false)){await loadHandles(hs,false); return;}}catch(e){}
+  const rb=$('#reopenBtn'); rb.textContent='Mở lại: '+hs.map(h=>h.name).join(', '); rb.hidden=false;
+  rb.addEventListener('click',async e=>{e.stopPropagation(); try{if(await canRead(hs,true)){rb.hidden=true; await loadHandles(hs,false); return;}}catch(err){} pick();});})();
 $('#tryBtn').addEventListener('click',()=>{handles=null; setModel(buildModel(SAMPLE),{name:'Dữ liệu mẫu',sample:true});});
 fi.addEventListener('change',()=>{if(fi.files.length) loadFiles([...fi.files]); fi.value='';});
 const drop=document.body;
 ['dragenter','dragover'].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault(); drop.classList.add('over');}));
 ['dragleave','drop'].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault(); if(ev==='drop'||!e.relatedTarget) drop.classList.remove('over');}));
-document.addEventListener('drop',e=>{const fs=e.dataTransfer&&[...e.dataTransfer.files].filter(f=>/\.xls[xm]$/i.test(f.name)); if(fs&&fs.length){handles=null; loadFiles(fs);}});
+document.addEventListener('drop',e=>{const dt=e.dataTransfer; const hp=dt?[...dt.items].filter(i=>i.kind==='file'&&i.getAsFileSystemHandle).map(i=>i.getAsFileSystemHandle()):[];
+  const fs=dt&&[...dt.files].filter(f=>/\.xls[xm]$/i.test(f.name)); if(fs&&fs.length){handles=null; loadFiles(fs);
+    Promise.all(hp).then(hs=>{hs=hs.filter(h=>h&&h.kind==='file'&&/\.xls[xm]$/i.test(h.name)); if(hs.length) keepHandles(hs);}).catch(()=>{});}});
 $('#sampleBtn').addEventListener('click',()=>{M=null; handles=null; showLanding(); $('#alerts').replaceChildren(); $('#alertsLand').replaceChildren();});
 async function loadFiles(files,refresh=false){
   const host=$('#landing').hidden?$('#alerts'):$('#alertsLand'); $('#alertsLand').replaceChildren();
@@ -1174,7 +1523,7 @@ async function loadFiles(files,refresh=false){
   host.replaceChildren(el('div',{class:'alert info',text:'Đang đọc '+names+'…'}));
   document.querySelectorAll('section.panel').forEach(p=>p.style.opacity='.5');
   try{const books=[]; for(const f of files) books.push(await readWorkbook(new Uint8Array(await f.arrayBuffer())));
-    const m=buildModel(mergeBooks(books)); if(!refresh) $('#fDate').value='';
+    const m=buildModel(mergeBooks(books)); if(!refresh){$('#fDate').value=''; $('#fFrom').value='';}
     lastFiles=files; setModel(m,{name:files.length>1?files.length+' file':files[0].name,sample:false});
     if(refresh){const t=new Date(); $('#alerts').prepend(el('div',{class:'alert info',text:`Đã làm mới lúc ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')} từ ${names}.`}));}}
   catch(err){if(!M) showLanding(); host.replaceChildren(el('div',{class:'alert',text:'Không đọc được file: '+(err&&err.message||err)}));}
