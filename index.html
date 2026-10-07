@@ -199,6 +199,14 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .pdfx.pg .pgbody>*{flex:none;margin:0}
 .pdfx.pg .pgz{display:flex;flex-direction:column;gap:10px}
 .pdfx.pg .pgz>*{flex:none;margin:0}
+.pdfx.pg .pgz.fill>:last-child{flex:1 1 auto}
+.pdfx.pg .pgz.fill .grid2{align-items:stretch}
+.pdfx.pg .pgz.fill>.grid2:last-child{grid-template-rows:minmax(0,1fr)}
+.pdfx.pg .pgz.fill>.card:last-child,.pdfx.pg .pgz.fill>.grid2:last-child>.card{display:flex;flex-direction:column}
+.pdfx.pg .pgz.fill .card .chart{flex:1 1 auto;justify-content:center}
+.pdfx.pg .pgz.fill>:last-child .tbl{flex:1 1 auto}
+.pdfx.pg .pgz.fill>:last-child .tbl>table,.pdfx.pg .pgz.fill>.grid2:last-child .tbl>table{height:100%}
+.pdfx.pg .pgz.fill>.card:last-child .pbt,.pdfx.pg .pgz.fill>.card:last-child .ins{flex:1 1 auto}
 .pdfx.pg .kpis:not(.kcol):not(.k4){grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
 .pdfx.pg .pgz>.card svg{max-height:400px}
 .pdfx.pg .pgz>.card .ins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;align-items:start}
@@ -1430,7 +1438,7 @@ function jpegBytes(cv){const b=atob(cv.toDataURL('image/jpeg',0.9).split(',')[1]
 async function rasterize(node,width,breaksOut,bsel,fixedH){
   const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');
   const wrap=document.createElement('div'); wrap.className='pdfx'; wrap.style.cssText=`position:absolute;left:-100000px;top:0;width:${width}px;background:var(--page);padding:18px;box-sizing:border-box;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink)`;
-  if(fixedH){wrap.classList.add('pg'); wrap.style.height=fixedH+'px'; wrap.style.overflow='hidden';}
+  if(fixedH){wrap.classList.add('pg'); wrap.style.height=fixedH+'px'; wrap.style.overflow='hidden'; wrap.style.padding='10px 14px';}
   wrap.append(node); document.body.append(wrap); await nextFrame();
   const H=fixedH||Math.ceil(wrap.scrollHeight), top0=wrap.getBoundingClientRect().top;
   wrap.querySelectorAll(bsel||'.kpis,.card,.yc,.grid2,.ygrid,.pdfhead,.cmpnote').forEach(e=>{const r=e.getBoundingClientRect(); breaksOut.push(Math.round(r.top-top0)-8);});
@@ -1467,7 +1475,7 @@ function prepPanel(t){const src=$('#p-'+t); if(!src) return null; const p=src.cl
   // lưới 2 cột chỉ còn 1 khung → khung đó trải hết chiều ngang; lưới trống → bỏ
   p.querySelectorAll('.grid2,.ygrid').forEach(g=>{const k=[...g.children].filter(x=>!x.hidden); if(!k.length) g.remove(); else if(g.classList.contains('grid2')){if(k.length===1) g.style.gridTemplateColumns='minmax(0,1fr)'; else if(k.length%2) k[k.length-1].style.gridColumn='1 / -1';}});
   if(!p.querySelector('.kpis,.card,.yc')) return null; return p;}
-// dựng các trang báo cáo khổ 16:9 (dùng chung cho PDF và PPT – hai file giống hệt nhau)
+// PPT: dàn trang khổ 16:9 cho thuyết trình – gộp khung, co giãn chữ và kéo đầy trang
 // mỗi trang lặp lại thanh tiêu đề (phần đang trình bày + bộ lọc); khung dài được ngắt theo dòng, ưu tiên ngắt ở đầu nhóm
 const PGW=1600, PGH=900;
 function pgHead(name,F0){const hd=el('div',{class:'pdfhead'}); const lg=document.querySelector('.brandlogo');
@@ -1485,7 +1493,7 @@ function pgCont(x){const t=x.querySelector('b,.nm')||x.querySelector('td')||x; t
 function pgTitleCont(c){const h=c.querySelector('h3'); if(h&&!/\(tiếp\)$/.test(h.textContent)) h.append(document.createTextNode(' (tiếp)'));}
 async function buildPages(lbl){
   const F0=filt(); const TABS=EXPORT_TABS.filter(([t])=>tabHasContent(t)); const out=[];
-  const host=document.createElement('div'); host.className='pdfx pg'; host.style.cssText=`position:absolute;left:-100000px;top:0;width:${PGW}px;height:${PGH}px;padding:18px;box-sizing:border-box;background:var(--page);font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink)`;
+  const host=document.createElement('div'); host.className='pdfx pg'; host.style.cssText=`position:absolute;left:-100000px;top:0;width:${PGW}px;height:${PGH}px;padding:10px 14px;box-sizing:border-box;background:var(--page);font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink)`;
   document.body.append(host);
   try{
   for(let ti=0;ti<TABS.length;ti++){const [t,name]=TABS[ti]; lbl.textContent=`Đang dàn trang ${ti+1}/${TABS.length}…`;
@@ -1494,14 +1502,14 @@ async function buildPages(lbl){
     const q=[...p.children].filter(x=>!x.hidden&&x.offsetParent!==undefined);
     const cn=$('#cmpNote'); if(!cn.hidden&&t!=='years'){const c=cn.cloneNode(true); c.className='cmpnote'; c.removeAttribute('id'); c.style.cssText='font-size:12.5px;color:var(--ink-2);padding:8px 12px;background:#fff4e8;border:1px solid #f6c38f;border-radius:10px'; q.unshift(c);}
     let cur=null;
-    const MINZ=0.72, MAXZ=1.15;
+    const MINZ=0.72, MAXZ=1.4;
     const newPage=()=>{const node=el('div',{class:'pgnode'}); node.append(pgHead(name,F0)); const body=el('div',{class:'pgbody'}); const inner=el('div',{class:'pgz'}); body.append(inner); const ft=el('div',{class:'pdffoot',text:' '}); node.append(body,ft); host.replaceChildren(node); cur={node,body,inner,ft,name}; cur.body.append=(...x)=>inner.append(...x); Object.defineProperty(cur.body,'children',{get:()=>inner.children}); return cur;};
     const setZ=z=>{cur.inner.style.zoom=String(z); cur.inner.style.width=(cur.body.clientWidth/z)+'px';};
     const fitsZ=z=>{setZ(z); return cur.body.scrollHeight<=cur.body.clientHeight+1;};
     // trong lúc xếp: cho phép thu nhỏ cả trang tới MINZ để gộp thêm khung
     const fits=()=>fitsZ(MINZ);
     const bestZ=()=>{if(!fitsZ(MINZ)) return MINZ; let lo=MINZ,hi=MAXZ; if(fitsZ(hi)) return hi; for(let k=0;k<8;k++){const m=(lo+hi)/2; if(fitsZ(m)) lo=m; else hi=m;} return lo;};
-    const flush=()=>{if(cur&&cur.body.children.length){setZ(bestZ()); host.replaceChildren(); out.push(cur);} cur=null;};
+    const flush=()=>{if(cur&&cur.body.children.length){const z=bestZ(); setZ(z); cur.inner.classList.add('fill'); cur.inner.style.minHeight=(cur.body.clientHeight/z)+'px'; host.replaceChildren(); out.push(cur);} cur=null;};
     // tách 1 khung có bảng/danh sách: lấy phần vừa với chỗ trống còn lại, phần còn lại thành khung "(tiếp)"
     const splitCard=(b,minRows)=>{const U0=pgUnits(b); if(!U0) return null;
       const c=b.cloneNode(true); const U=pgUnits(c); const all=pgItems(U); [...U.box.children].forEach(x=>x.remove()); cur.body.append(c);
@@ -1524,7 +1532,7 @@ async function buildPages(lbl){
       const per=b.classList.contains('ygrid')?3:2, nk=[...b.children].filter(x=>!x.hidden).length;
       if(b.matches('.grid2,.ygrid')&&nk>per){q.unshift(...splitGrid(b)); continue;}
       if(!empty){fitsZ(MINZ); const room=(cur.body.clientHeight-cur.inner.getBoundingClientRect().height)/MINZ;
-        if(room>220&&pgUnits(b)&&!b.matches('.grid2,.ygrid')){const sp=splitCard(b,3); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
+        if(room>220&&pgUnits(b)&&!b.matches('.grid2,.ygrid')&&!b.querySelector('.pbt')){const sp=splitCard(b,3); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
         flush(); newPage(); q.unshift(b); continue;}
       if(b.matches('.grid2,.ygrid')){cur.body.append(b); const h=b.getBoundingClientRect().height/MINZ, mx=cur.body.clientHeight/MINZ;
         if(h*0.6<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';
@@ -1542,10 +1550,35 @@ async function buildPages(lbl){
   } finally{host.remove();}
   return {pages:out,F0};
 }
+// PDF: mỗi tab của dashboard = đúng 1 trang PDF (chiều cao theo nội dung)
+async function buildLongPages(lbl){
+  const F0=filt(); const TABS=EXPORT_TABS.filter(([t])=>tabHasContent(t));
+  const width=Math.max(1100,Math.min(1400,$('#app').clientWidth||1280)); const pages=[];
+  {
+    for(let ti=0;ti<TABS.length;ti++){const [t,name]=TABS[ti]; lbl.textContent=`Đang xuất ${ti+1}/${TABS.length}…`;
+      S.tab=t; render(); await nextFrame();
+      const node=document.createElement('div');
+      const hd=el('div',{class:'pdfhead'}); const lg=document.querySelector('.brandlogo');
+      const L=el('div',{class:'ph-l'}); if(lg){const im=el('img',{class:'ph-logo',src:lg.getAttribute('src'),alt:'SCC'}); L.append(im,el('i',{class:'ph-sep'}));}
+      const tt=el('div'); tt.append(el('div',{class:'ph-t',text:'Training Dashboard'}),el('div',{class:'ph-s',text:'Phòng Nhân sự · L&OD · Saigon Cosmetics Corporation'})); L.append(tt);
+      const Rr=el('div',{class:'ph-r'}); Rr.append(el('div',{class:'ph-tab',text:name}));
+      const ch=el('div',{class:'ph-chips'}); const sel=id=>{const e=$(id); return e.options[e.selectedIndex]?e.options[e.selectedIndex].text:'';};
+      [['Năm',String(F0.Y)+($('#fCmp').value?' so với '+$('#fCmp').value:'')],['Khối',sel('#fKhoi')],['Phòng ban',sel('#fPb')],['Nhóm',sel('#fNhom')],F0.D0?['Kỳ',dmy(F0.D0)+' – '+dmy(F0.D1)]:['Đến ngày',dmy(F0.T)]].forEach(([k,v])=>{const c=el('span'); c.append(el('em',{text:k}),document.createTextNode(' '+v)); ch.append(c);});
+      Rr.append(ch); hd.append(L,Rr); node.append(hd);
+      const ft=el('div',{class:'pdffoot',text:`SCC Training Dashboard · ${name} · Trang ${ti+1}/${TABS.length} · Xuất lúc ${new Date().toLocaleString('vi-VN')}`});
+      const cn=$('#cmpNote'); if(!cn.hidden&&t!=='years'){const c=cn.cloneNode(true); c.className='cmpnote'; c.removeAttribute('id'); c.style.cssText='font-size:12.5px;color:var(--ink-2);margin:0 0 12px;padding:8px 12px;background:#fff4e8;border:1px solid #f6c38f;border-radius:10px'; node.append(c);}
+      const p=prepPanel(t); if(!p) continue; p.hidden=false; p.removeAttribute('hidden'); p.removeAttribute('id'); p.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); node.append(p); node.append(ft);
+      const breaks=[]; const {cv,H,sc}=await rasterize(node,width,breaks);
+      // mỗi tab = 1 trang PDF (khổ ngang A4, chiều cao theo nội dung)
+      pages.push({jpeg:jpegBytes(cv),w:cv.width,h:cv.height,dw:802,dh:H*802/width});
+    }
+  }
+  return {pages,F0};
+}
 async function exportPdf(){
   if(!M) return; const btn=$('#pdfBtn'), lbl=$('#pdfLbl'); btn.disabled=true; const prevTab=S.tab;
   try{
-    const {pages,F0}=await buildPages(lbl); if(!pages.length) return;
+    const {pages,F0}=await buildLongPages(lbl); if(!pages.length) return;
     lbl.textContent='Đang lưu…';
     const blob=buildPdf(pages); const name=`SCC_Training_Dashboard_${F0.Y}_${iso(new Date())}.pdf`;
     await saveFile(blob,name);

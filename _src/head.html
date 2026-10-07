@@ -199,6 +199,14 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .pdfx.pg .pgbody>*{flex:none;margin:0}
 .pdfx.pg .pgz{display:flex;flex-direction:column;gap:10px}
 .pdfx.pg .pgz>*{flex:none;margin:0}
+.pdfx.pg .pgz.fill>:last-child{flex:1 1 auto}
+.pdfx.pg .pgz.fill .grid2{align-items:stretch}
+.pdfx.pg .pgz.fill>.grid2:last-child{grid-template-rows:minmax(0,1fr)}
+.pdfx.pg .pgz.fill>.card:last-child,.pdfx.pg .pgz.fill>.grid2:last-child>.card{display:flex;flex-direction:column}
+.pdfx.pg .pgz.fill .card .chart{flex:1 1 auto;justify-content:center}
+.pdfx.pg .pgz.fill>:last-child .tbl{flex:1 1 auto}
+.pdfx.pg .pgz.fill>:last-child .tbl>table,.pdfx.pg .pgz.fill>.grid2:last-child .tbl>table{height:100%}
+.pdfx.pg .pgz.fill>.card:last-child .pbt,.pdfx.pg .pgz.fill>.card:last-child .ins{flex:1 1 auto}
 .pdfx.pg .kpis:not(.kcol):not(.k4){grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
 .pdfx.pg .pgz>.card svg{max-height:400px}
 .pdfx.pg .pgz>.card .ins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;align-items:start}
