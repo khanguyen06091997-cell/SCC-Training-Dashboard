@@ -902,7 +902,7 @@ function prepPanel(t){const src=$('#p-'+t); if(!src) return null; const p=src.cl
   if(!p.querySelector('.kpis,.card,.yc')) return null; return p;}
 // dựng các trang báo cáo khổ 16:9 (dùng chung cho PDF và PPT – hai file giống hệt nhau)
 // mỗi trang lặp lại thanh tiêu đề (phần đang trình bày + bộ lọc); khung dài được ngắt theo dòng, ưu tiên ngắt ở đầu nhóm
-const PGW=1360, PGH=765;
+const PGW=1600, PGH=900;
 function pgHead(name,F0){const hd=el('div',{class:'pdfhead'}); const lg=document.querySelector('.brandlogo');
   const L=el('div',{class:'ph-l'}); if(lg){const im=el('img',{class:'ph-logo',src:lg.getAttribute('src'),alt:'SCC'}); L.append(im,el('i',{class:'ph-sep'}));}
   const tt=el('div'); tt.append(el('div',{class:'ph-t',text:'Training Dashboard'}),el('div',{class:'ph-s',text:'Phòng Nhân sự · L&OD · Saigon Cosmetics Corporation'})); L.append(tt);
@@ -949,17 +949,22 @@ async function buildPages(lbl){
     while(q.length&&guard++<400){const b=q.shift();
       cur.body.append(b); if(fits()) continue; b.remove();
       const empty=!cur.body.children.length;
+      const per=b.classList.contains('ygrid')?3:2, nk=[...b.children].filter(x=>!x.hidden).length;
+      if(b.matches('.grid2,.ygrid')&&nk>per){q.unshift(...splitGrid(b)); continue;}
       if(!empty){const room=cur.body.clientHeight-cur.body.scrollHeight;
         if(room>220&&pgUnits(b)&&!b.matches('.grid2,.ygrid')){const sp=splitCard(b,3); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
         flush(); newPage(); q.unshift(b); continue;}
-      if(b.matches('.grid2,.ygrid')){const r=splitGrid(b); if(r.length&&!(r.length===1&&r[0]===b)){q.unshift(...r); continue;}}
+      if(b.matches('.grid2,.ygrid')){cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight;
+        if(h*0.6<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';
+        const r=splitGrid(b); if(r.length&&!(r.length===1&&r[0]===b)){q.unshift(...r); continue;}}
+      {cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight, thr=b.querySelector('.gantt')?9:b.querySelector('.pbt')?0.66:0.8; if(h*thr<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';}
       if(pgUnits(b)){const sp=splitCard(b,1); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
       // không tách được: thu nhỏ cho vừa 1 trang
       cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight; if(h>mx) b.style.zoom=String(Math.max(0.45,(mx-2)/h)); flush(); newPage();}
     flush();}
   // đánh số trang rồi chụp
   for(let i=0;i<out.length;i++){const pg=out[i]; lbl.textContent=`Đang xuất trang ${i+1}/${out.length}…`;
-    pg.ft.textContent=`SCC Training Dashboard · ${pg.name} · Trang ${i+1}/${out.length} · Xuất lúc ${new Date().toLocaleString('vi-VN')}`;
+    pg.ft.textContent=`${i+1}/${out.length}`;
     const {cv}=await rasterize(pg.node,PGW,[],null,PGH);
     out[i]={jpeg:jpegBytes(cv),w:cv.width,h:cv.height,full:1};}
   } finally{host.remove();}

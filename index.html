@@ -199,7 +199,18 @@ body.over .land-card{border-color:var(--accent);background:var(--accent-soft)}
 .pdfx.pg .pgbody>*{flex:none;margin:0}
 .pdfx.pg .pgbody>.card svg{max-height:400px}
 .pdfx.pg .pgbody>.card .ins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;align-items:start}
-.pdfx.pg .pdffoot{flex:none;margin-top:8px;padding-top:6px}
+.pdfx.pg .pdffoot{flex:none;margin-top:4px;padding-top:0;border-top:0;font-size:12px;font-weight:700;color:#8a93a8;text-align:right}
+.pdfx.pg .pgbody{gap:10px}
+.pdfx.pg .pdfhead{margin-bottom:10px}
+.pdfx.pg .grid2{gap:12px;align-items:start}
+.pdfx.pg .ygrid{gap:12px}
+.pdfx.pg .card{padding:12px 16px;gap:6px;border-radius:12px}
+.pdfx.pg .card .chart{justify-content:flex-start}
+.pdfx.pg .kpis{gap:10px}
+.pdfx.pg .kpi{padding:10px 14px;gap:3px;border-radius:12px}
+.pdfx.pg .kpi .hd{min-height:0}
+.pdfx.pg .kpi .v{margin-top:2px}
+.pdfx.pg .pgbody>.card svg{max-height:330px}
 .pdffoot{margin-top:18px;padding-top:10px;border-top:1px solid #d5dae5;font-size:11px;color:#8a93a8;text-align:right}
 #calSch{max-height:none;overflow-y:visible}
 #fPb{max-width:170px}
@@ -372,11 +383,11 @@ td.stt,th.stt{width:36px;color:var(--muted)}
 /* v19: bảng phòng ban gọn */
 .pbt{display:flex;flex-direction:column;font-size:12.5px;font-variant-numeric:tabular-nums}
 .pbr{display:grid;grid-template-columns:34px minmax(160px,1.2fr) minmax(200px,2fr) 84px 120px;gap:12px;align-items:center;padding:5px 8px;border-bottom:1px solid var(--grid)}
-.pbr.pbsec{background:#e8f1fd;border:1px solid #c9dcf6;border-radius:8px;padding:7px 8px;margin-top:10px;font-weight:700}
-.pbr.pbsec .nm{color:#1f4fa8;font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:12px}
-.pbr.pbsec .r{color:#173a7a;font-weight:800}
-.pbr.pbsec .pbbar{background:#fff;box-shadow:inset 0 0 0 1px #d6e4f8}.pbr.pbsec .pbbar i{background:linear-gradient(90deg,#3b7be8,#2a62cf)}
-.pbr.pbsec .pbbar span.out{color:#173a7a}
+.pbr.pbsec{background:#e7f6ec;border:1px solid #bfe5cc;border-radius:8px;padding:7px 8px;margin-top:10px;font-weight:700}
+.pbr.pbsec .nm{color:#17703f;font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:12px}
+.pbr.pbsec .r{color:#145c34;font-weight:800}
+.pbr.pbsec .pbbar{background:#fff;box-shadow:inset 0 0 0 1px #cfe9d8}.pbr.pbsec .pbbar i{background:linear-gradient(90deg,#3cb878,#22955a)}
+.pbr.pbsec .pbbar span.out{color:#145c34}
 .pbr:last-child{border-bottom:0}
 .pbr .r{text-align:right}
 .pbr .mu{color:var(--muted)}
@@ -1455,7 +1466,7 @@ function prepPanel(t){const src=$('#p-'+t); if(!src) return null; const p=src.cl
   if(!p.querySelector('.kpis,.card,.yc')) return null; return p;}
 // dựng các trang báo cáo khổ 16:9 (dùng chung cho PDF và PPT – hai file giống hệt nhau)
 // mỗi trang lặp lại thanh tiêu đề (phần đang trình bày + bộ lọc); khung dài được ngắt theo dòng, ưu tiên ngắt ở đầu nhóm
-const PGW=1360, PGH=765;
+const PGW=1600, PGH=900;
 function pgHead(name,F0){const hd=el('div',{class:'pdfhead'}); const lg=document.querySelector('.brandlogo');
   const L=el('div',{class:'ph-l'}); if(lg){const im=el('img',{class:'ph-logo',src:lg.getAttribute('src'),alt:'SCC'}); L.append(im,el('i',{class:'ph-sep'}));}
   const tt=el('div'); tt.append(el('div',{class:'ph-t',text:'Training Dashboard'}),el('div',{class:'ph-s',text:'Phòng Nhân sự · L&OD · Saigon Cosmetics Corporation'})); L.append(tt);
@@ -1502,17 +1513,22 @@ async function buildPages(lbl){
     while(q.length&&guard++<400){const b=q.shift();
       cur.body.append(b); if(fits()) continue; b.remove();
       const empty=!cur.body.children.length;
+      const per=b.classList.contains('ygrid')?3:2, nk=[...b.children].filter(x=>!x.hidden).length;
+      if(b.matches('.grid2,.ygrid')&&nk>per){q.unshift(...splitGrid(b)); continue;}
       if(!empty){const room=cur.body.clientHeight-cur.body.scrollHeight;
         if(room>220&&pgUnits(b)&&!b.matches('.grid2,.ygrid')){const sp=splitCard(b,3); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
         flush(); newPage(); q.unshift(b); continue;}
-      if(b.matches('.grid2,.ygrid')){const r=splitGrid(b); if(r.length&&!(r.length===1&&r[0]===b)){q.unshift(...r); continue;}}
+      if(b.matches('.grid2,.ygrid')){cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight;
+        if(h*0.6<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';
+        const r=splitGrid(b); if(r.length&&!(r.length===1&&r[0]===b)){q.unshift(...r); continue;}}
+      {cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight, thr=b.querySelector('.gantt')?9:b.querySelector('.pbt')?0.66:0.8; if(h*thr<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';}
       if(pgUnits(b)){const sp=splitCard(b,1); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
       // không tách được: thu nhỏ cho vừa 1 trang
       cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight; if(h>mx) b.style.zoom=String(Math.max(0.45,(mx-2)/h)); flush(); newPage();}
     flush();}
   // đánh số trang rồi chụp
   for(let i=0;i<out.length;i++){const pg=out[i]; lbl.textContent=`Đang xuất trang ${i+1}/${out.length}…`;
-    pg.ft.textContent=`SCC Training Dashboard · ${pg.name} · Trang ${i+1}/${out.length} · Xuất lúc ${new Date().toLocaleString('vi-VN')}`;
+    pg.ft.textContent=`${i+1}/${out.length}`;
     const {cv}=await rasterize(pg.node,PGW,[],null,PGH);
     out[i]={jpeg:jpegBytes(cv),w:cv.width,h:cv.height,full:1};}
   } finally{host.remove();}
