@@ -1,0 +1,107 @@
+<header class="top" id="topbar" hidden>
+ <div class="bar"><div class="barin">
+  <div class="brand"><img class="brandlogo" src="__LOGO_W__" alt="SCC – Saigon Cosmetics Corporation"><span class="bdiv" aria-hidden="true"></span>
+   <div><h1>Training Dashboard</h1><div class="sub" id="brandSub">Phòng Nhân sự · L&amp;OD</div></div></div>
+  <div class="tabs" role="tablist">
+   <button class="tab" role="tab" id="t-perf" aria-selected="true" data-p="perf">Hiệu quả đào tạo</button>
+   <button class="tab" role="tab" id="t-budget" aria-selected="false" data-p="budget">Ngân sách</button>
+   <button class="tab" role="tab" id="t-sched" aria-selected="false" data-p="sched">Kế hoạch &amp; lịch</button>
+   <button class="tab" role="tab" id="t-years" aria-selected="false" data-p="years">So sánh các năm</button>
+   <button class="tab" role="tab" id="t-data" aria-selected="false" data-p="data">Dữ liệu</button>
+  </div>
+  <div class="src">
+   <span id="srcChip" class="chip sample">Dữ liệu mẫu</span>
+   <span id="rowsChip" class="chip"></span>
+   <button class="btn" id="sampleBtn" type="button">Về trang tải file</button>
+   <button class="btn" id="pdfBtn" type="button" title="Tải toàn bộ dashboard đang xem thành file PDF"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M4 17v1.5A1.5 1.5 0 005.5 20h13a1.5 1.5 0 001.5-1.5V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="pdfLbl">Tải PDF</span></button>
+   <button class="btn primary" id="refreshBtn" type="button" title="Cập nhật lại dữ liệu từ file Excel đang mở (sau khi bạn sửa và lưu file)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Làm mới</button>
+  </div>
+ </div></div>
+ <div class="fbar"><div class="filters">
+   <div class="f" id="ffYear"><label for="fYear">Năm</label><select id="fYear"></select></div>
+   <div class="f" id="ffFrom"><label for="fFrom">Từ ngày</label><input type="date" id="fFrom" title="Để trống = từ đầu năm"></div>
+   <div class="f" id="ffDate"><label for="fDate">Đến ngày</label><input type="date" id="fDate" title="Ngày chốt số liệu – khóa quá ngày này mà chưa hoàn thành là trễ hạn"></div>
+   <div class="f" id="ffCmp" hidden style="display:none"><label for="fCmp">So sánh với</label><select id="fCmp"></select></div>
+   <div class="f" id="ffKhoi"><label for="fKhoi">Khối</label><select id="fKhoi"></select></div>
+   <div class="f" id="ffPb"><label for="fPb">Phòng ban</label><select id="fPb"></select></div>
+   <div class="f" id="ffNhom"><label for="fNhom">Nhóm khóa học</label><select id="fNhom"></select></div>
+ </div></div>
+</header>
+<input type="file" id="fileIn" accept=".xlsx,.xlsm" multiple hidden>
+<main class="landing" id="landing">
+ <div class="land-head"><img class="landlogo" src="__LOGO_N__" alt="SCC – Saigon Cosmetics Corporation"><div><h1>Training Dashboard</h1><p>Phòng Nhân sự · L&amp;OD</p></div></div>
+ <div class="land-card" id="landDrop" tabindex="0" role="button" aria-label="Chọn file Excel dữ liệu đào tạo">
+  <svg width="54" height="54" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v11m0 0l-4.5-4.5M12 14l4.5-4.5M4 15.5v2.5a2 2 0 002 2h12a2 2 0 002-2v-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <h2>Kéo thả file dữ liệu đào tạo vào đây</h2>
+  <p>Thả file <b>SCC Training Record.xlsx</b> vào bất kỳ đâu trên trang, hoặc bấm để chọn file. Có thể chọn nhiều file cùng lúc (ví dụ mỗi năm 1 file).</p>
+  <button class="btn cta" id="pickBtn3" type="button">Chọn file…</button>
+  <button class="btn" id="reopenBtn" type="button" hidden style="margin-top:10px"></button>
+  <p class="small">File chỉ được đọc trên máy bạn, không tải lên máy chủ nào.</p>
+ </div>
+ <div id="alertsLand"></div>
+ <button class="linkbtn" id="tryBtn" type="button">Chưa có file? Xem thử với dữ liệu mẫu</button>
+</main>
+<div class="wrap" id="app" hidden>
+ <div id="alerts"></div>
+ <p class="hint" id="cmpNote" hidden></p>
+
+ <section class="panel" id="p-perf" role="tabpanel" aria-labelledby="t-perf">
+  <div class="kpis k4" id="kPerf"></div>
+  <div class="grid2">
+   <div class="card"><div class="ch"><div><h3 id="mTitle">Giờ đào tạo theo tháng</h3></div>
+     <div class="seg" id="mSeg"><button type="button" data-m="hours" aria-pressed="true">Giờ</button><button type="button" data-m="lượt" aria-pressed="false">Lượt học</button></div></div>
+     <div class="legend" id="lgMonth"></div><div class="chart" id="cMonth"></div></div>
+   <div class="card"><div class="ch"><div><h3>Tỷ lệ NV được đào tạo &amp; giờ đào tạo theo Khối</h3></div></div><div class="chart" id="cKhoi"></div></div>
+   <div class="card"><div class="ch"><div><h3 id="nTitle">Giờ đào tạo theo nhóm khóa học</h3></div></div><div class="chart" id="cNhom"></div></div>
+   <div class="card"><div class="ch"><div><h3>Phân tích nhanh</h3></div></div><div class="ins" id="insights"></div></div>
+  </div>
+  <div class="card"><div class="ch"><div><h3>Tỷ lệ &amp; Số giờ nhân viên được đào tạo theo Phòng ban</h3></div></div><div class="chart" id="cPb"></div></div>
+  <div class="card"><div class="ch"><div><h3 id="cTitle">Theo khóa học</h3></div></div><div class="tbl" id="tCourse"></div></div>
+  <div class="card nopdf"><div class="ch"><div><h3>Tra cứu quá trình đào tạo của nhân viên</h3></div>
+    <div class="f qf"><label for="qNV">Tìm</label><input id="qNV" type="search" placeholder="VD: NV00106 hoặc Bùi Văn" autocomplete="off"></div></div><div id="nvRes"><p class="hint">Nhập ít nhất 2 ký tự để tìm.</p></div></div>
+ </section>
+
+ <section class="panel" id="p-budget" role="tabpanel" aria-labelledby="t-budget" hidden>
+  <div class="budtop"><div class="card bhero" id="bHero"></div><div class="kpis kcol" id="kBud"></div></div>
+  <div class="grid2">
+   <div class="card"><div class="ch"><div><h3 id="bTitle">Chi phí kế hoạch và thực tế theo tháng</h3></div></div><div class="legend" id="lgBud"></div><div class="chart" id="cBud"></div></div>
+   <div class="card"><div class="ch"><div><h3>Chi phí thực tế theo nhóm khóa học</h3></div></div><div class="chart" id="cBudNhom"></div></div>
+  </div>
+ </section>
+
+ <section class="panel" id="p-sched" role="tabpanel" aria-labelledby="t-sched" hidden>
+  <div class="kpis" id="kSch"></div>
+  <div class="card"><div class="ch"><div><h3 id="calTitle">Lịch đào tạo năm: kế hoạch và thực hiện</h3></div></div>
+   <div class="legend callg" id="calLg"></div>
+   <div class="tbl" id="calSch"></div></div>
+  <div class="grid2">
+   <div class="card"><div class="ch"><div><h3 id="sTitle">Lớp trong kế hoạch: đến hạn và hoàn thành</h3></div></div><div class="legend" id="lgSch"></div><div class="chart" id="cSch"></div></div>
+   <div class="card"><div class="ch"><div><h3 id="uTitle">Lịch Đào Tạo</h3></div></div><div class="tbl" id="tUp"></div></div>
+  </div>
+  <div class="card"><div class="ch"><div><h3>Toàn bộ lớp trong năm</h3></div>
+    <div class="f"><label for="fStatus">Trạng thái</label><select id="fStatus"></select></div></div><div class="tbl" id="tCls"></div></div>
+ </section>
+
+ <section class="panel" id="p-years" role="tabpanel" aria-labelledby="t-years" hidden>
+  <div class="ygrid" id="yCharts"></div>
+  <div class="card"><div class="ch"><div><h3>Phân tích nhanh</h3><p class="hint" id="yqSub" style="margin:2px 0 0"></p></div></div><div class="ins yq" id="yQuick"></div></div>
+ </section>
+
+ <section class="panel" id="p-data" role="tabpanel" aria-labelledby="t-data" hidden>
+  <div class="card"><h3>Kiểm tra dữ liệu của file đang mở</h3><div id="dq"></div></div>
+  <div class="card"><h3>Cách dùng</h3>
+   <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;max-width:85ch">
+    <li>Nhập dữ liệu mọi năm vào cùng file <i>SCC Training Record.xlsx</i>: gõ thêm dòng ngay dưới bảng ở sheet Lop hoc và Training Record. Năm được lấy từ cột Ngày bắt đầu / Ngày học.</li>
+    <li>DS Nhan vien giữ cả người đã nghỉ (ghi Ngày nghỉ việc, không xóa dòng) để headcount các năm cũ tính đúng.</li>
+    <li>Mở link, bấm <b>Chọn file…</b> hoặc kéo thả file. Nếu dữ liệu tách nhiều file (mỗi năm 1 file), chọn tất cả cùng lúc – trang tự gộp.</li>
+    <li>Sửa Excel xong, lưu file (Ctrl+S) rồi bấm nút cam <b>Làm mới</b>: trang tự đọc lại chính file đang mở, không cần chọn lại. Lần đầu trình duyệt có thể hỏi quyền xem file – chọn <i>Cho phép</i> (nên chọn "cho phép mỗi lần truy cập" để lần sau mở link là tự tải). Dùng Chrome hoặc Edge.</li>
+    <li>Bấm <b>Tải PDF</b> để lưu toàn bộ dashboard (4 tab, theo bộ lọc đang chọn) thành 1 file PDF gửi báo cáo.</li>
+    <li>Chọn Năm và <b>So sánh với</b> một năm khác: thẻ chỉ số hiện mức tăng/giảm, biểu đồ theo tháng hiện 2 năm cạnh nhau.</li>
+   </ol>
+   <p class="hint">Trang tự tính lại từ các cột nhập (không phụ thuộc công thức trong file). Không đổi tên sheet, tên cột và dòng tiêu đề trong file. Đóng trang là dữ liệu biến mất; mỗi lần xem cần tải lại file.</p>
+  </div>
+  <div class="card"><h3>Định nghĩa chỉ số</h3><div class="tbl" id="tDef"></div></div>
+ </section>
+
+</div>
+<div class="tip" id="tip" hidden></div>
