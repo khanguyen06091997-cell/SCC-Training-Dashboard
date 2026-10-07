@@ -927,9 +927,14 @@ async function buildPages(lbl){
     const q=[...p.children].filter(x=>!x.hidden&&x.offsetParent!==undefined);
     const cn=$('#cmpNote'); if(!cn.hidden&&t!=='years'){const c=cn.cloneNode(true); c.className='cmpnote'; c.removeAttribute('id'); c.style.cssText='font-size:12.5px;color:var(--ink-2);padding:8px 12px;background:#fff4e8;border:1px solid #f6c38f;border-radius:10px'; q.unshift(c);}
     let cur=null;
-    const newPage=()=>{const node=el('div',{class:'pgnode'}); node.append(pgHead(name,F0)); const body=el('div',{class:'pgbody'}); const ft=el('div',{class:'pdffoot',text:' '}); node.append(body,ft); host.replaceChildren(node); cur={node,body,ft,name}; return cur;};
-    const fits=()=>cur.body.scrollHeight<=cur.body.clientHeight+1;
-    const flush=()=>{if(cur&&cur.body.children.length){host.replaceChildren(); out.push(cur);} cur=null;};
+    const MINZ=0.72, MAXZ=1.15;
+    const newPage=()=>{const node=el('div',{class:'pgnode'}); node.append(pgHead(name,F0)); const body=el('div',{class:'pgbody'}); const inner=el('div',{class:'pgz'}); body.append(inner); const ft=el('div',{class:'pdffoot',text:' '}); node.append(body,ft); host.replaceChildren(node); cur={node,body,inner,ft,name}; cur.body.append=(...x)=>inner.append(...x); Object.defineProperty(cur.body,'children',{get:()=>inner.children}); return cur;};
+    const setZ=z=>{cur.inner.style.zoom=String(z); cur.inner.style.width=(cur.body.clientWidth/z)+'px';};
+    const fitsZ=z=>{setZ(z); return cur.body.scrollHeight<=cur.body.clientHeight+1;};
+    // trong lúc xếp: cho phép thu nhỏ cả trang tới MINZ để gộp thêm khung
+    const fits=()=>fitsZ(MINZ);
+    const bestZ=()=>{if(!fitsZ(MINZ)) return MINZ; let lo=MINZ,hi=MAXZ; if(fitsZ(hi)) return hi; for(let k=0;k<8;k++){const m=(lo+hi)/2; if(fitsZ(m)) lo=m; else hi=m;} return lo;};
+    const flush=()=>{if(cur&&cur.body.children.length){setZ(bestZ()); host.replaceChildren(); out.push(cur);} cur=null;};
     // tách 1 khung có bảng/danh sách: lấy phần vừa với chỗ trống còn lại, phần còn lại thành khung "(tiếp)"
     const splitCard=(b,minRows)=>{const U0=pgUnits(b); if(!U0) return null;
       const c=b.cloneNode(true); const U=pgUnits(c); const all=pgItems(U); [...U.box.children].forEach(x=>x.remove()); cur.body.append(c);
@@ -948,19 +953,19 @@ async function buildPages(lbl){
     newPage(); let guard=0;
     while(q.length&&guard++<400){const b=q.shift();
       cur.body.append(b); if(fits()) continue; b.remove();
-      const empty=!cur.body.children.length;
+      const empty=!cur.inner.children.length;
       const per=b.classList.contains('ygrid')?3:2, nk=[...b.children].filter(x=>!x.hidden).length;
       if(b.matches('.grid2,.ygrid')&&nk>per){q.unshift(...splitGrid(b)); continue;}
-      if(!empty){const room=cur.body.clientHeight-cur.body.scrollHeight;
+      if(!empty){fitsZ(MINZ); const room=(cur.body.clientHeight-cur.inner.getBoundingClientRect().height)/MINZ;
         if(room>220&&pgUnits(b)&&!b.matches('.grid2,.ygrid')){const sp=splitCard(b,3); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
         flush(); newPage(); q.unshift(b); continue;}
-      if(b.matches('.grid2,.ygrid')){cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight;
+      if(b.matches('.grid2,.ygrid')){cur.body.append(b); const h=b.getBoundingClientRect().height/MINZ, mx=cur.body.clientHeight/MINZ;
         if(h*0.6<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';
         const r=splitGrid(b); if(r.length&&!(r.length===1&&r[0]===b)){q.unshift(...r); continue;}}
-      {cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight, thr=b.querySelector('.gantt')?9:b.querySelector('.pbt')?0.66:0.8; if(h*thr<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';}
+      {cur.body.append(b); const h=b.getBoundingClientRect().height/MINZ, mx=cur.body.clientHeight/MINZ, thr=b.querySelector('.gantt')?9:b.querySelector('.pbt')?0.66:0.8; if(h*thr<=mx){b.style.zoom=String((mx*0.97)/h); if(fits()) continue;} b.remove(); b.style.zoom='';}
       if(pgUnits(b)){const sp=splitCard(b,1); if(sp){cur.body.append(sp[0]); flush(); newPage(); q.unshift(sp[1]); continue;}}
       // không tách được: thu nhỏ cho vừa 1 trang
-      cur.body.append(b); const h=b.getBoundingClientRect().height, mx=cur.body.clientHeight; if(h>mx) b.style.zoom=String(Math.max(0.45,(mx-2)/h)); flush(); newPage();}
+      cur.body.append(b); const h=b.getBoundingClientRect().height/MINZ, mx=cur.body.clientHeight/MINZ; if(h>mx) b.style.zoom=String(Math.max(0.45,(mx-2)/h)); flush(); newPage();}
     flush();}
   // đánh số trang rồi chụp
   for(let i=0;i<out.length;i++){const pg=out[i]; lbl.textContent=`Đang xuất trang ${i+1}/${out.length}…`;
