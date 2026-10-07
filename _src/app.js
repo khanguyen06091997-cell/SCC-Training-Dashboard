@@ -861,7 +861,7 @@ function buildPdf(pages){ // pages: [{jpeg:Uint8Array,w,h,dw,dh}] trên khổ 84
   push(latin(x+`trailer\n<< /Size ${3+n*3} /Root 1 0 R >>\nstartxref\n${xo}\n%%EOF`));
   return new Blob(parts,{type:'application/pdf'});
 }
-function jpegBytes(cv){const b=atob(cv.toDataURL('image/jpeg',0.9).split(',')[1]); const u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u;}
+function jpegBytes(cv,q=0.9){const b=atob(cv.toDataURL('image/jpeg',q).split(',')[1]); const u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u;}
 async function rasterize(node,width,breaksOut,bsel,fixedH){
   const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');
   const wrap=document.createElement('div'); wrap.className='pdfx'; wrap.style.cssText=`position:absolute;left:-100000px;top:0;width:${width}px;background:var(--page);padding:18px;box-sizing:border-box;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink)`;
@@ -874,7 +874,7 @@ async function rasterize(node,width,breaksOut,bsel,fixedH){
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${H}"><foreignObject x="0" y="0" width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml"><style>${css.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</style>${html}</div></foreignObject></svg>`;
   const img=new Image(); img.decoding='sync';
   await new Promise((ok,bad)=>{img.onload=ok; img.onerror=()=>bad(new Error('render')); setTimeout(()=>bad(new Error('timeout')),30000); img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);});
-  const sc=2, cv=document.createElement('canvas'); cv.width=width*sc; cv.height=H*sc; const g=cv.getContext('2d'); g.fillStyle='#eef1f6'; g.fillRect(0,0,cv.width,cv.height); g.scale(sc,sc); g.drawImage(img,0,0);
+  const sc=fixedH?1.5:2, cv=document.createElement('canvas'); cv.width=width*sc; cv.height=H*sc; const g=cv.getContext('2d'); g.fillStyle='#eef1f6'; g.fillRect(0,0,cv.width,cv.height); g.scale(sc,sc); g.drawImage(img,0,0);
   cv.toDataURL('image/jpeg',0.5); // ném lỗi ngay nếu trình duyệt chặn (canvas bị "tainted")
   if(fixedH) return {cv,H,sc};
   // cắt phần nền trống thừa ở cuối (font trong ảnh có thể khác font trên trang → nội dung ngắn hơn)
@@ -986,7 +986,7 @@ async function buildPages(lbl){
   for(let i=0;i<out.length;i++){const pg=out[i]; lbl.textContent=`Đang xuất trang ${i+1}/${out.length}…`;
     pg.ft.textContent=`${i+1}/${out.length}`;
     const {cv}=await rasterize(pg.node,PGW,[],null,PGH);
-    out[i]={jpeg:jpegBytes(cv),w:cv.width,h:cv.height,full:1};}
+    out[i]={jpeg:jpegBytes(cv,0.85),w:cv.width,h:cv.height,full:1};}
   } finally{host.remove();}
   return {pages:out,F0};
 }
@@ -1048,7 +1048,7 @@ function makePptx(SWin,SHin){
       s.rect=(x,y,w,h,col)=>{s.sh.push(`<p:sp><p:nvSpPr><p:cNvPr id="${s.id++}" name="Shape ${s.id}"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr>${xf(x,y,w,h)}<a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="${col}"/></a:solidFill><a:ln><a:noFill/></a:ln></p:spPr></p:sp>`); return s;};
       s.text=(t,o)=>{const sz=Math.round((o.size||14)*100); s.sh.push(`<p:sp><p:nvSpPr><p:cNvPr id="${s.id++}" name="Text ${s.id}"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr><p:spPr>${xf(o.x,o.y,o.w,o.h)}<a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/></p:spPr><p:txBody><a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="${o.anchor||'t'}"><a:normAutofit/></a:bodyPr><a:lstStyle/><a:p><a:pPr algn="${o.align||'l'}"/><a:r><a:rPr lang="vi-VN" sz="${sz}" b="${o.bold?1:0}"${o.spc?` spc="${o.spc}"`:''} dirty="0"><a:solidFill><a:srgbClr val="${o.color||'141B2D'}"/></a:solidFill><a:latin typeface="Arial"/><a:cs typeface="Arial"/></a:rPr><a:t>${X(t)}</a:t></a:r></a:p></p:txBody></p:sp>`); return s;};
       s.image=(bytes,ext,x,y,w,h)=>{const n=media.length+1; media.push({name:`ppt/media/image${n}.${ext}`,data:bytes}); const rid='rId'+(s.rel.length+2); s.rel.push(`<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image${n}.${ext}"/>`);
-        s.sh.push(`<p:pic><p:nvPicPr><p:cNvPr id="${s.id++}" name="Picture ${s.id}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>${xf(x,y,w,h)}<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>`); return s;};
+        s.sh.push(`<p:pic><p:nvPicPr><p:cNvPr id="${s.id++}" name="Slide ${slides.length} image ${s.id}" descr="Slide ${slides.length}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>${xf(x,y,w,h)}<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>`); return s;};
       slides.push(s); return s;},
     blob(title){const F=[]; const n=slides.length;
       F.push({name:'[Content_Types].xml',data:HD+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpeg" ContentType="image/jpeg"/><Default Extension="png" ContentType="image/png"/><Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/><Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/><Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/><Override PartName="/ppt/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>'+slides.map((_,i)=>`<Override PartName="/ppt/slides/slide${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>`).join('')+'<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>'});
