@@ -360,7 +360,16 @@ td.stt,th.stt{width:36px;color:var(--muted)}
 .sub2{display:block;font-size:10.5px;font-weight:500;color:var(--muted)}
 /* v19: bảng phòng ban gọn */
 .pbt{display:flex;flex-direction:column;font-size:12.5px;font-variant-numeric:tabular-nums}
-.pbr{display:grid;grid-template-columns:34px 92px minmax(140px,1.1fr) minmax(200px,2fr) 84px 120px;gap:12px;align-items:center;padding:5px 0;border-bottom:1px solid var(--grid)}
+.pbr{display:grid;grid-template-columns:34px minmax(160px,1.2fr) minmax(200px,2fr) 84px 120px;gap:12px;align-items:center;padding:5px 8px;border-bottom:1px solid var(--grid)}
+.pbr.pbsec{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:8px;padding:7px 8px;margin-top:10px;font-weight:700}
+.pbr.pbsec .nm{color:var(--accent-2);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:12px}
+.pbr.pbsec .r{color:var(--ink);font-weight:800}
+.pbr.pbsec .pbbar{background:#fff}.pbr.pbsec .pbbar i{background:var(--accent-2)}
+.pbr.pbtot{background:var(--navy);border-radius:8px;margin-top:10px;padding:8px;color:#fff;font-weight:700}
+.pbr.pbtot .nm{color:#fff;font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:12px}
+.pbr.pbtot .r{color:#fff}
+.pbr.pbtot .pbbar{background:rgba(255,255,255,.14)}
+.pbr.pbtot .pbbar span.out{color:#fff}
 .pbr:last-child{border-bottom:0}
 .pbr .r{text-align:right}
 .pbr .mu{color:var(--muted)}
@@ -371,7 +380,7 @@ td.stt,th.stt{width:36px;color:var(--muted)}
 .pbbar span{position:absolute;left:8px;top:0;bottom:0;display:flex;align-items:center;gap:3px;color:#fff;font-size:11.5px;white-space:nowrap}
 .pbbar span.out{color:var(--ink-2)}
 .pbbar span b{font-weight:700}
-@media (max-width:760px){.pbr{grid-template-columns:24px 0 minmax(90px,1fr) minmax(120px,1.4fr) 44px 64px;gap:8px}.pbr>div:nth-child(2){display:none}}
+@media (max-width:760px){.pbr{grid-template-columns:24px minmax(90px,1fr) minmax(120px,1.4fr) 44px 64px;gap:8px;padding-inline:4px}}
 /* v20 */
 .pbh .srt{cursor:pointer;user-select:none}
 .pbh .srt:hover{color:var(--ink)}
@@ -442,6 +451,7 @@ td.stt,th.stt{width:36px;color:var(--muted)}
    <span id="rowsChip" class="chip"></span>
    <button class="btn" id="sampleBtn" type="button">Về trang tải file</button>
    <button class="btn" id="pdfBtn" type="button" title="Tải toàn bộ dashboard đang xem thành file PDF"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M4 17v1.5A1.5 1.5 0 005.5 20h13a1.5 1.5 0 001.5-1.5V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="pdfLbl">Tải PDF</span></button>
+   <button class="btn" id="pptBtn" type="button" title="Tải dashboard thành file PowerPoint – mỗi biểu đồ một slide (bỏ qua các khung đang thu gọn)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M12 17v3M8 20h8M8 13V10M12 13V8M16 13v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="pptLbl">Tải PPT</span></button>
    <button class="btn primary" id="refreshBtn" type="button" title="Cập nhật lại dữ liệu từ file Excel đang mở (sau khi bạn sửa và lưu file)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11a8 8 0 10-2.3 5.7M20 5v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Làm mới</button>
   </div>
  </div></div>
@@ -812,22 +822,34 @@ function hbars(host,items,fmt,{max=null,color='var(--s1)',heads=null}={}){
   host.append(box);
 }
 // bảng phòng ban gọn: STT · Khối · Phòng ban · thanh (đã học/tổng · %) · Số khóa · Giờ học
-const PBS={i:1,d:1};
+const PBS={i:2,d:-1};
+const ROM=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+const KORD=['Nhà máy','Nội nghiệp','Thương mại'];
+const kNm=k=>String(k||'').replace(/^Khối\s+/,'');
 function pbTable(host,items,hasH){host.replaceChildren(); if(!items.length){host.append(el('div',{class:'empty',text:'Chưa có dữ liệu'})); return;}
   const t=el('div',{class:'pbt'}); const hd=el('div',{class:'pbr pbh'}); const body=el('div');
-  const K=[null,it=>String(it.khoi||''),it=>it.label,it=>it.value,it=>it.nk,it=>hasH?it.hh:it.n];
-  const heads=['STT','Khối','Phòng ban','NV đang làm đã học / tổng · tỷ lệ','Số khóa học',hasH?'Giờ học (gồm NV đã nghỉ)':'Lượt học (gồm NV đã nghỉ)'];
-  const hcs=heads.map((x,i)=>{const c=el('div',{class:(i===0||i>=4?'r':'')+(i?' srt':''),text:x}); if(i){c.tabIndex=0; c.title='Bấm để sắp xếp'; const go=()=>{if(PBS.i===i) PBS.d=-PBS.d; else {PBS.i=i; PBS.d=i>=3?-1:1;} draw();}; c.addEventListener('click',go); c.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); go();}});} hd.append(c); return c;});
+  const K=[null,it=>it.label,it=>it.value,it=>it.nk,it=>hasH?it.hh:it.n];
+  const heads=['STT','Phòng ban','NV đang làm đã học / tổng · tỷ lệ','Số khóa học',hasH?'Giờ học (gồm NV đã nghỉ)':'Lượt học (gồm NV đã nghỉ)'];
+  const hcs=heads.map((x,i)=>{const c=el('div',{class:(i===0||i>=3?'r':'')+(i?' srt':''),text:x}); if(i){c.tabIndex=0; c.title='Bấm để sắp xếp trong từng khối'; const go=()=>{if(PBS.i===i) PBS.d=-PBS.d; else {PBS.i=i; PBS.d=i>=2?-1:1;} draw();}; c.addEventListener('click',go); c.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); go();}});} hd.append(c); return c;});
   const cmp=(x,y)=>typeof x==='number'?x-y:String(x).localeCompare(String(y),'vi',{numeric:true});
+  const ko=k=>{const i=KORD.indexOf(kNm(k)); return i<0?99:i;};
+  const groups=[...new Set(items.map(it=>it.khoi||''))].sort((x,y)=>ko(x)-ko(y)||kNm(x).localeCompare(kNm(y),'vi'));
+  const bar=(v,u,h2)=>{const tr=el('div',{class:'pbbar'}); const f=el('i'); f.style.width=Math.max(0,Math.min(100,v*100))+'%'; tr.append(f);
+    const lb=el('span',{class:v<0.35?'out':''}); lb.append(el('b',{text:fmtP(v)}),document.createTextNode(` · ${fmtN(u)}/${fmtN(h2)} NV`)); tr.append(lb); return tr;};
+  const sumRow=(label,arr,cls)=>{const u=arr.reduce((x,it)=>x+it.u,0), h2=arr.reduce((x,it)=>x+it.h,0), hh=arr.reduce((x,it)=>x+it.hh,0), n=arr.reduce((x,it)=>x+it.n,0);
+    const ks=new Set(arr.flatMap(it=>[...(it.ks||[])])); const r=el('div',{class:'pbr '+cls});
+    const lab=el('div',{class:'nm',text:label}); lab.style.gridColumn='1 / span 2'; r.append(lab,bar(h2?u/h2:0,u,h2),el('div',{class:'r',text:fmtN(ks.size)}),el('div',{class:'r',text:hasH?fmtN(hh)+' giờ':fmtN(n)+' lượt'}));
+    r.title=`${label}: ${fmtN(u)}/${fmtN(h2)} NV đang làm đã học · ${fmtN(arr.length)} phòng ban`; return r;};
   function draw(){hcs.forEach((c,i)=>c.dataset.sort=i&&i===PBS.i?(PBS.d>0?'asc':'desc'):'');
-    const arr=items.slice().sort((a,b2)=>cmp(K[PBS.i](a),K[PBS.i](b2))*PBS.d||(PBS.i===1?(b2.value-a.value||b2.hh-a.hh):0)||a.label.localeCompare(b2.label,'vi'));
-    body.replaceChildren(...arr.map((it,i)=>{const r=el('div',{class:'pbr'});
-      r.append(el('div',{class:'r mu',text:String(i+1)}),el('div',{class:'mu',text:String(it.khoi||'').replace(/^Khối\s+/,'')}));
-      const nm=el('div',{class:'nm',text:it.label}); nm.title=it.label; r.append(nm);
-      const tr=el('div',{class:'pbbar'}); const f=el('i'); f.style.width=Math.max(0,Math.min(100,it.value*100))+'%'; tr.append(f);
-      const lb=el('span',{class:it.value<0.35?'out':''}); lb.append(el('b',{text:fmtP(it.value)}),document.createTextNode(` · ${fmtN(it.u)}/${fmtN(it.h)} NV`)); tr.append(lb); r.append(tr);
-      r.append(el('div',{class:'r',text:fmtN(it.nk)}),el('div',{class:'r',text:hasH?fmtN(it.hh)+' giờ':fmtN(it.n)+' lượt'}));
-      r.title=it.sub||''; return r;}));}
+    const out=[]; let n=0;
+    groups.forEach((g,gi)=>{const arr=items.filter(it=>(it.khoi||'')===g).sort((a,b2)=>cmp(K[PBS.i](a),K[PBS.i](b2))*PBS.d||(b2.value-a.value)||(b2.hh-a.hh)||a.label.localeCompare(b2.label,'vi'));
+      out.push(sumRow(`${ROM[gi]||gi+1}. ${g?(/^Khối/i.test(g)?g:'Khối '+g):'Chưa xác định khối'}`,arr,'pbsec'));
+      arr.forEach(it=>{const r=el('div',{class:'pbr'}); r.append(el('div',{class:'r mu',text:String(++n)}));
+        const nm=el('div',{class:'nm',text:it.label}); nm.title=it.label; r.append(nm,bar(it.value,it.u,it.h));
+        r.append(el('div',{class:'r',text:fmtN(it.nk)}),el('div',{class:'r',text:hasH?fmtN(it.hh)+' giờ':fmtN(it.n)+' lượt'}));
+        r.title=it.sub||''; out.push(r);});});
+    if(groups.length>1) out.push(sumRow('Tổng cộng',items,'pbtot'));
+    body.replaceChildren(...out);}
   t.append(hd,body); host.append(t); draw();}
 function legend(host,items){host.replaceChildren(...items.map(([n,c])=>{const s=el('span'); const w=el('span',{class:'sw'}); w.style.background=c; s.append(w,document.createTextNode(n)); return s;}));}
 const SST=new Map();
@@ -977,7 +999,7 @@ function renderPerf(F){
   {const ap=allActive.filter(e=>e.pb&&(F.K==='*'||e.khoi===F.K)); const pbs=[...new Set(ap.map(e=>e.pb))];
    const items=pbs.map(p=>{const ak=new Set(ap.filter(e=>e.pb===p).map(e=>e.id)); const h=ak.size; const dk=yrDone.filter(r=>r.e&&r.e.pb===p); const u=new Set(dk.filter(r=>ak.has(r.eid)).map(r=>r.eid)).size; const hh=dk.reduce((a,r)=>a+r.hrs,0);
      const kc=new Map(); ap.filter(e=>e.pb===p).forEach(e=>kc.set(e.khoi,(kc.get(e.khoi)||0)+1)); const khoi=[...kc.entries()].sort((x,y)=>y[1]-x[1])[0][0];
-     return {label:p,khoi,u,h,nk:new Set(dk.map(r=>r.cl.kh)).size,value:h?u/h:0,hh,n:dk.length,cnt:`${fmtN(u)} / ${fmtN(h)}`,txt:kHasH?`${fmtN(hh)} giờ`:`${fmtN(dk.length)} lượt`,sub:`${fmtN(u)}/${fmtN(h)} NV đang làm đã học · ${kHasH?fmtN(hh)+' giờ':fmtN(dk.length)+' lượt học'}`};}).sort((a,b)=>b.value-a.value||b.n-a.n);
+     const ks=new Set(dk.map(r=>r.cl.kh)); return {label:p,khoi,u,h,ks,nk:ks.size,value:h?u/h:0,hh,n:dk.length,cnt:`${fmtN(u)} / ${fmtN(h)}`,txt:kHasH?`${fmtN(hh)} giờ`:`${fmtN(dk.length)} lượt`,sub:`${fmtN(u)}/${fmtN(h)} NV đang làm đã học · ${kHasH?fmtN(hh)+' giờ':fmtN(dk.length)+' lượt học'}`};}).sort((a,b)=>b.value-a.value||b.n-a.n);
    pbTable($('#cPb'),items,kHasH);
    {const ph=$('#pbHint'); if(ph) ph.textContent=`% NV đang làm đã học ≥ 1 lớp · kèm ${kHasH?'tổng giờ':'số lượt học'} · xếp giảm dần · ${items.length} phòng ban${F.K==='*'?'':' thuộc '+F.K}`;}}
   // nhom
@@ -1385,12 +1407,12 @@ function buildPdf(pages){ // pages: [{jpeg:Uint8Array,w,h,dw,dh}] trên khổ 84
   return new Blob(parts,{type:'application/pdf'});
 }
 function jpegBytes(cv){const b=atob(cv.toDataURL('image/jpeg',0.9).split(',')[1]); const u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u;}
-async function rasterize(node,width,breaksOut){
+async function rasterize(node,width,breaksOut,bsel){
   const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');
   const wrap=document.createElement('div'); wrap.className='pdfx'; wrap.style.cssText=`position:absolute;left:-100000px;top:0;width:${width}px;background:var(--page);padding:18px;box-sizing:border-box;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink)`;
   wrap.append(node); document.body.append(wrap); await nextFrame();
   const H=Math.ceil(wrap.scrollHeight), top0=wrap.getBoundingClientRect().top;
-  wrap.querySelectorAll('.kpis,.card,.yc,.grid2,.ygrid,.pdfhead,.cmpnote').forEach(e=>{const r=e.getBoundingClientRect(); breaksOut.push(Math.round(r.top-top0)-8);});
+  wrap.querySelectorAll(bsel||'.kpis,.card,.yc,.grid2,.ygrid,.pdfhead,.cmpnote').forEach(e=>{const r=e.getBoundingClientRect(); breaksOut.push(Math.round(r.top-top0)-8);});
   wrap.style.position='static'; wrap.style.left='0';
   const html=new XMLSerializer().serializeToString(wrap); wrap.remove();
   const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${H}"><foreignObject x="0" y="0" width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml"><style>${css.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</style>${html}</div></foreignObject></svg>`;
@@ -1413,9 +1435,20 @@ async function saveFile(blob,name){
       if(d){ try{await d.save({filename:name,data:blob}); return true;}catch(e){ if(e&&e.code==='declined') return false; if(e&&!['unavailable','not_granted','capability_disabled','capability_removed'].includes(e.code)) throw e; } } } }catch(e){}
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.append(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},3000); return true;
 }
+
+// ---------- dùng chung cho PDF / PPT: bỏ khung đang thu gọn (đóng) và dàn lại bố cục
+const EXPORT_TABS=[['perf','Hiệu quả đào tạo'],['budget','Ngân sách'],['sched','Kế hoạch & lịch'],['years','So sánh các năm']];
+function tabHasContent(t){const p=$('#p-'+t); return !!p&&[...p.querySelectorAll('.kpis,.card,.yc')].some(c=>!c.classList.contains('collapsed')&&!c.classList.contains('nopdf')&&!c.closest('.nopdf'));}
+function prepPanel(t){const src=$('#p-'+t); if(!src) return null; const p=src.cloneNode(true);
+  p.removeAttribute('hidden'); p.removeAttribute('id'); p.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+  p.querySelectorAll('.nopdf,.card.collapsed').forEach(e=>e.remove()); p.querySelectorAll('.colbtn').forEach(e=>e.remove());
+  // lưới 2 cột chỉ còn 1 khung → khung đó trải hết chiều ngang; lưới trống → bỏ
+  p.querySelectorAll('.grid2,.ygrid').forEach(g=>{const k=[...g.children].filter(x=>!x.hidden); if(!k.length) g.remove(); else if(g.classList.contains('grid2')){if(k.length===1) g.style.gridTemplateColumns='minmax(0,1fr)'; else if(k.length%2) k[k.length-1].style.gridColumn='1 / -1';}});
+  if(!p.querySelector('.kpis,.card,.yc')) return null; return p;}
 async function exportPdf(){
   if(!M) return; const btn=$('#pdfBtn'), lbl=$('#pdfLbl'); btn.disabled=true; const prevTab=S.tab; const F0=filt();
-  const TABS=[['perf','Hiệu quả đào tạo'],['budget','Ngân sách'],['sched','Kế hoạch & lịch'],['years','So sánh các năm']];
+  const TABS=EXPORT_TABS.filter(([t])=>tabHasContent(t));
+  if(!TABS.length){btn.disabled=false; return;}
   const width=Math.max(1100,Math.min(1400,$('#app').clientWidth||1280)); const pages=[];
   try{
     for(let ti=0;ti<TABS.length;ti++){const [t,name]=TABS[ti]; lbl.textContent=`Đang xuất ${ti+1}/${TABS.length}…`;
@@ -1430,7 +1463,7 @@ async function exportPdf(){
       Rr.append(ch); hd.append(L,Rr); node.append(hd);
       const ft=el('div',{class:'pdffoot',text:`SCC Training Dashboard · ${name} · Trang ${ti+1}/${TABS.length} · Xuất lúc ${new Date().toLocaleString('vi-VN')}`});
       const cn=$('#cmpNote'); if(!cn.hidden&&t!=='years'){const c=cn.cloneNode(true); c.className='cmpnote'; c.removeAttribute('id'); c.style.cssText='font-size:12.5px;color:var(--ink-2);margin:0 0 12px;padding:8px 12px;background:#fff4e8;border:1px solid #f6c38f;border-radius:10px'; node.append(c);}
-      const p=$('#p-'+t).cloneNode(true); p.hidden=false; p.removeAttribute('hidden'); p.removeAttribute('id'); p.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); p.querySelectorAll('.nopdf,.colbtn').forEach(e=>e.remove()); node.append(p); node.append(ft);
+      const p=prepPanel(t); if(!p) continue; p.hidden=false; p.removeAttribute('hidden'); p.removeAttribute('id'); p.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); node.append(p); node.append(ft);
       const breaks=[]; const {cv,H,sc}=await rasterize(node,width,breaks);
       // mỗi tab = 1 trang PDF (khổ ngang A4, chiều cao theo nội dung)
       pages.push({jpeg:jpegBytes(cv),w:cv.width,h:cv.height,dw:802,dh:H*802/width});
@@ -1441,6 +1474,92 @@ async function exportPdf(){
   }catch(err){ console.error(err);
     $('#alerts').prepend(el('div',{class:'alert',text:'Trình duyệt này không cho xuất PDF trực tiếp. Hãy dùng Chrome hoặc Edge, hoặc nhấn Ctrl+P → "Lưu dưới dạng PDF".'})); }
   finally{ S.tab=prevTab; render(); btn.disabled=false; lbl.textContent='Tải PDF'; }
+}
+
+// ---------- xuất PowerPoint (tự tạo file .pptx, không cần thư viện ngoài): mỗi khung = 1 slide, tiêu đề là chữ sửa được
+const CRCT=(()=>{const t=new Uint32Array(256); for(let n=0;n<256;n++){let c=n; for(let k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0;} return t;})();
+function crc32(u){let c=0xFFFFFFFF; for(let i=0;i<u.length;i++) c=CRCT[(c^u[i])&255]^(c>>>8); return (c^0xFFFFFFFF)>>>0;}
+function zipStore(files){const enc=new TextEncoder(); const parts=[], cen=[]; let off=0;
+  const w16=(d,o,v)=>{d[o]=v&255; d[o+1]=(v>>>8)&255;}, w32=(d,o,v)=>{d[o]=v&255; d[o+1]=(v>>>8)&255; d[o+2]=(v>>>16)&255; d[o+3]=(v>>>24)&255;};
+  files.forEach(f=>{const nm=enc.encode(f.name); const data=typeof f.data==='string'?enc.encode(f.data):f.data; const crc=crc32(data);
+    const h=new Uint8Array(30+nm.length); w32(h,0,0x04034b50); w16(h,4,20); w16(h,6,0x0800); w16(h,8,0); w16(h,10,0); w16(h,12,0x21); w32(h,14,crc); w32(h,18,data.length); w32(h,22,data.length); w16(h,26,nm.length); w16(h,28,0); h.set(nm,30);
+    const c=new Uint8Array(46+nm.length); w32(c,0,0x02014b50); w16(c,4,20); w16(c,6,20); w16(c,8,0x0800); w16(c,10,0); w16(c,12,0); w16(c,14,0x21); w32(c,16,crc); w32(c,20,data.length); w32(c,24,data.length); w16(c,28,nm.length); w32(c,42,off); c.set(nm,46);
+    parts.push(h,data); cen.push(c); off+=h.length+data.length;});
+  const cs=cen.reduce((x,c)=>x+c.length,0); const end=new Uint8Array(22); w32(end,0,0x06054b50); w16(end,8,files.length); w16(end,10,files.length); w32(end,12,cs); w32(end,16,off);
+  return new Blob([...parts,...cen,end],{type:'application/vnd.openxmlformats-officedocument.presentationml.presentation'});}
+function b64bytes(d){const s=atob(d.split(',')[1]); const u=new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u;}
+function makePptx(){
+  const E=v=>Math.round(v*914400), X=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const NS='xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"';
+  const HD='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'; const GRP='<p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>';
+  const slides=[], media=[]; const xf=(x,y,w,h)=>`<a:xfrm><a:off x="${E(x)}" y="${E(y)}"/><a:ext cx="${E(w)}" cy="${E(h)}"/></a:xfrm>`;
+  const P={addSlide(bg){const s={bg:bg||'FFFFFF',sh:[],rel:[],id:2};
+      s.rect=(x,y,w,h,col)=>{s.sh.push(`<p:sp><p:nvSpPr><p:cNvPr id="${s.id++}" name="Shape ${s.id}"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr>${xf(x,y,w,h)}<a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="${col}"/></a:solidFill><a:ln><a:noFill/></a:ln></p:spPr></p:sp>`); return s;};
+      s.text=(t,o)=>{const sz=Math.round((o.size||14)*100); s.sh.push(`<p:sp><p:nvSpPr><p:cNvPr id="${s.id++}" name="Text ${s.id}"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr><p:spPr>${xf(o.x,o.y,o.w,o.h)}<a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/></p:spPr><p:txBody><a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="${o.anchor||'t'}"><a:normAutofit/></a:bodyPr><a:lstStyle/><a:p><a:pPr algn="${o.align||'l'}"/><a:r><a:rPr lang="vi-VN" sz="${sz}" b="${o.bold?1:0}"${o.spc?` spc="${o.spc}"`:''} dirty="0"><a:solidFill><a:srgbClr val="${o.color||'141B2D'}"/></a:solidFill><a:latin typeface="Arial"/><a:cs typeface="Arial"/></a:rPr><a:t>${X(t)}</a:t></a:r></a:p></p:txBody></p:sp>`); return s;};
+      s.image=(bytes,ext,x,y,w,h)=>{const n=media.length+1; media.push({name:`ppt/media/image${n}.${ext}`,data:bytes}); const rid='rId'+(s.rel.length+2); s.rel.push(`<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image${n}.${ext}"/>`);
+        s.sh.push(`<p:pic><p:nvPicPr><p:cNvPr id="${s.id++}" name="Picture ${s.id}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>${xf(x,y,w,h)}<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>`); return s;};
+      slides.push(s); return s;},
+    blob(title){const F=[]; const n=slides.length;
+      F.push({name:'[Content_Types].xml',data:HD+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpeg" ContentType="image/jpeg"/><Default Extension="png" ContentType="image/png"/><Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/><Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/><Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/><Override PartName="/ppt/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>'+slides.map((_,i)=>`<Override PartName="/ppt/slides/slide${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>`).join('')+'<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>'});
+      F.push({name:'_rels/.rels',data:HD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="ppt/presentation.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>'});
+      const now=new Date().toISOString().replace(/\.\d+Z$/,'Z');
+      F.push({name:'docProps/core.xml',data:HD+`<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${X(title)}</dc:title><dc:creator>Phòng Nhân sự · L&amp;OD</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${now}</dcterms:modified></cp:coreProperties>`});
+      F.push({name:'docProps/app.xml',data:HD+`<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Application>Microsoft Office PowerPoint</Application><Slides>${n}</Slides><Company>Saigon Cosmetics Corporation</Company></Properties>`});
+      F.push({name:'ppt/presentation.xml',data:HD+`<p:presentation ${NS} saveSubsetFonts="1"><p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst><p:sldIdLst>${slides.map((_,i)=>`<p:sldId id="${256+i}" r:id="rId${i+3}"/>`).join('')}</p:sldIdLst><p:sldSz cx="12192000" cy="6858000"/><p:notesSz cx="6858000" cy="9144000"/></p:presentation>`});
+      F.push({name:'ppt/_rels/presentation.xml.rels',data:HD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="slideMasters/slideMaster1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/>'+slides.map((_,i)=>`<Relationship Id="rId${i+3}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide" Target="slides/slide${i+1}.xml"/>`).join('')+'</Relationships>'});
+      const sc=(nm,c)=>`<a:${nm}><a:srgbClr val="${c}"/></a:${nm}>`; const sf='<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>';
+      F.push({name:'ppt/theme/theme1.xml',data:HD+`<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="SCC"><a:themeElements><a:clrScheme name="SCC"><a:dk1><a:srgbClr val="141B2D"/></a:dk1><a:lt1><a:srgbClr val="FFFFFF"/></a:lt1>${sc('dk2','14213D')}${sc('lt2','EEF1F6')}${sc('accent1','F28C28')}${sc('accent2','2F6FDE')}${sc('accent3','1AA673')}${sc('accent4','F2B01E')}${sc('accent5','D64545')}${sc('accent6','4A5470')}${sc('hlink','2F6FDE')}${sc('folHlink','7D869B')}</a:clrScheme><a:fontScheme name="SCC"><a:majorFont><a:latin typeface="Arial"/><a:ea typeface=""/><a:cs typeface=""/></a:majorFont><a:minorFont><a:latin typeface="Arial"/><a:ea typeface=""/><a:cs typeface=""/></a:minorFont></a:fontScheme><a:fmtScheme name="SCC"><a:fillStyleLst>${sf}${sf}${sf}</a:fillStyleLst><a:lnStyleLst><a:ln w="6350">${sf}</a:ln><a:ln w="12700">${sf}</a:ln><a:ln w="19050">${sf}</a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst>${sf}${sf}${sf}</a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/></a:theme>`});
+      F.push({name:'ppt/slideMasters/slideMaster1.xml',data:HD+`<p:sldMaster ${NS}><p:cSld><p:bg><p:bgRef idx="1001"><a:schemeClr val="bg1"/></p:bgRef></p:bg><p:spTree>${GRP}</p:spTree></p:cSld><p:clrMap bg1="lt1" tx1="dk1" bg2="lt2" tx2="dk2" accent1="accent1" accent2="accent2" accent3="accent3" accent4="accent4" accent5="accent5" accent6="accent6" hlink="hlink" folHlink="folHlink"/><p:sldLayoutIdLst><p:sldLayoutId id="2147483649" r:id="rId1"/></p:sldLayoutIdLst><p:txStyles><p:titleStyle/><p:bodyStyle/><p:otherStyle/></p:txStyles></p:sldMaster>`});
+      F.push({name:'ppt/slideMasters/_rels/slideMaster1.xml.rels',data:HD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="../theme/theme1.xml"/></Relationships>'});
+      F.push({name:'ppt/slideLayouts/slideLayout1.xml',data:HD+`<p:sldLayout ${NS} type="blank" preserve="1"><p:cSld name="Blank"><p:spTree>${GRP}</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sldLayout>`});
+      F.push({name:'ppt/slideLayouts/_rels/slideLayout1.xml.rels',data:HD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="../slideMasters/slideMaster1.xml"/></Relationships>'});
+      slides.forEach((s,i)=>{F.push({name:`ppt/slides/slide${i+1}.xml`,data:HD+`<p:sld ${NS}><p:cSld><p:bg><p:bgPr><a:solidFill><a:srgbClr val="${s.bg}"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree>${GRP}${s.sh.join('')}</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>`});
+        F.push({name:`ppt/slides/_rels/slide${i+1}.xml.rels`,data:HD+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/>'+s.rel.join('')+'</Relationships>'});});
+      return zipStore(F.concat(media));}};
+  return P;}
+async function exportPpt(){
+  if(!M) return; const btn=$('#pptBtn'), lbl=$('#pptLbl'); btn.disabled=true; const prevTab=S.tab; const F0=filt();
+  try{
+    const pp=makePptx(); const ORG='F28C28', INK='141B2D', MUTE='8A93A8', SW=13.333, SH=7.5;
+    const sum=filterSummary(F0); const today=new Date().toLocaleDateString('vi-VN');
+    const lg=document.querySelector('.brandlogo'); const logo=lg?lg.getAttribute('src'):null;
+    {const s=pp.addSlide('14213D');
+      if(logo&&/^data:image\/png/.test(logo)){const im=new Image(); im.src=logo; await im.decode().catch(()=>{}); const r=im.naturalWidth&&im.naturalHeight?im.naturalWidth/im.naturalHeight:3; const lh=0.7; s.image(b64bytes(logo),'png',0.8,0.75,lh*r,lh);}
+      s.rect(0.8,2.75,0.12,1.25,ORG);
+      s.text('Training Dashboard',{x:1.1,y:2.6,w:11,h:0.85,size:40,bold:1,color:'FFFFFF'});
+      s.text('Phòng Nhân sự · L&OD',{x:1.1,y:3.45,w:11,h:0.5,size:18,color:'B9C3D9'});
+      s.text(sum,{x:1.1,y:5.6,w:11.4,h:0.45,size:12,color:'D6DDEB'});
+      s.text('Cập nhật '+today,{x:1.1,y:6.05,w:11.4,h:0.4,size:12,bold:1,color:ORG});}
+    const TABS=EXPORT_TABS.filter(([t])=>tabHasContent(t)); let no=1;
+    const BX={x:0.5,y:1.25,w:SW-1,h:SH-1.8};
+    for(let ti=0;ti<TABS.length;ti++){const [t,name]=TABS[ti]; lbl.textContent=`Đang xuất ${ti+1}/${TABS.length}…`;
+      S.tab=t; render(); await nextFrame();
+      const p=prepPanel(t); if(!p) continue;
+      const live=[...$('#p-'+t).querySelectorAll('.kpis,.card,.yc')].filter(c=>!c.classList.contains('collapsed')&&!c.closest('.nopdf')&&!c.parentElement.closest('.card,.yc,.kpis'));
+      const blocks=[...p.querySelectorAll('.kpis,.card,.yc')].filter(c=>!c.parentElement.closest('.card,.yc,.kpis'));
+      for(let bi=0;bi<blocks.length;bi++){const blk=blocks[bi]; const lv=live[bi];
+        const h3=blk.querySelector('h3'); const title=h3?h3.textContent.replace(/\s+/g,' ').trim():(blk.classList.contains('kpis')?'Chỉ số tổng quan':name);
+        const node=blk.cloneNode(true); const hh=node.querySelector(':scope > .ch')||node.querySelector(':scope > h3'); if(hh&&h3) hh.remove();
+        node.style.margin='0';
+        const w=Math.max(640,Math.min(1300,Math.round((lv?lv.getBoundingClientRect().width:1100)+36)));
+        const brk=[]; const {cv,H}=await rasterize(node,w,brk,'tr,.pbr,.kpi,li,.gsh,.ins > *,.card > *');
+        const sc=cv.width/w, maxH=Math.floor(BX.h*96/0.62); /* chỉ tách slide khi ảnh quá cao */ const cuts=[...new Set(brk.map(y=>Math.max(0,y+8)))].sort((x,y)=>x-y);
+        const np=H>maxH*1.12?Math.ceil(H/maxH):1, tg=H/np; const parts=[]; let y0=0; for(let q=1;q<np;q++){const want=tg*q; let c=cuts.filter(y=>y>y0+60&&y<=y0+maxH).sort((x,y)=>Math.abs(x-want)-Math.abs(y-want))[0]; if(!c) c=Math.min(H,y0+maxH); parts.push([y0,c]); y0=c;} parts.push([y0,H]);
+        parts.forEach(([a0,a1],pi)=>{const ph=Math.max(1,Math.round((a1-a0)*sc)); const c2=document.createElement('canvas'); c2.width=cv.width; c2.height=ph; const g=c2.getContext('2d'); g.fillStyle='#eef1f6'; g.fillRect(0,0,c2.width,ph); g.drawImage(cv,0,Math.round(a0*sc),cv.width,ph,0,0,cv.width,ph);
+          const s=pp.addSlide('EEF1F6'); s.rect(0,0,SW,0.12,ORG);
+          s.text(name.toUpperCase(),{x:0.5,y:0.32,w:9,h:0.3,size:11,bold:1,color:'E2711D',spc:100});
+          s.text(title+(parts.length>1?` (${pi+1}/${parts.length})`:''),{x:0.5,y:0.6,w:12.3,h:0.55,size:22,bold:1,color:INK});
+          const iw=c2.width/sc, ih=ph/sc; const k=Math.min(BX.w/iw,BX.h/ih); const dw=iw*k, dh=ih*k;
+          s.image(jpegBytes(c2),'jpeg',BX.x+(BX.w-dw)/2,BX.y,dw,dh);
+          s.text(`SCC Training Dashboard · ${sum}`,{x:0.5,y:SH-0.42,w:11,h:0.3,size:9,color:MUTE});
+          s.text(String(++no),{x:SW-1.1,y:SH-0.42,w:0.6,h:0.3,size:9,color:MUTE,align:'r'});});
+      }
+    }
+    lbl.textContent='Đang lưu…';
+    await saveFile(pp.blob('SCC Training Dashboard'),`SCC_Training_Dashboard_${F0.Y}_${iso(new Date())}.pptx`);
+  }catch(err){ console.error(err);
+    $('#alerts').prepend(el('div',{class:'alert',text:'Chưa xuất được file PowerPoint. Hãy dùng Chrome hoặc Edge và thử lại.'})); }
+  finally{ S.tab=prevTab; render(); btn.disabled=false; lbl.textContent='Tải PPT'; }
 }
 // ---------- nút thu gọn / mở rộng cho từng khung
 const CHEV='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1458,6 +1577,7 @@ $('#fFrom').addEventListener('change',()=>{const d=toDate($('#fFrom').value); if
 $('#fKhoi').addEventListener('change',()=>{fillPb(); render();});
 $('#qNV').addEventListener('input',()=>renderNV());
 $('#pdfBtn').addEventListener('click',exportPdf);
+$('#pptBtn').addEventListener('click',exportPpt);
 $('#fYear').addEventListener('change',()=>{$('#fFrom').value=''; fillCmp(); render();});
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{S.tab=t.dataset.p; try{localStorage.setItem('scc-td-tab',S.tab)}catch(e){} render();}));
 $('#mSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; S.month=b.dataset.m; $('#mSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b))); render();});
