@@ -50,7 +50,7 @@ function buildModel(sheets){
      const d0=toDate(r[c.d0]);
      if(!co) badCls.push(id+' – mã "'+k+'" chưa có trong DM Khoa hoc'); if(!d0){badCls.push(id+' – thiếu Ngày bắt đầu'); continue;}
      const key=id+'|'+iso(d0);
-     if(cls.has(key)){badCls.push(id+' ngày '+dmy(d0)+' – trùng đợt (cùng mã, cùng ngày), chỉ tính dòng đầu'); continue;}
+     if(cls.has(key)){badCls.push(id+' ngày '+dmy(d0)+' – trùng lớp (cùng mã, cùng ngày), chỉ tính dòng đầu'); continue;}
      const o={id,key,kh:k,co,name:co?co.name:k,nhom:co?co.nhom:'(Chưa phân nhóm)',ht:co?co.ht:'',nb:co?co.nb:'',plan:norm(r[c.plan]).startsWith('trong'),d0,d1:toDate(r[c.d1]),h:num(r[c.h])??(co?co.h:0),gv:str(r[c.gv]),khoi:str(r[c.khoi])||'Toàn công ty',dd:str(r[c.dd]),cp:num(r[c.cp])||0,ca:num(r[c.ca]),st:str(r[c.st])||'Kế hoạch',note:str(r[c.note]),reg:0,done:0};
      cls.set(key,o); if(!byId.has(id)) byId.set(id,[]); byId.get(id).push(o);}}
   const recs=[]; const badRec=[]; const seen=new Set();
@@ -60,7 +60,7 @@ function buildModel(sheets){
      if(!cid||!eid){badRec.push({row:rowNo,msg:'Thiếu mã lớp hoặc mã NV',cid,d:dLabel,eid});return;}
      let cl=d?cls.get(cid+'|'+iso(d)):null;
      if(!cl&&!d){const l=byId.get(cid); if(l&&l.length===1) cl=l[0];}
-     if(!cl){badRec.push({row:rowNo,msg:byId.has(cid)?(d?'Không có đợt học ngày này ở sheet Lop hoc':'Thiếu Ngày học (mã lớp có nhiều đợt)'):'Mã lớp không có trong sheet Lop hoc',cid,d:dLabel,eid});return;}
+     if(!cl){badRec.push({row:rowNo,msg:byId.has(cid)?(d?'Không có lớp học ngày này ở sheet Lop hoc':'Thiếu Ngày học (mã lớp có nhiều đợt)'):'Mã lớp không có trong sheet Lop hoc',cid,d:dLabel,eid});return;}
      const e=emp.get(eid);
      if(!e){badRec.push({row:rowNo,msg:'Mã NV không có trong DS Nhan vien',cid,d:dLabel,eid});}
      const key=cl.key+'|'+eid; if(seen.has(key)){badRec.push({row:rowNo,msg:'Trùng dòng (cùng NV, cùng lớp, cùng ngày) – không tính lần 2',cid,d:dLabel,eid});return;} seen.add(key);
@@ -432,7 +432,7 @@ function renderPerf(F){
   const done=P.done;
   kpis($('#kPerf'),[
     {i:'users',l:'Số NV được đào tạo',v:fmtN(P.uniq),of:fmtN(P.hc),p:P.cov,n:`độ phủ ${fmtP(P.cov)} NV đang làm`+(P.learners>P.uniq?` · ${fmtN(P.learners-P.uniq)} người đã nghỉ`:''),d:D('cov','pp',1)},
-    {i:'book',u:'lượt',l:'Số lượt học',v:fmtN(P.attN),n:`${fmtN(new Set(done.map(r=>r.cl)).size)} lớp · ${fmtN(new Set(done.map(r=>r.cl.kh)).size)} khóa học`,d:D('attN','pct',1)},
+    {i:'book',u:'lượt',l:'Số lượt học',v:fmtN(P.attN),n:`${fmtN(new Set(done.map(r=>r.cl)).size)} lớp · ${fmtN(khHeld(F,done))}/${fmtN(totKh(F))} khóa`,d:D('attN','pct',1)},
     {i:'clock',u:P.hasH?'giờ':'',l:'Tổng số giờ đào tạo',v:P.hasH?fmtN(P.hrs):'–',n:P.hasH?`bình quân ${fmt1(P.attN?P.hrs/P.attN:null)} giờ / lượt học`:`${fmtN(P.attN)} lượt tham dự · chưa có số giờ (điền Thời lượng chuẩn ở DM Khoa hoc)`,d:D('hrs','pct',1)},
     {i:'gauge',u:P.hasH?`giờ / ${fmtN(P.hc)} NV`:`/ ${fmtN(P.hc)} NV`,l:'Số giờ đào tạo / NV',v:fmt1(P.hpn),n:P.hasH?`${fmtN(P.hrs)} giờ ÷ ${fmtN(P.hc)} NV đang làm`:'chưa có số giờ',d:D('hpn','pct',1)},
     {i:'check',l:'Tỷ lệ đạt / Tỷ lệ tham dự',split:[
@@ -524,11 +524,11 @@ function renderInsights(F,P,C,Q){
   // 6. tiến độ kế hoạch
   const Sm=schM(F);
   if(Sm.byPlan){const late=Sm.its.filter(x=>x.k==='late'); const lb=late.filter(x=>/bat buoc/.test(norm(x.p.sec)));
-    add('cal','info',`Đã triển khai ${fmtN(Sm.num)}/${fmtN(Sm.den)} đợt kế hoạch (${fmtP(Sm.rate)})`,
-      `${fmtN(Sm.nRun)} đợt đang thực hiện`+(late.length?`, ${fmtN(late.length)} đợt đang chờ xếp lịch`+(lb.length?` (gồm ${fmtN(lb.length)} đợt bắt buộc: ${lb.map(x=>x.p.name.replace(/\s*\(Đợt T\d+\)$/,'')).slice(0,3).join('; ')})`:''):'')+'.');
+    add('cal','info',`Đã triển khai ${fmtN(Sm.num)}/${fmtN(Sm.den)} khóa kế hoạch (${fmtP(Sm.rate)})`,
+      `${fmtN(Sm.nRun)} khóa đang thực hiện`+(late.length?`, ${fmtN(late.length)} khóa đang chờ xếp lịch`+(lb.length?` (gồm ${fmtN(lb.length)} khóa bắt buộc: ${lb.map(x=>x.p.name.replace(/\s*\(Đợt T\d+\)$/,'')).slice(0,3).join('; ')})`:''):'')+'.');
   // 7. ngân sách
     if(B.plan){const u=B.act/B.plan; const lateBud=late.reduce((a,x)=>a+(x.p.bud||0),0);
-      add('coin','info',`Đã sử dụng ${fmtP(u)} ngân sách`,lateBud?`Phần lớn ngân sách còn lại (${vt(lateBud)}) thuộc các đợt đang chờ xếp lịch; nếu triển khai đủ, chi phí cả năm khoảng ${vt(B.act+lateBud)} (${fmtP((B.act+lateBud)/B.plan)} ngân sách) – vẫn nằm trong ngân sách.`:`${vt(B.act)} / ${vt(B.plan)}.`);}}
+      add('coin','info',`Đã sử dụng ${fmtP(u)} ngân sách`,lateBud?`Phần lớn ngân sách còn lại (${vt(lateBud)}) thuộc các khóa đang chờ xếp lịch; nếu triển khai đủ, chi phí cả năm khoảng ${vt(B.act+lateBud)} (${fmtP((B.act+lateBud)/B.plan)} ngân sách) – vẫn nằm trong ngân sách.`:`${vt(B.act)} / ${vt(B.plan)}.`);}}
   // 8. người đã nghỉ
   if(P.hrs){const lv=done.filter(r=>!actIds.has(r.eid)); const hL=lv.reduce((a,r)=>a+r.hrs,0); const nL=new Set(lv.map(r=>r.eid)).size;
     if(nL) add('ext','info',`${fmtP(1-hL/P.hrs)} giờ đào tạo thuộc về NV đang làm`,`${fmtN(nL)} người đã học trong kỳ rồi nghỉ việc (${fmtN(hL)} giờ, ${fmtP(hL/P.hrs)} tổng giờ).`);}
@@ -642,6 +642,9 @@ function renderBud(F){
 // trạng thái 1 dòng kế hoạch tại ngày T: cột Trạng thái nhập tay trước, để trống thì tự tính theo ngày
 const PST={done:['Hoàn thành','var(--good)'],run:['Đang thực hiện','var(--warn)'],plan:['Kế hoạch','#b8bfcc'],late:['Trễ hạn','var(--crit)'],cx:['Hủy','#6b7385'],na:['Khi phát sinh','#d5dae5']};
 function pst(p,T){if(p.st==='hoan thanh') return 'done'; if(p.st==='huy') return 'cx'; if(p.st==='dang thuc hien') return 'run'; if(!p.s) return 'na'; if(p.e<T) return 'late'; if(p.s<=T) return 'run'; return 'plan';}
+const nAdK=F=>new Set(F.cls.filter(c=>!c.plan).map(c=>c.kh)).size;
+const totKh=F=>F.plan.length?F.plan.length+nAdK(F):new Set(F.cls.map(c=>c.kh)).size;   // khóa = 1 dòng trong bảng theo dõi: dòng kế hoạch + khóa phát sinh
+const khHeld=(F,done)=>{if(!F.plan.length) return new Set(done.map(r=>r.cl.kh)).size; const rows=new Set(), ad=new Set(); done.forEach(r=>{const c=r.cl; if(!c.plan) ad.add(c.kh); else {const p=planRowOf(F,c); rows.add(p||c.kh);}}); return rows.size+ad.size;};
 function schM(F){const T=F.cut||F.T;
   if(F.plan.length){const its=F.plan.map(p=>({p,k:pst(p,T)})); const cnt=k=>its.filter(x=>x.k===k).length;
     const due=its.filter(x=>x.k!=='na'), dueDone=due.filter(x=>x.k==='done');  // lớp KH cả năm (có lịch) và lớp KH đã diễn ra
@@ -666,25 +669,25 @@ function renderSch(F){
     const runs=Sm.its.filter(x=>x.k==='run'), rM=runs.filter(inM).length;
     const dn=F.cls.filter(c=>c.st==='Hoàn thành');
     kpis($('#kSch'),[
-      {i:'cal',l:'Tỷ lệ hoàn thành kế hoạch',v:fmtN(Sm.num),of:fmtN(Sm.den),u:`đợt (${fmtP(Sm.rate)})`,p:Sm.rate,bl:[...Sm.grp].map(([k,g])=>[k,k==='Phát sinh'?`${fmtN(g.done)} khóa`:`${fmtN(g.done)}/${fmtN(g.plan)} đợt`]),n:`${fmtN(Sm.dueDone.length)} đợt KH đã diễn ra + ${fmtN(Sm.nAd)} khóa phát sinh, trên ${fmtN(Sm.den)} đợt KH`},
-      {i:'book',u:'đợt',l:'Số đợt theo kế hoạch',v:fmtN(Sm.den),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.plan)} đợt`]),n:`thuộc ${fmtN(new Set(F.plan.map(p=>p.code||p.name)).size)} khóa học (1 khóa có thể có nhiều đợt)`},
-      {i:'clock',u:'đợt',l:'Số đợt đang thực hiện',v:fmtN(Sm.nRun),bl:[[`Trong tháng ${T0.getMonth()+1}`,`${fmtN(rM)} đợt`],['Định kỳ cả năm',`${fmtN(runs.length-rM)} đợt`]],n:runs.length-rM?'Định kỳ: '+[...new Set(runs.filter(x=>!inM(x)).map(x=>x.p.name.replace(/\s*–\s*Khối.*$/,'').replace(/^Hướng Dẫn\s+/,'').replace(/\s+Cho\s+/,' ').replace(/Nhân Viên/g,'NV')))].join('; '):''},
-      {i:'warn',u:'đợt',l:'Số đợt trễ hạn',v:fmtN(Sm.nLate),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.late)} đợt`])},
-      {i:'cal',u:'đợt',l:'Số đợt còn lại theo kế hoạch',v:fmtN(Sm.den-Sm.dueDone.length),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.rem)} đợt`])},
-      {i:'check',u:'lớp',l:'Số lớp đã tổ chức',v:fmtN(Sm.nDone),bl:[...Sm.grp].map(([k,g])=>[k,`${fmtN(g.cls)} lớp`]),n:`thuộc ${fmtN(new Set(dn.map(c=>c.kh)).size)} khóa học`},
+      {i:'cal',l:'Tỷ lệ hoàn thành kế hoạch',v:fmtN(Sm.num),of:fmtN(Sm.den),u:`khóa (${fmtP(Sm.rate)})`,p:Sm.rate,bl:[...Sm.grp].map(([k,g])=>[k,k==='Phát sinh'?`${fmtN(g.done)} khóa`:`${fmtN(g.done)}/${fmtN(g.plan)} khóa`]),n:`${fmtN(Sm.dueDone.length)} khóa KH đã diễn ra + ${fmtN(Sm.nAd)} khóa phát sinh, trên ${fmtN(Sm.den)} khóa KH`},
+      {i:'book',u:'khóa',l:'Số khóa theo kế hoạch',v:fmtN(Sm.den),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.plan)} khóa`]),n:`+ ${fmtN(nAdK(F))} khóa phát sinh = ${fmtN(totKh(F))} khóa trong bảng theo dõi`},
+      {i:'clock',u:'khóa',l:'Số khóa đang thực hiện',v:fmtN(Sm.nRun),bl:[[`Trong tháng ${T0.getMonth()+1}`,`${fmtN(rM)} khóa`],['Định kỳ cả năm',`${fmtN(runs.length-rM)} khóa`]],n:runs.length-rM?'Định kỳ: '+[...new Set(runs.filter(x=>!inM(x)).map(x=>x.p.name.replace(/\s*–\s*Khối.*$/,'').replace(/^Hướng Dẫn\s+/,'').replace(/\s+Cho\s+/,' ').replace(/Nhân Viên/g,'NV')))].join('; '):''},
+      {i:'warn',u:'khóa',l:'Số khóa trễ hạn',v:fmtN(Sm.nLate),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.late)} khóa`])},
+      {i:'cal',u:'khóa',l:'Số khóa còn lại theo kế hoạch',v:fmtN(Sm.den-Sm.dueDone.length),bl:[...Sm.grp].filter(([k])=>k!=='Phát sinh').map(([k,g])=>[k,`${fmtN(g.rem)} khóa`])},
+      {i:'check',u:'lớp',l:'Số lớp đã tổ chức',v:fmtN(Sm.nDone),bl:[...Sm.grp].map(([k,g])=>[k,`${fmtN(g.cls)} lớp`]),n:`thuộc ${fmtN(khHeld(F,dn.map(c=>({cl:c}))))}/${fmtN(totKh(F))} khóa`},
     ]);
     renderGantt(F,Sm);
     // theo tháng (tháng của Kết thúc dự kiến)
     const D=MONTHS.map((_,m)=>due.filter(x=>(x.p.s||x.p.dn).getMonth()===m).length), H=MONTHS.map((_,m)=>dueDone.filter(x=>(x.p.s||x.p.dn).getMonth()===m).length+new Set(Sm.adhoc.filter(c=>c.d0.getMonth()===m).map(c=>c.kh)).size);
-    {const t=$('#sTitle'); t.replaceChildren(document.createTextNode('Số Đợt Đào Tạo Theo Tháng ')); const bd=el('span',{class:'tbadge'}); bd.append(el('b',{text:`${fmtN(Sm.num)}/${fmtN(Sm.den)}`}),document.createTextNode(` đợt KH + khóa phát sinh đã diễn ra / đợt kế hoạch · ${fmtP(Sm.rate)}`)); t.append(bd);}
-    legend($('#lgSch'),[['Đợt kế hoạch','var(--navy)'],['Đã diễn ra','var(--good)']]);
+    {const t=$('#sTitle'); t.replaceChildren(document.createTextNode('Số Khóa Học Theo Tháng ')); const bd=el('span',{class:'tbadge'}); bd.append(el('b',{text:`${fmtN(Sm.num)}/${fmtN(Sm.den)}`}),document.createTextNode(` khóa KH + khóa phát sinh đã diễn ra / khóa kế hoạch · ${fmtP(Sm.rate)}`)); t.append(bd);}
+    legend($('#lgSch'),[['Khóa kế hoạch','var(--navy)'],['Đã diễn ra','var(--good)']]);
     $('#uTitle').textContent='Lịch Đào Tạo';
     const ord={'Trễ hạn':0,'Đang thực hiện':1,'Kế hoạch':2};
     const up=Sm.its.filter(x=>x.k==='run'||x.k==='plan'||x.k==='late').map(x=>({d:x.p.s,t:dmy(x.p.s).slice(0,5)+' – '+dmy(x.p.e).slice(0,5),name:x.p.name,who:x.p.dv,st:PST[x.k][0]}))
       .concat(upS.map(c=>({d:c.d0,t:dmy(c.d0),name:c.name+' (lớp)',who:c.gv,st:c.st}))).sort((a,b)=>(ord[a.st]??3)-(ord[b.st]??3)||a.d-b.d);
     tbl($('#tUp'),[{h:'Thời gian',v:r=>r.t,sv:r=>r.d},{h:'Nội dung',v:r=>r.name,sv:r=>r.name},{h:'Đơn vị thực hiện',v:r=>r.who||'–',sv:r=>r.who||null},{h:'Trạng thái',v:r=>pill(r.st),sv:r=>ord[r.st]??3}],up.slice(0,20),'Không có lớp sắp tới',{sort:1});
     const ch=$('#tUp').closest('.card').offsetHeight; const hh=ch?Math.max(240,ch-$('#lgSch').offsetHeight-$('#sTitle').closest('.ch').offsetHeight-60):240;
-    vbars($('#cSch'),MONTHS,[{name:'Đợt kế hoạch',color:'var(--navy)',values:D},{name:'Đã diễn ra',color:'var(--good)',values:H}],fmtN,{intTicks:true,label:fmtN,h:hh});
+    vbars($('#cSch'),MONTHS,[{name:'Khóa kế hoạch',color:'var(--navy)',values:D},{name:'Đã diễn ra',color:'var(--good)',values:H}],fmtN,{intTicks:true,label:fmtN,h:hh});
   } else {
     const over=due.filter(c=>!['Hoàn thành','Hủy'].includes(c.st));
     kpis($('#kSch'),[
@@ -752,9 +755,9 @@ function renderGantt(F,Sm){
   secs.forEach(sec=>{const its=Sm.its.filter(x=>x.p.sec===sec).sort((a,b)=>{const A=sk(a),B=sk(b); return A[0]-B[0]||A[1]-B[1];});
     const bud=its.reduce((a,x)=>a+x.p.bud,0); const done=its.filter(x=>x.k==='done').length;
     const spent=F.cls.filter(c=>typeOfG(c)===LO(sec)).reduce((a,c)=>a+(c.ca||0),0);
-    const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=9; const hd=done; td.append(secHead(sec,[[hd,its.length,`${fmtN(hd)}/${fmtN(its.length)} đợt đã diễn ra`],bud||spent?[spent,bud,`${vt(spent)} / ${vt(bud)}`+'',1]:null])); tr.append(td); tb.append(tr);
+    const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=9; const hd=done; td.append(secHead(sec,[[hd,its.length,`${fmtN(hd)}/${fmtN(its.length)} khóa đã diễn ra`],bud||spent?[spent,bud,`${vt(spent)} / ${vt(bud)}`+'',1]:null])); tr.append(td); tb.append(tr);
     its.forEach(({p,k})=>{
-      const nm=el('div'); nm.append(el('span',{text:p.name})); if(p.code&&F.plan.filter(q=>q.code===p.code).length>1&&!/Đợt/i.test(p.name)&&p.s) nm.append(el('small',{class:'ncls',text:` · đợt T${p.s.getMonth()+1}`}));
+      const nm=el('div'); nm.append(el('span',{text:p.name})); if(p.code&&F.plan.filter(q=>q.code===p.code).length>1&&!/Đợt/i.test(p.name)&&p.s) nm.append(el('small',{class:'ncls',text:` · T${p.s.getMonth()+1}`}));
       const ex=[]; if(p.dn) ex.push({d:p.dn,cls:'gdm',t:'Thực hiện '+dmy(p.dn)});
       if(p.code&&p.s) F.clsAll.filter(c=>c.kh===p.code&&c.st==='Hoàn thành'&&c.d0>=p.s&&c.d0<=p.e&&(!p.dn||+c.d0!==+p.dn)).forEach(c=>ex.push({d:c.d0,cls:'gdm',t:`Lớp ${c.id} ${dmy(c.d0)}${c.done?' · '+c.done+' học viên':''}`}));
       row([[p.stt||'',''],[nm,'c-nm',p.name],[p.dv||'–','c-dv'],[nbTag(p.nb),'c-nb',p.nb||''],[p.s?dmy(p.s).slice(0,5):'–','c-d'],[p.e?dmy(p.e).slice(0,5):'–','c-d'],[pill(PST[k][0]),'c-st'],(()=>{const a=F.clsAll.filter(c=>c.kh===p.code&&planRowOf(F,c)===p).reduce((x,c)=>x+(c.ca||0),0); return [cost(a,p.bud),'c-cp',null,a||null];})()],
@@ -771,10 +774,8 @@ function renderGantt(F,Sm){
       const ca=L.reduce((a,x)=>a+(x.ca||0),0); const nm=el('div'); nm.append(el('span',{text:c.name})); if(n>1) nm.append(el('small',{class:'ncls',text:` · ${n} lớp`}));
       const ex=L.filter(x=>x.st==='Hoàn thành').map(x=>({d:x.d0,cls:'gdm',t:`Lớp ${dmy(x.d0)}${x.done?' · '+x.done+' học viên':''}`}));
       row([['–',''],[nm,'c-nm',c.name],[c.gv||'–','c-dv'],[nbTag(c.nb),'c-nb',c.nb||''],[dmy(s0).slice(0,5),'c-d'],[dmy(e0).slice(0,5),'c-d'],[pill(PST[k][0]),'c-st'],[cost(ca,null),'c-cp',null,ca||null]],tl(s0,e0,k,ex),`${c.name} · ${n} lớp: ${L.map(x=>dmy(x.d0)).join(', ')}`);});}
-  {const cK=new Map(); F.plan.forEach(p=>{const k=p.code||p.name; cK.set(k,(cK.get(k)||0)+1);}); const multi=[...cK].filter(([,n])=>n>1).map(([k,n])=>`${k} (${n} đợt)`);
-   const dnC=F.cls.filter(c=>c.st==='Hoàn thành'), dnK=new Set(dnC.map(c=>c.kh)), dnP=new Set(dnC.filter(c=>c.plan).map(c=>c.kh)), adK=new Set(F.cls.filter(c=>!c.plan).map(c=>c.kh));
-   const nrow=Sm.its.length+adK.size;
-   var defEl=(Object.assign(el('div',{class:'gdef'}),{innerHTML:`<b>Cách đếm:</b> <b>Khóa học</b> = 1 mã khóa (${fmtN(cK.size)} khóa trong kế hoạch + ${fmtN(adK.size)} khóa phát sinh = ${fmtN(cK.size+adK.size)} khóa) · <b>Đợt kế hoạch</b> = 1 khóa × 1 đợt dự kiến (${fmtN(Sm.its.length)} đợt${multi.length?'; '+multi.join(', '):''}) · <b>Lớp</b> = 1 lần tổ chức thực tế (${fmtN(dnC.length)} lớp thuộc ${fmtN(dnK.size)} khóa: ${fmtN(dnP.size)} khóa KH + ${fmtN(dnK.size-dnP.size)} khóa phát sinh). Bảng có ${fmtN(Sm.its.length)} dòng đợt KH + ${fmtN(adK.size)} dòng khóa phát sinh = ${fmtN(nrow)} dòng.`}));}
+  {const adK=nAdK(F), dnC=F.cls.filter(c=>c.st==='Hoàn thành'), held=khHeld(F,dnC.map(c=>({cl:c})));
+   var defEl=(Object.assign(el('div',{class:'gdef'}),{innerHTML:`<b>Cách đếm:</b> <b>Khóa</b> = 1 dòng trong bảng theo dõi (${fmtN(Sm.its.length)} khóa theo kế hoạch + ${fmtN(adK)} khóa phát sinh = ${fmtN(Sm.its.length+adK)} khóa) · <b>Lớp</b> = 1 lần tổ chức thực tế của khóa (1 khóa có thể có nhiều lớp): ${fmtN(dnC.length)} lớp đã tổ chức, thuộc ${fmtN(held)}/${fmtN(Sm.its.length+adK)} khóa.`}));}
   t.append(tb); host.append(t); host.append(defEl); if(host.nextElementSibling&&host.nextElementSibling.classList.contains('fnote')) host.nextElementSibling.remove(); ganttSort(t);
 }
 
