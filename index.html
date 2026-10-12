@@ -752,7 +752,8 @@ function perfM(F){
 function budM(F){const hasP=F.plan.length>0; const plan=hasP?F.plan.reduce((a,p)=>a+p.bud,0):F.cls.reduce((a,c)=>a+c.cp,0), act=F.cls.reduce((a,c)=>a+(c.ca||0),0);
   const doneRec=M.recs.filter(r=>F.cls.includes(r.cl)&&r.done); const hrs=doneRec.reduce((a,r)=>a+r.hrs,0);
   const intA=F.cls.filter(c=>norm(c.nb)==='noi bo').reduce((a,c)=>a+(c.ca||0),0);
-  return {plan,act,rem:plan-act,u:plan?act/plan:null,perRec:doneRec.length?act/doneRec.length:null,perH:hrs?act/hrs:null,intS:act?intA/act:null,nRec:doneRec.length,nDone:F.cls.filter(c=>c.st==='Hoàn thành').length,hasP};}
+  const byNb=t=>{const cs=F.cls.filter(c=>norm(c.nb)===t), ca=cs.reduce((a,c)=>a+(c.ca||0),0), rr=doneRec.filter(r=>norm(r.cl.nb)===t), h=rr.reduce((a,r)=>a+r.hrs,0); return {ca,n:rr.length,h,perRec:rr.length?ca/rr.length:null,perH:h?ca/h:null};};
+  return {plan,act,rem:plan-act,u:plan?act/plan:null,perRec:doneRec.length?act/doneRec.length:null,perH:hrs?act/hrs:null,intS:act?intA/act:null,nRec:doneRec.length,nDone:F.cls.filter(c=>c.st==='Hoàn thành').length,hasP,nb:{i:byNb('noi bo'),e:byNb('ben ngoai')},hrs};}
 // delta badge: kind 'pct' (relative change), 'pp' (percentage points), 'abs' (absolute, 1 decimal); good:+1 higher is better, -1 lower is better, 0 neutral
 function dlt(cur,prev,Yc,kind='pct',good=1){
   if(cur==null||prev==null||isNaN(cur)||isNaN(prev)) return {t:'–',e:' '+Yc+': chưa có số',c:''};
@@ -1178,9 +1179,10 @@ function renderBud(F){
        const v=el('div',{class:'bs-v'}); v.append(el('b',{text:fmtVND(ac)}),document.createTextNode(' / '+fmtVND(pl))); r.append(n,tr,v); box.append(r);});
      const hh=el('div',{class:'bs bs-h'}); hh.append(el('div',{text:'Theo nhóm kế hoạch'}),el('div'),el('div',{text:'Thực tế / Kế hoạch'})); box.prepend(hh); h.append(box);}
   }
+  const vd=v=>v==null||isNaN(v)?'–':fmtN(Math.round(v))+' đ';
   kpis($('#kBud'),[
-    {i:'user',vnd:1,l:'Chi phí / lượt học',v:fmtVND(B.perRec),n:`thực tế / ${fmtN(B.nRec)} lượt tham dự`,d:D('perRec','pct',-1)},
-    {i:'clock',vnd:1,l:'Chi phí / giờ đào tạo',v:fmtVND(B.perH),n:'thực tế / giờ đào tạo',d:D('perH','pct',-1)},
+    {i:'user',vnd:1,l:'Chi phí / lượt học',v:fmtVND(B.perRec),n:`thực tế / ${fmtN(B.nRec)} lượt tham dự`,d:D('perRec','pct',-1),bl:[['Nội bộ',`${vd(B.nb.i.perRec)} · ${fmtN(B.nb.i.n)} lượt`],['Bên ngoài',`${vd(B.nb.e.perRec)} · ${fmtN(B.nb.e.n)} lượt`]]},
+    {i:'clock',vnd:1,l:'Chi phí / giờ đào tạo',v:fmtVND(B.perH),n:`thực tế / ${fmtN(B.hrs)} giờ đào tạo`,d:D('perH','pct',-1),bl:[['Nội bộ',`${vd(B.nb.i.perH)} · ${fmtN(B.nb.i.h)} giờ`],['Bên ngoài',`${vd(B.nb.e.perH)} · ${fmtN(B.nb.e.h)} giờ`]]},
   ]);
   const mon=(F2,f)=>MONTHS.map((_,m)=>F2.cls.filter(c=>c.d0.getMonth()===m).reduce((a,c)=>a+f(c),0));
   const monP=F2=>F2.plan.length?MONTHS.map((_,m)=>F2.plan.filter(p=>p.s&&p.s.getMonth()===m).reduce((a,p)=>a+p.bud,0)):mon(F2,c=>c.cp);
