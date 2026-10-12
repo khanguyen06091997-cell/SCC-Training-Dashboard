@@ -217,8 +217,11 @@ function kpis(host,items){host.replaceChildren(...items.map(it=>{const k=el('div
       w.append(r);}); k.append(w);
     if(it.dual){k.append(stackBar(it.dual.att,it.dual.pr,'kbar')); const lg=el('div',{class:'slg'}); lg.append(el('span',{class:'k1',text:'Đạt'}),el('span',{class:'k2',text:'Tham dự'})); k.append(lg);}
     return k;}
-  const v=el('div',{class:'v'}); const m=String(it.v).match(/^(.*?)(\s*\/\s*5|\s+(tr|tỷ|giờ))?$/); v.append(document.createTextNode(m?m[1]:it.v)); if(it.of!=null) v.append(el('span',{class:'of',text:'/'+it.of})); const U={tr:'triệu đ','tỷ':'tỷ đ','giờ':'giờ'}; const u=it.u||(m&&m[3]?U[m[3]]:(it.vnd&&it.v!=='–'?'đ':null)); if(u) v.append(el('small',{text:u})); k.append(v);
+  if(it.v!=null){const v=el('div',{class:'v'}); const m=String(it.v).match(/^(.*?)(\s*\/\s*5|\s+(tr|tỷ|giờ))?$/); v.append(document.createTextNode(m?m[1]:it.v)); if(it.of!=null) v.append(el('span',{class:'of',text:'/'+it.of})); const U={tr:'triệu đ','tỷ':'tỷ đ','giờ':'giờ'}; const u=it.u||(m&&m[3]?U[m[3]]:(it.vnd&&it.v!=='–'?'đ':null)); if(u) v.append(el('small',{text:u})); k.append(v);}
   if(it.st){const s=el('span',{class:'st'}); const d=el('span',{class:'dot'}); d.style.background=`var(--${it.st[0]})`; s.append(d,document.createTextNode(it.st[1])); k.append(s);}
+  if(it.split){const w=el('div',{class:'ksp'+(it.v==null?' big':'')}); it.split.forEach(x=>{const c=el('div',{class:'ksp-c'}); c.append(el('div',{class:'ksp-l',text:x.l})); const v=el('div',{class:'ksp-v'}); v.append(document.createTextNode(x.v)); if(x.u) v.append(el('small',{text:x.u})); c.append(v); if(x.n) c.append(el('div',{class:'ksp-n',text:x.n}));
+      if(x.p!=null&&!isNaN(x.p)){const mt=el('div',{class:'meter'}); const b=el('i'); b.style.width=Math.max(0,Math.min(100,x.p*100))+'%'; mt.append(b); c.append(mt);}
+      if(x.d){const dw=el('div',{class:'dlw'}); dw.append(el('span',{class:'dl '+(x.d.c||''),text:x.d.t})); if(x.d.e) dw.append(el('span',{class:'dle',text:x.d.e.trim()})); c.append(dw);} w.append(c);}); k.append(w);}
   if(it.n&&!it.bl) k.append(el('div',{class:'n',text:it.n}));
   if(it.bl){const u=el('ul',{class:'kbl'}); it.bl.forEach(([a,v])=>{const li=el('li'); li.append(el('span',{text:a}),el('b',{text:v})); u.append(li);}); k.append(u); if(it.n) k.append(el('div',{class:'n kbn',text:it.n}));}
   if(it.d){const w=el('div',{class:'dlw'}); w.append(el('span',{class:'dl '+(it.d.c||''),text:it.d.t})); if(it.d.e) w.append(el('span',{class:'dle',text:it.d.e.trim()})); k.append(w);}
@@ -429,12 +432,13 @@ function renderPerf(F){
   const done=P.done;
   kpis($('#kPerf'),[
     {i:'users',l:'Số NV được đào tạo',v:fmtN(P.uniq),of:fmtN(P.hc),p:P.cov,n:`độ phủ ${fmtP(P.cov)} NV đang làm`+(P.learners>P.uniq?` · ${fmtN(P.learners-P.uniq)} người đã nghỉ`:''),d:D('cov','pp',1)},
-    {i:'star',u:P.satN?'/ 5':'',l:'Mức độ hài lòng',v:P.satN?fmt1(P.sat):'–',n:`${fmtN(P.satN)} lượt đánh giá`,d:D('sat','abs',1)},
-    {i:'clock',u:P.hasH?'giờ':'',l:'Tổng số giờ đào tạo',v:P.hasH?fmtN(P.hrs):'–',n:P.hasH?`${fmtN(P.attN)} lượt tham dự`:`${fmtN(P.attN)} lượt tham dự · chưa có số giờ (điền Thời lượng chuẩn ở DM Khoa hoc)`,d:D('hrs','pct',1)},
+    {i:'book',u:'lượt',l:'Số lượt học',v:fmtN(P.attN),n:`${fmtN(new Set(done.map(r=>r.cl)).size)} lớp · ${fmtN(new Set(done.map(r=>r.cl.kh)).size)} khóa học`,d:D('attN','pct',1)},
+    {i:'clock',u:P.hasH?'giờ':'',l:'Tổng số giờ đào tạo',v:P.hasH?fmtN(P.hrs):'–',n:P.hasH?`bình quân ${fmt1(P.attN?P.hrs/P.attN:null)} giờ / lượt học`:`${fmtN(P.attN)} lượt tham dự · chưa có số giờ (điền Thời lượng chuẩn ở DM Khoa hoc)`,d:D('hrs','pct',1)},
     {i:'gauge',u:P.hasH?`giờ / ${fmtN(P.hc)} NV`:`/ ${fmtN(P.hc)} NV`,l:'Số giờ đào tạo / NV',v:fmt1(P.hpn),n:P.hasH?`${fmtN(P.hrs)} giờ ÷ ${fmtN(P.hc)} NV đang làm`:'chưa có số giờ',d:D('hpn','pct',1)},
-    {i:'check',l:'Tỷ lệ đạt / Tỷ lệ tham dự',wide:1,dual:{att:P.att,pr:P.pr},multi:[
-      {l:'Tỷ lệ đạt',p:P.pr,n:`${fmtN(P.pass)} / ${fmtN(P.tested)} lượt có kết quả đánh giá đạt`,d:D('pr','pp',1)},
-      {l:'Tỷ lệ tham dự',p:P.att,n:`${fmtN(P.attN)} / ${fmtN(P.attD)} lượt được mời đã tham dự`,d:D('att','pp',1)}]},
+    {i:'check',l:'Tỷ lệ đạt / Tỷ lệ tham dự',split:[
+      {l:'Đạt',v:P.pr==null?'–':fmtP(P.pr),n:`${fmtN(P.pass)} / ${fmtN(P.tested)} lượt`,p:P.pr,d:D('pr','pp',1)},
+      {l:'Tham dự',v:P.att==null?'–':fmtP(P.att),n:`${fmtN(P.attN)} / ${fmtN(P.attD)} lượt`,p:P.att,d:D('att','pp',1)}]},
+    {i:'star',u:P.satN?'/ 5':'',l:'Mức độ hài lòng',v:P.satN?fmt1(P.sat):'–',n:`${fmtN(P.satN)} lượt đánh giá`,d:D('sat','abs',1)},
     (()=>{const t=P.hrs||0, f=(m)=>{const h=P.done.filter(r=>norm(r.cl.nb)===m).reduce((a,r)=>a+r.hrs,0); const k=new Set(P.done.filter(r=>norm(r.cl.nb)===m).map(r=>r.cl.kh)).size; return {h,k};}; const a=f('noi bo'); return {i:'home',u:P.hasH?'giờ':'',l:'Số giờ đào tạo nội bộ',v:P.hasH?fmtN(a.h):'–',p:t?a.h/t:null,n:`${fmtP(t?a.h/t:null)} tổng giờ · ${fmtN(a.k)} khóa do SCC tự đào tạo`,d:Q?dlt(a.h,(()=>{const x=Q.done.filter(r=>norm(r.cl.nb)==='noi bo').reduce((s,r)=>s+r.hrs,0); return x;})(),(C.cut?'cùng kỳ ':'')+Yc,'pct',1):null};})(),
     (()=>{const t=P.hrs||0; const dn=P.done.filter(r=>norm(r.cl.nb)==='ben ngoai'); const h=dn.reduce((a,r)=>a+r.hrs,0); const k=new Set(dn.map(r=>r.cl.kh)).size; return {i:'ext',u:P.hasH?'giờ':'',l:'Số giờ đào tạo bên ngoài',v:P.hasH?fmtN(h):'–',p:t?h/t:null,n:`${fmtP(t?h/t:null)} tổng giờ · ${fmtN(k)} khóa thuê / cử đi học bên ngoài`,d:Q?dlt(h,Q.done.filter(r=>norm(r.cl.nb)==='ben ngoai').reduce((s,r)=>s+r.hrs,0),(C.cut?'cùng kỳ ':'')+Yc,'pct',0):null};})(),
   ]);
@@ -601,10 +605,10 @@ function renderBud(F){
        const v=el('div',{class:'bs-v'}); v.append(el('b',{text:fmtVND(ac)}),document.createTextNode(' / '+fmtVND(pl))); r.append(n,tr,v); box.append(r);});
      const hh=el('div',{class:'bs bs-h'}); hh.append(el('div',{text:'Theo nhóm kế hoạch'}),el('div'),el('div',{text:'Thực tế / Kế hoạch'})); box.prepend(hh); h.append(box);}
   }
-  const vd=v=>v==null||isNaN(v)?'–':fmtN(Math.round(v))+' đ';
+  const vd=v=>v==null||isNaN(v)?'–':fmtN(Math.round(v));
   kpis($('#kBud'),[
-    {i:'user',vnd:1,l:'Chi phí / lượt học',v:fmtVND(B.perRec),n:`thực tế / ${fmtN(B.nRec)} lượt tham dự`,d:D('perRec','pct',-1),bl:[['Nội bộ',`${vd(B.nb.i.perRec)} · ${fmtN(B.nb.i.n)} lượt`],['Bên ngoài',`${vd(B.nb.e.perRec)} · ${fmtN(B.nb.e.n)} lượt`]]},
-    {i:'clock',vnd:1,l:'Chi phí / giờ đào tạo',v:fmtVND(B.perH),n:`thực tế / ${fmtN(B.hrs)} giờ đào tạo`,d:D('perH','pct',-1),bl:[['Nội bộ',`${vd(B.nb.i.perH)} · ${fmtN(B.nb.i.h)} giờ`],['Bên ngoài',`${vd(B.nb.e.perH)} · ${fmtN(B.nb.e.h)} giờ`]]},
+    {i:'user',vnd:1,l:'Chi phí / lượt học',v:fmtVND(B.perRec),n:`thực tế / ${fmtN(B.nRec)} lượt tham dự`,d:D('perRec','pct',-1),split:[{l:'Nội bộ',v:vd(B.nb.i.perRec),u:'đ',n:`${fmtN(B.nb.i.n)} lượt`},{l:'Bên ngoài',v:vd(B.nb.e.perRec),u:'đ',n:`${fmtN(B.nb.e.n)} lượt`}]},
+    {i:'clock',vnd:1,l:'Chi phí / giờ đào tạo',v:fmtVND(B.perH),n:`thực tế / ${fmtN(B.hrs)} giờ đào tạo`,d:D('perH','pct',-1),split:[{l:'Nội bộ',v:vd(B.nb.i.perH),u:'đ',n:`${fmtN(B.nb.i.h)} giờ`},{l:'Bên ngoài',v:vd(B.nb.e.perH),u:'đ',n:`${fmtN(B.nb.e.h)} giờ`}]},
   ]);
   const mon=(F2,f)=>MONTHS.map((_,m)=>F2.cls.filter(c=>c.d0.getMonth()===m).reduce((a,c)=>a+f(c),0));
   const monP=F2=>F2.plan.length?MONTHS.map((_,m)=>F2.plan.filter(p=>p.s&&p.s.getMonth()===m).reduce((a,p)=>a+p.bud,0)):mon(F2,c=>c.cp);
