@@ -706,18 +706,19 @@ function renderSch(F){
 const GSS={i:-1,d:1};
 function ganttSort(t){const tb=t.tBodies[0]; const ths=[...t.tHead.rows[0].cells];
   const val=(tr,i)=>{const td=tr.cells[i]; let x=(td.dataset.fv!=null?td.dataset.fv:td.textContent).trim(); if(!x||x==='–') return null;
-    if(i===0) return tr._g; if(i===3||i===4){const m=x.match(/^(\d{2})\/(\d{2})/); return m?+m[2]*100+ +m[1]:null;}
-    if(i===6) return td.dataset.sv===''||td.dataset.sv==null?null:+td.dataset.sv; if(i===5) return {'Trễ hạn':0,'Đang thực hiện':1,'Kế hoạch':2,'Hoàn thành':3,'Khi phát sinh':4,'Hủy':5}[x]??6; return x;};
+    if(i===0) return tr._g; if(i===4||i===5){const m=x.match(/^(\d{2})\/(\d{2})/); return m?+m[2]*100+ +m[1]:null;}
+    if(i===7) return td.dataset.sv===''||td.dataset.sv==null?null:+td.dataset.sv; if(i===6) return {'Trễ hạn':0,'Đang thực hiện':1,'Kế hoạch':2,'Hoàn thành':3,'Khi phát sinh':4,'Hủy':5}[x]??6; return x;};
   const groups=[]; [...tb.rows].forEach(r=>{if(r.classList.contains('sec')) groups.push({h:r,rows:[]}); else if(groups.length) groups[groups.length-1].rows.push(r); else groups.push({h:null,rows:[r]});});
   let gi=0; groups.forEach(g=>g.rows.forEach((r,j)=>{r._o=j; r._g=gi++;}));
   const draw=()=>{ths.forEach((h2,i)=>h2.dataset.sort=i===GSS.i?(GSS.d>0?'asc':'desc'):'');
     groups.forEach(g=>{const rs=g.rows.slice().sort((a,b)=>{if(GSS.i<0) return a._o-b._o; const x=val(a,GSS.i),y=val(b,GSS.i); if(x==null||y==null) return x==null&&y==null?a._o-b._o:x==null?1:-1;
       return (typeof x==='number'?x-y:String(x).localeCompare(String(y),'vi',{numeric:true}))*GSS.d||a._o-b._o;}); let after=g.h; rs.forEach(r=>{if(after) after.after(r); else tb.prepend(r); after=r;});});
     let n=0; [...tb.rows].forEach(r=>{if(!r.classList.contains('sec')) r.cells[0].textContent=++n;});};
-  ths.forEach((h2,i)=>{if(i>6) return; h2.classList.add('sortable'); h2.tabIndex=0; h2.title='Bấm để sắp xếp (trong từng nhóm)';
+  ths.forEach((h2,i)=>{if(i>7) return; h2.classList.add('sortable'); h2.tabIndex=0; h2.title='Bấm để sắp xếp (trong từng nhóm)';
     const go=()=>{if(GSS.i===i) GSS.d=-GSS.d; else {GSS.i=i; GSS.d=1;} draw();}; h2.addEventListener('click',go); h2.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault(); go();}});});
   draw();}
 // ---------- Gantt: mỗi dòng kế hoạch = 1 thanh trên trục 12 tháng
+const nbTag=v=>{const n=norm(v); if(!n) return '–'; return el('span',{class:'gnb '+(n==='noi bo'?'in':'ex'),text:v});};
 function renderGantt(F,Sm){
   const host=$('#calSch'); host.classList.remove('cal'); host.classList.add('gantt'); host.replaceChildren();
   $('#calTitle').textContent=`Bảng theo dõi tiến độ Đào Tạo ${F.Y}`;
@@ -725,7 +726,7 @@ function renderGantt(F,Sm){
   const y0=new Date(F.Y,0,1), y1=new Date(F.Y+1,0,1); const pos=d=>Math.max(0,Math.min(100,(d-y0)/(y1-y0)*100)); const DAY=864e5;
   const showNow=F.T>=y0&&F.T<y1, nowP=pos(F.T); const curM=showNow?F.T.getMonth():-1;
   const t=el('table'); const th=el('thead'), hr=el('tr');
-  [['STT','c-stt'],['Nội dung đào tạo','c-nm'],['Đơn vị thực hiện','c-dv'],['Bắt đầu','c-d'],['Kết thúc','c-d'],['Trạng thái','c-st'],['Chi phí','c-cp']].forEach(([x,c])=>{const th=el('th',{class:c,text:x}); if(c==='c-cp') th.append(el('small',{class:'thu',text:'(Triệu Đ)'})); hr.append(th);});
+  [['STT','c-stt'],['Nội dung đào tạo','c-nm'],['Đơn vị thực hiện','c-dv'],['Phân loại','c-nb'],['Bắt đầu','c-d'],['Kết thúc','c-d'],['Trạng thái','c-st'],['Chi phí','c-cp']].forEach(([x,c])=>{const th=el('th',{class:c,text:x}); if(c==='c-cp') th.append(el('small',{class:'thu',text:'(Triệu Đ)'})); hr.append(th);});
   const tlh=el('th',{class:'c-tl'}); const mh=el('div',{class:'gmh'}); MONTHS.forEach((m,i)=>mh.append(el('span',{class:i===curM?'now':'',text:m}))); tlh.append(mh); hr.append(tlh); th.append(hr); t.append(th);
   const tb=el('tbody');
   const tl=(s,e,k,extra)=>{const d=el('div',{class:'gtl'});
@@ -745,21 +746,21 @@ function renderGantt(F,Sm){
   secs.forEach(sec=>{const its=Sm.its.filter(x=>x.p.sec===sec).sort((a,b)=>{const A=sk(a),B=sk(b); return A[0]-B[0]||A[1]-B[1];});
     const bud=its.reduce((a,x)=>a+x.p.bud,0); const done=its.filter(x=>x.k==='done').length;
     const spent=F.cls.filter(c=>typeOfG(c)===LO(sec)).reduce((a,c)=>a+(c.ca||0),0);
-    const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=8; const hd=done; td.append(secHead(sec,[[hd,its.length,`${fmtN(hd)}/${fmtN(its.length)} khóa đã diễn ra`],bud||spent?[spent,bud,`${vt(spent)} / ${vt(bud)}`+'',1]:null])); tr.append(td); tb.append(tr);
+    const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=9; const hd=done; td.append(secHead(sec,[[hd,its.length,`${fmtN(hd)}/${fmtN(its.length)} khóa đã diễn ra`],bud||spent?[spent,bud,`${vt(spent)} / ${vt(bud)}`+'',1]:null])); tr.append(td); tb.append(tr);
     its.forEach(({p,k})=>{
       const nm=el('div'); nm.append(el('span',{text:p.name})); 
       const ex=[]; if(p.dn) ex.push({d:p.dn,cls:'gdm',t:'Thực hiện '+dmy(p.dn)});
       if(p.code&&p.s) F.clsAll.filter(c=>c.kh===p.code&&c.st==='Hoàn thành'&&c.d0>=p.s&&c.d0<=p.e&&(!p.dn||+c.d0!==+p.dn)).forEach(c=>ex.push({d:c.d0,cls:'gdm',t:`Lớp ${c.id} ${dmy(c.d0)}${c.done?' · '+c.done+' học viên':''}`}));
-      row([[p.stt||'',''],[nm,'c-nm',p.name],[p.dv||'–','c-dv'],[p.s?dmy(p.s).slice(0,5):'–','c-d'],[p.e?dmy(p.e).slice(0,5):'–','c-d'],[pill(PST[k][0]),'c-st'],(()=>{const a=F.clsAll.filter(c=>c.kh===p.code&&planRowOf(F,c)===p).reduce((x,c)=>x+(c.ca||0),0); return [cost(a,p.bud),'c-cp',null,a||null];})()],
+      row([[p.stt||'',''],[nm,'c-nm',p.name],[p.dv||'–','c-dv'],[nbTag(p.nb),'c-nb',p.nb||''],[p.s?dmy(p.s).slice(0,5):'–','c-d'],[p.e?dmy(p.e).slice(0,5):'–','c-d'],[pill(PST[k][0]),'c-st'],(()=>{const a=F.clsAll.filter(c=>c.kh===p.code&&planRowOf(F,c)===p).reduce((x,c)=>x+(c.ca||0),0); return [cost(a,p.bud),'c-cp',null,a||null];})()],
         tl(p.s||(k==='done'?p.dn:null),p.e||(k==='done'?p.dn:null),k,ex),`${p.name}\n${p.s?dmy(p.s)+' – '+dmy(p.e):'Khi có phát sinh'} · ${PST[k][0]}${p.dn?' · thực hiện '+dmy(p.dn):''}${p.bud?' · ngân sách '+fmtN(p.bud)+' đ':''}`);});
   });
   // lớp ngoài kế hoạch (phát sinh) đã/sắp tổ chức trong năm
   const out=F.cls.filter(c=>!c.plan).sort((a,b)=>a.d0-b.d0);
   if(out.length){const oc=out.reduce((a,c)=>a+(c.ca||0),0), nk=new Set(out.map(c=>c.kh)).size, nd=new Set(out.filter(c=>c.st==='Hoàn thành').map(c=>c.kh)).size;
-    {const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=8; const sh=secHead('IV. Phát sinh (ngoài kế hoạch)',[[nd,nk,`${fmtN(nd)} khóa đã diễn ra`]]); sh.append(el('span',{class:'gsx',text:`Chi phí ${vt(oc)} (chưa có trong ngân sách kế hoạch)`})); td.append(sh); tr.append(td); tb.append(tr);}
+    {const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=9; const sh=secHead('IV. Phát sinh (ngoài kế hoạch)',[[nd,nk,`${fmtN(nd)} khóa đã diễn ra`]]); sh.append(el('span',{class:'gsx',text:`Chi phí ${vt(oc)} (chưa có trong ngân sách kế hoạch)`})); td.append(sh); tr.append(td); tb.append(tr);}
     out.forEach(c=>{const k=c.st==='Hoàn thành'?'done':c.st==='Hủy'?'cx':c.d0<F.T?'late':'plan'; const e=c.d1&&c.d1>=c.d0?c.d1:c.d0;
       const nm=el('div'); nm.append(el('span',{text:c.name})); 
-      row([['–',''],[nm,'c-nm',c.name],[c.gv||'–','c-dv'],[dmy(c.d0).slice(0,5),'c-d'],[dmy(e).slice(0,5),'c-d'],[pill(k==='late'?'Trễ hạn':c.st),'c-st'],[cost(c.ca,null),'c-cp',null,c.ca||null]],tl(c.d0,e,k),`${c.name} · ${dmy(c.d0)} · ${c.st}`);});}
+      row([['–',''],[nm,'c-nm',c.name],[c.gv||'–','c-dv'],[nbTag(c.nb),'c-nb',c.nb||''],[dmy(c.d0).slice(0,5),'c-d'],[dmy(e).slice(0,5),'c-d'],[pill(k==='late'?'Trễ hạn':c.st),'c-st'],[cost(c.ca,null),'c-cp',null,c.ca||null]],tl(c.d0,e,k),`${c.name} · ${dmy(c.d0)} · ${c.st}`);});}
   t.append(tb); host.append(t); if(host.nextElementSibling&&host.nextElementSibling.classList.contains('fnote')) host.nextElementSibling.remove(); ganttSort(t);
 }
 
