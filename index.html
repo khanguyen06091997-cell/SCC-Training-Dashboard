@@ -478,6 +478,7 @@ td.stt,th.stt{width:36px;color:var(--muted)}
 .kpi .ksp .meter{margin-top:6px}
 .kpi .ksp .dlw{margin-top:4px}
 @media (max-width:560px){.kpi .ksp.big .ksp-v{font-size:21px}.kpi .ksp-v{font-size:16px}.kpi .ksp-c{padding-right:6px}.kpi .ksp-c+.ksp-c{padding-left:8px}}
+.gantt .ncls{color:var(--mut,#8a93a6);font-weight:500;font-size:.85em}
 </style>
 <header class="top" id="topbar" hidden>
  <div class="bar"><div class="barin">
@@ -1354,9 +1355,13 @@ function renderGantt(F,Sm){
   const out=F.cls.filter(c=>!c.plan).sort((a,b)=>a.d0-b.d0);
   if(out.length){const oc=out.reduce((a,c)=>a+(c.ca||0),0), nk=new Set(out.map(c=>c.kh)).size, nd=new Set(out.filter(c=>c.st==='Hoàn thành').map(c=>c.kh)).size;
     {const tr=el('tr',{class:'sec'}); const td=el('td'); td.colSpan=9; const sh=secHead('IV. Phát sinh (ngoài kế hoạch)',[[nd,nk,`${fmtN(nd)} khóa đã diễn ra`]]); sh.append(el('span',{class:'gsx',text:`Chi phí ${vt(oc)} (chưa có trong ngân sách kế hoạch)`})); td.append(sh); tr.append(td); tb.append(tr);}
-    out.forEach(c=>{const k=c.st==='Hoàn thành'?'done':c.st==='Hủy'?'cx':c.d0<F.T?'late':'plan'; const e=c.d1&&c.d1>=c.d0?c.d1:c.d0;
-      const nm=el('div'); nm.append(el('span',{text:c.name})); 
-      row([['–',''],[nm,'c-nm',c.name],[c.gv||'–','c-dv'],[nbTag(c.nb),'c-nb',c.nb||''],[dmy(c.d0).slice(0,5),'c-d'],[dmy(e).slice(0,5),'c-d'],[pill(k==='late'?'Trễ hạn':c.st),'c-st'],[cost(c.ca,null),'c-cp',null,c.ca||null]],tl(c.d0,e,k),`${c.name} · ${dmy(c.d0)} · ${c.st}`);});}
+    const byK=new Map(); out.forEach(c=>{if(!byK.has(c.kh)) byK.set(c.kh,[]); byK.get(c.kh).push(c);});  // 1 khóa = nhiều lớp → 1 dòng, mỗi lớp 1 mốc
+    [...byK.values()].forEach(L=>{const c=L[0], n=L.length; const allDone=L.every(x=>x.st==='Hoàn thành'), anyDone=L.some(x=>x.st==='Hoàn thành');
+      const k=allDone?'done':L.every(x=>x.st==='Hủy')?'cx':anyDone?'run':L[0].d0<F.T?'late':'plan';
+      const s0=L.reduce((m,x)=>x.d0<m?x.d0:m,L[0].d0), e0=L.reduce((m,x)=>{const e=x.d1&&x.d1>=x.d0?x.d1:x.d0; return e>m?e:m;},L[0].d0);
+      const ca=L.reduce((a,x)=>a+(x.ca||0),0); const nm=el('div'); nm.append(el('span',{text:c.name})); if(n>1) nm.append(el('small',{class:'ncls',text:` · ${n} lớp`}));
+      const ex=L.filter(x=>x.st==='Hoàn thành').map(x=>({d:x.d0,cls:'gdm',t:`Lớp ${dmy(x.d0)}${x.done?' · '+x.done+' học viên':''}`}));
+      row([['–',''],[nm,'c-nm',c.name],[c.gv||'–','c-dv'],[nbTag(c.nb),'c-nb',c.nb||''],[dmy(s0).slice(0,5),'c-d'],[dmy(e0).slice(0,5),'c-d'],[pill(PST[k][0]),'c-st'],[cost(ca,null),'c-cp',null,ca||null]],tl(s0,e0,k,ex),`${c.name} · ${n} lớp: ${L.map(x=>dmy(x.d0)).join(', ')}`);});}
   t.append(tb); host.append(t); if(host.nextElementSibling&&host.nextElementSibling.classList.contains('fnote')) host.nextElementSibling.remove(); ganttSort(t);
 }
 
